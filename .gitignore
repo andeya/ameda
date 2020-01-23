@@ -18,3 +18,4 @@ vendor/
 *.sublime-workspace
 .DS_Store
 .idea
+*.zip
