@@ -7,6 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestStringSlice_Strings(t *testing.T) {
+	slice := StringSlice{"a", "b", "c", "d", "e"}
+	r := slice.Strings()
+	assert.Equal(t, []string{"a", "b", "c", "d", "e"}, r)
+}
+
 func TestStringSlice_Concat(t *testing.T) {
 	a := []string{"a"}
 	b := []string{"b"}

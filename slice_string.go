@@ -9,6 +9,11 @@ import (
 // StringSlice string slice object
 type StringSlice []string
 
+// Strings converts to []string.
+func (s StringSlice) Strings() []string {
+	return []string(s)
+}
+
 // Copy creates a copy of the string slice.
 func (s StringSlice) Copy() []string {
 	b := make([]string, len(s))
