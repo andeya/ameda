@@ -8,8 +8,7 @@ import (
 )
 
 func TestStringSlice_Strings(t *testing.T) {
-	slice := StringSlice{"a", "b", "c", "d", "e"}
-	r := slice.Strings()
+	r := NewStringSlice([]string{"a", "b", "c", "d", "e"}).Strings()
 	assert.Equal(t, []string{"a", "b", "c", "d", "e"}, r)
 }
 

@@ -9,6 +9,12 @@ import (
 // StringSlice string slice object
 type StringSlice []string
 
+// NewStringSlice creates a StringSlice object.
+func NewStringSlice(a []string) *StringSlice {
+	s := StringSlice(a)
+	return &s
+}
+
 // Strings converts to []string.
 func (s StringSlice) Strings() []string {
 	return []string(s)
