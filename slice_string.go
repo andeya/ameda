@@ -485,9 +485,25 @@ func (s StringSlice) Some(fn func(curr StringSlice, k int, v string) bool) bool 
 	return false
 }
 
+// Len is the number of elements in the collection.
+func (s StringSlice) Len() int {
+	return len(s)
+}
+
+// Less reports whether the element with
+// index m should sort before the element with index n.
+func (s StringSlice) Less(m, n int) bool {
+	return s[m] < s[n]
+}
+
+// Swap swaps the elements with indexes m and n.
+func (s StringSlice) Swap(m, n int) {
+	s[m], s[n] = s[n], s[m]
+}
+
 // Sort sorts the elements of an slice in place and returns the sorted slice.
 func (s StringSlice) Sort() {
-	sort.Strings([]string(s))
+	sort.Sort(s)
 }
 
 // Splice changes the contents of an slice by removing or replacing
