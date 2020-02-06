@@ -15,16 +15,16 @@ func NewStringSlice(a []string) *StringSlice {
 	return &s
 }
 
-// Strings converts to []string.
-func (s StringSlice) Strings() []string {
-	return []string(s)
-}
-
 // Copy creates a copy of the string slice.
 func (s StringSlice) Copy() []string {
 	b := make([]string, len(s))
 	copy(b, s)
 	return b
+}
+
+// Strings converts to []string.
+func (s StringSlice) Strings() []string {
+	return []string(s)
 }
 
 // Bools converts string slice to bool slice.
@@ -83,30 +83,16 @@ func (s StringSlice) Ints(emptyAsZero ...bool) ([]int, error) {
 	return r, nil
 }
 
-// Int64s converts string slice to int64 slice.
-func (s StringSlice) Int64s(emptyAsZero ...bool) ([]int64, error) {
+// Int8s converts string slice to int8 slice.
+func (s StringSlice) Int8s(emptyAsZero ...bool) ([]int8, error) {
 	strict := !isEmptyAsZero(emptyAsZero)
-	r := make([]int64, len(s))
+	r := make([]int8, len(s))
 	for k, v := range s {
-		i, err := strconv.ParseInt(v, 10, 64)
+		i, err := strconv.ParseInt(v, 10, 8)
 		if err != nil && strict {
 			return nil, err
 		}
-		r[k] = i
-	}
-	return r, nil
-}
-
-// Int32s converts string slice to int32 slice.
-func (s StringSlice) Int32s(emptyAsZero ...bool) ([]int32, error) {
-	strict := !isEmptyAsZero(emptyAsZero)
-	r := make([]int32, len(s))
-	for k, v := range s {
-		i, err := strconv.ParseInt(v, 10, 32)
-		if err != nil && strict {
-			return nil, err
-		}
-		r[k] = int32(i)
+		r[k] = int8(i)
 	}
 	return r, nil
 }
@@ -125,16 +111,44 @@ func (s StringSlice) Int16s(emptyAsZero ...bool) ([]int16, error) {
 	return r, nil
 }
 
-// Int8s converts string slice to int8 slice.
-func (s StringSlice) Int8s(emptyAsZero ...bool) ([]int8, error) {
+// Int32s converts string slice to int32 slice.
+func (s StringSlice) Int32s(emptyAsZero ...bool) ([]int32, error) {
 	strict := !isEmptyAsZero(emptyAsZero)
-	r := make([]int8, len(s))
+	r := make([]int32, len(s))
 	for k, v := range s {
-		i, err := strconv.ParseInt(v, 10, 8)
+		i, err := strconv.ParseInt(v, 10, 32)
 		if err != nil && strict {
 			return nil, err
 		}
-		r[k] = int8(i)
+		r[k] = int32(i)
+	}
+	return r, nil
+}
+
+// Int64s converts string slice to int64 slice.
+func (s StringSlice) Int64s(emptyAsZero ...bool) ([]int64, error) {
+	strict := !isEmptyAsZero(emptyAsZero)
+	r := make([]int64, len(s))
+	for k, v := range s {
+		i, err := strconv.ParseInt(v, 10, 64)
+		if err != nil && strict {
+			return nil, err
+		}
+		r[k] = i
+	}
+	return r, nil
+}
+
+// Uints converts string slice to uint slice.
+func (s StringSlice) Uints(emptyAsZero ...bool) ([]uint, error) {
+	strict := !isEmptyAsZero(emptyAsZero)
+	r := make([]uint, len(s))
+	for k, v := range s {
+		i, err := strconv.ParseUint(v, 10, 64)
+		if err != nil && strict {
+			return nil, err
+		}
+		r[k] = uint(i)
 	}
 	return r, nil
 }
@@ -195,20 +209,6 @@ func (s StringSlice) Uint64s(emptyAsZero ...bool) ([]uint64, error) {
 	return r, nil
 }
 
-// Uints converts string slice to uint slice.
-func (s StringSlice) Uints(emptyAsZero ...bool) ([]uint, error) {
-	strict := !isEmptyAsZero(emptyAsZero)
-	r := make([]uint, len(s))
-	for k, v := range s {
-		i, err := strconv.ParseUint(v, 10, 64)
-		if err != nil && strict {
-			return nil, err
-		}
-		r[k] = uint(i)
-	}
-	return r, nil
-}
-
 // Concat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
 func (s StringSlice) Concat(a ...[]string) []string {
@@ -236,7 +236,7 @@ func (s StringSlice) Concat(a ...[]string) []string {
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func (s StringSlice) CopyWithin(target, start int, end ...int) {
-	target = s.fixIndex(target, true)
+	target = fixIndex(len(s), target, true)
 	if target == len(s) {
 		return
 	}
@@ -268,7 +268,7 @@ func (s StringSlice) Every(fn func(curr StringSlice, k int, v string) bool) bool
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func (s StringSlice) Fill(value string, start int, end ...int) {
-	fixedStart, fixedEnd, ok := s.fixRange(start, end...)
+	fixedStart, fixedEnd, ok := fixRange(len(s), start, end...)
 	if !ok {
 		return
 	}
@@ -311,7 +311,7 @@ func (s StringSlice) Includes(valueToFind string, fromIndex ...int) bool {
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
 func (s StringSlice) IndexOf(searchElement string, fromIndex ...int) int {
-	idx := s.fromIndex(fromIndex...)
+	idx := getFromIndex(len(s), fromIndex...)
 	for k, v := range s[idx:] {
 		if searchElement == v {
 			return k + idx
@@ -330,7 +330,7 @@ func (s StringSlice) Join(sep string) string {
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
 func (s StringSlice) LastIndexOf(searchElement string, fromIndex ...int) int {
-	idx := s.fromIndex(fromIndex...)
+	idx := getFromIndex(len(s), fromIndex...)
 	for i := len(s) - 1; i >= idx; i-- {
 		if searchElement == s[i] {
 			return i
@@ -466,7 +466,7 @@ func (s *StringSlice) Shift() (string, bool) {
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
 func (s StringSlice) Slice(begin int, end ...int) []string {
-	fixedStart, fixedEnd, ok := s.fixRange(begin, end...)
+	fixedStart, fixedEnd, ok := fixRange(len(s), begin, end...)
 	if !ok {
 		return []string{}
 	}
@@ -513,7 +513,7 @@ func (s *StringSlice) Splice(start, deleteCount int, items ...string) {
 	if deleteCount < 0 {
 		deleteCount = 0
 	}
-	start, end, _ := a.fixRange(start, start+1+deleteCount)
+	start, end, _ := fixRange(len(a), start, start+1+deleteCount)
 	deleteCount = end - start - 1
 	for i := 0; i < len(items); i++ {
 		if deleteCount > 0 {
@@ -628,48 +628,4 @@ func (s *StringSlice) RemoveAll(element ...string) int {
 	n := len(a)
 	*s = a[:n:n]
 	return n
-}
-
-func (s StringSlice) fromIndex(fromIndex ...int) int {
-	if len(fromIndex) > 0 {
-		return s.fixIndex(fromIndex[0], true)
-	}
-	return 0
-}
-
-func (s StringSlice) fixRange(start int, end ...int) (fixedStart, fixedEnd int, ok bool) {
-	fixedStart = s.fixIndex(start, true)
-	if fixedStart == len(s) {
-		return
-	}
-	fixedEnd = len(s)
-	if len(end) > 0 {
-		fixedEnd = s.fixIndex(end[0], true)
-	}
-	if fixedEnd-fixedStart <= 0 {
-		return
-	}
-	ok = true
-	return
-}
-
-func (s StringSlice) fixIndex(idx int, canLen bool) int {
-	if idx < 0 {
-		idx = len(s) + idx
-		if idx < 0 {
-			return 0
-		}
-		return idx
-	}
-	if idx >= len(s) {
-		if canLen {
-			return len(s)
-		}
-		return len(s) - 1
-	}
-	return idx
-}
-
-func isEmptyAsZero(emptyAsZero []bool) bool {
-	return len(emptyAsZero) > 0 && emptyAsZero[0]
 }
