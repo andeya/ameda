@@ -1,6 +1,7 @@
 package ameda
 
 import (
+	"math"
 	"sort"
 	"strconv"
 )
@@ -12,11 +13,6 @@ type IntSlice []int
 func NewIntSlice(a []int) *IntSlice {
 	i := IntSlice(a)
 	return &i
-}
-
-// Ints converts to []int.
-func (i IntSlice) Ints() []int {
-	return []int(i)
 }
 
 // Copy creates a copy of the int slice.
@@ -31,78 +27,6 @@ func (i IntSlice) Strings() []string {
 	r := make([]string, len(i))
 	for k, v := range i {
 		r[k] = strconv.Itoa(v)
-	}
-	return r
-}
-
-// Int8s converts int slice to int8 slice.
-func (i IntSlice) Int8s() []int8 {
-	r := make([]int8, len(i))
-	for k, v := range i {
-		r[k] = int8(v)
-	}
-	return r
-}
-
-// Int16s converts int slice to int16 slice.
-func (i IntSlice) Int16s() []int16 {
-	r := make([]int16, len(i))
-	for k, v := range i {
-		r[k] = int16(v)
-	}
-	return r
-}
-
-// Int32s converts int slice to int32 slice.
-func (i IntSlice) Int32s() []int32 {
-	r := make([]int32, len(i))
-	for k, v := range i {
-		r[k] = int32(v)
-	}
-	return r
-}
-
-// Int64s converts int slice to int64 slice.
-func (i IntSlice) Int64s() []int64 {
-	r := make([]int64, len(i))
-	for k, v := range i {
-		r[k] = int64(v)
-	}
-	return r
-}
-
-// Uint8s converts int slice to uint8 slice.
-func (i IntSlice) Uint8s() []uint8 {
-	r := make([]uint8, len(i))
-	for k, v := range i {
-		r[k] = uint8(v)
-	}
-	return r
-}
-
-// Uint16s converts int slice to uint16 slice.
-func (i IntSlice) Uint16s() []uint16 {
-	r := make([]uint16, len(i))
-	for k, v := range i {
-		r[k] = uint16(v)
-	}
-	return r
-}
-
-// Uint32s converts int slice to uint32 slice.
-func (i IntSlice) Uint32s() []uint32 {
-	r := make([]uint32, len(i))
-	for k, v := range i {
-		r[k] = uint32(v)
-	}
-	return r
-}
-
-// Uint64s converts int slice to uint64 slice.
-func (i IntSlice) Uint64s() []uint64 {
-	r := make([]uint64, len(i))
-	for k, v := range i {
-		r[k] = uint64(v)
 	}
 	return r
 }
@@ -123,6 +47,125 @@ func (i IntSlice) Float64s() []float64 {
 		r[k] = float64(v)
 	}
 	return r
+}
+
+// Ints converts to []int.
+func (i IntSlice) Ints() []int {
+	return []int(i)
+}
+
+// Int8s converts int slice to int8 slice.
+func (i IntSlice) Int8s() ([]int8, error) {
+	r := make([]int8, len(i))
+	for k, v := range i {
+		if v > math.MaxInt8 || v < math.MinInt8 {
+			return nil, errOverflowValue
+		}
+		r[k] = int8(v)
+	}
+	return r, nil
+}
+
+// Int16s converts int slice to int16 slice.
+func (i IntSlice) Int16s() ([]int16, error) {
+	r := make([]int16, len(i))
+	for k, v := range i {
+		if v > math.MaxInt16 || v < math.MinInt16 {
+			return nil, errOverflowValue
+		}
+		r[k] = int16(v)
+	}
+	return r, nil
+}
+
+// Int32s converts int slice to int32 slice.
+func (i IntSlice) Int32s() ([]int32, error) {
+	r := make([]int32, len(i))
+	for k, v := range i {
+		if v > math.MaxInt32 || v < math.MinInt32 {
+			return nil, errOverflowValue
+		}
+		r[k] = int32(v)
+	}
+	return r, nil
+}
+
+// Int64s converts int slice to int64 slice.
+func (i IntSlice) Int64s() []int64 {
+	r := make([]int64, len(i))
+	for k, v := range i {
+		r[k] = int64(v)
+	}
+	return r
+}
+
+// Uint8s converts int slice to uint slice.
+func (i IntSlice) Uints() ([]uint, error) {
+	r := make([]uint, len(i))
+	for k, v := range i {
+		if v < 0 {
+			return nil, errNegativeValue
+		}
+		r[k] = uint(v)
+	}
+	return r, nil
+}
+
+// Uint8s converts int slice to uint8 slice.
+func (i IntSlice) Uint8s() ([]uint8, error) {
+	r := make([]uint8, len(i))
+	for k, v := range i {
+		if v < 0 {
+			return nil, errNegativeValue
+		}
+		if v > math.MaxUint8 {
+			return nil, errOverflowValue
+		}
+		r[k] = uint8(v)
+	}
+	return r, nil
+}
+
+// Uint16s converts int slice to uint16 slice.
+func (i IntSlice) Uint16s() ([]uint16, error) {
+	r := make([]uint16, len(i))
+	for k, v := range i {
+		if v < 0 {
+			return nil, errNegativeValue
+		}
+		if v > math.MaxUint16 {
+			return nil, errOverflowValue
+		}
+		r[k] = uint16(v)
+	}
+	return r, nil
+}
+
+// Uint32s converts int slice to uint32 slice.
+func (i IntSlice) Uint32s() ([]uint32, error) {
+	r := make([]uint32, len(i))
+	for k, v := range i {
+		if v < 0 {
+			return nil, errNegativeValue
+		}
+		if v > math.MaxUint32 {
+			return nil, errOverflowValue
+		}
+		r[k] = uint32(v)
+	}
+	return r, nil
+}
+
+// Uint64s converts int slice to uint64 slice.
+func (i IntSlice) Uint64s() ([]uint64, error) {
+	r := make([]uint64, len(i))
+	for k, v := range i {
+		if v < 0 {
+			return nil, errNegativeValue
+		}
+		r[k] = uint64(v)
+	}
+	return r, nil
 }
 
 // Concat is used to merge two or more slices.
@@ -152,7 +195,7 @@ func (i IntSlice) Concat(a ...[]int) []int {
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func (i IntSlice) CopyWithin(target, start int, end ...int) {
-	target = i.fixIndex(target, true)
+	target = fixIndex(len(i), target, true)
 	if target == len(i) {
 		return
 	}
@@ -184,7 +227,7 @@ func (i IntSlice) Every(fn func(curr IntSlice, k int, v int) bool) bool {
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func (i IntSlice) Fill(value int, start int, end ...int) {
-	fixedStart, fixedEnd, ok := i.fixRange(start, end...)
+	fixedStart, fixedEnd, ok := fixRange(len(i), start, end...)
 	if !ok {
 		return
 	}
@@ -227,7 +270,7 @@ func (i IntSlice) Includes(valueToFind int, fromIndex ...int) bool {
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
 func (i IntSlice) IndexOf(searchElement int, fromIndex ...int) int {
-	idx := i.fromIndex(fromIndex...)
+	idx := getFromIndex(len(i), fromIndex...)
 	for k, v := range i[idx:] {
 		if searchElement == v {
 			return k + idx
@@ -240,7 +283,7 @@ func (i IntSlice) IndexOf(searchElement int, fromIndex ...int) int {
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
 func (i IntSlice) LastIndexOf(searchElement int, fromIndex ...int) int {
-	idx := i.fromIndex(fromIndex...)
+	idx := getFromIndex(len(i), fromIndex...)
 	for k := len(i) - 1; k >= idx; k-- {
 		if searchElement == i[k] {
 			return k
@@ -376,7 +419,7 @@ func (i *IntSlice) Shift() (int, bool) {
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
 func (i IntSlice) Slice(begin int, end ...int) []int {
-	fixedStart, fixedEnd, ok := i.fixRange(begin, end...)
+	fixedStart, fixedEnd, ok := fixRange(len(i), begin, end...)
 	if !ok {
 		return []int{}
 	}
@@ -423,7 +466,7 @@ func (i *IntSlice) Splice(start, deleteCount int, items ...int) {
 	if deleteCount < 0 {
 		deleteCount = 0
 	}
-	start, end, _ := a.fixRange(start, start+1+deleteCount)
+	start, end, _ := fixRange(len(a), start, start+1+deleteCount)
 	deleteCount = end - start - 1
 	for k := 0; k < len(items); k++ {
 		if deleteCount > 0 {
@@ -538,44 +581,4 @@ func (i *IntSlice) RemoveAll(element ...int) int {
 	n := len(a)
 	*i = a[:n:n]
 	return n
-}
-
-func (i IntSlice) fromIndex(fromIndex ...int) int {
-	if len(fromIndex) > 0 {
-		return i.fixIndex(fromIndex[0], true)
-	}
-	return 0
-}
-
-func (i IntSlice) fixRange(start int, end ...int) (fixedStart, fixedEnd int, ok bool) {
-	fixedStart = i.fixIndex(start, true)
-	if fixedStart == len(i) {
-		return
-	}
-	fixedEnd = len(i)
-	if len(end) > 0 {
-		fixedEnd = i.fixIndex(end[0], true)
-	}
-	if fixedEnd-fixedStart <= 0 {
-		return
-	}
-	ok = true
-	return
-}
-
-func (i IntSlice) fixIndex(idx int, canLen bool) int {
-	if idx < 0 {
-		idx = len(i) + idx
-		if idx < 0 {
-			return 0
-		}
-		return idx
-	}
-	if idx >= len(i) {
-		if canLen {
-			return len(i)
-		}
-		return len(i) - 1
-	}
-	return idx
 }
