@@ -7,7 +7,7 @@ import (
 )
 
 func TestInt32Slice_Ints(t *testing.T) {
-	r := NewInt32Slice([]int32{1, 2, 3, 4, 5}).Ints()
+	r := NewInt32Slice([]int32{1, 2, 3, 4, 5}).Int32s()
 	assert.Equal(t, []int32{1, 2, 3, 4, 5}, r)
 }
 
