@@ -5,11 +5,6 @@ import (
 	"math"
 )
 
-// Float32ToFloat32Ptr converts float32 to *float32.
-func Float32ToFloat32Ptr(v float32) *float32 {
-	return &v
-}
-
 // Float32ToInterface converts float32 to interface.
 func Float32ToInterface(v float32) interface{} {
 	return v
@@ -43,6 +38,11 @@ func Float32ToBoolPtr(v float32) *bool {
 	return &r
 }
 
+// Float32ToFloat32Ptr converts float32 to *float32.
+func Float32ToFloat32Ptr(v float32) *float32 {
+	return &v
+}
+
 // Float32ToFloat64 converts float32 to float64.
 func Float32ToFloat64(v float32) float64 {
 	return float64(v)
@@ -57,11 +57,11 @@ func Float32ToFloat64Ptr(v float32) *float64 {
 // Float32ToInt converts float32 to int.
 func Float32ToInt(v float32) (int, error) {
 	if is64BitPlatform {
-		if v > math.MaxInt64 {
+		if v > math.MaxInt64 || v < math.MinInt64 {
 			return 0, errOverflowValue
 		}
 	} else {
-		if v > math.MaxInt32 {
+		if v > math.MaxInt32 || v < math.MinInt32 {
 			return 0, errOverflowValue
 		}
 	}
