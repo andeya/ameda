@@ -19,6 +19,21 @@ func UnsafeStringToBytes(s string) []byte {
 	return *(*[]byte)(unsafe.Pointer(&bh))
 }
 
+// IndirectValue gets the indirect value.
+func IndirectValue(v reflect.Value) reflect.Value {
+	if !v.IsValid() {
+		return v
+	}
+	if v.Kind() != reflect.Ptr {
+		// Avoid creating a reflect.Value if it's not a pointer.
+		return v
+	}
+	for v.Kind() == reflect.Ptr && !v.IsNil() {
+		v = v.Elem()
+	}
+	return v
+}
+
 // DereferenceType dereference, get the underlying non-pointer type.
 func DereferenceType(t reflect.Type) reflect.Type {
 	for t.Kind() == reflect.Ptr {
