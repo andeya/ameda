@@ -22,7 +22,7 @@ func (f Float32Slice) Copy() []float32 {
 	return b
 }
 
-// Interfaces converts float32 slice to interface{} slice.
+// Interfaces converts float32 slice to interface slice.
 func (f Float32Slice) Interfaces() []interface{} {
 	r := make([]interface{}, len(f))
 	for k, v := range f {

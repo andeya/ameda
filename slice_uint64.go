@@ -22,7 +22,7 @@ func (u Uint64Slice) Copy() []uint64 {
 	return b
 }
 
-// Interfaces converts uint64 slice to interface{} slice.
+// Interfaces converts uint64 slice to interface slice.
 func (u Uint64Slice) Interfaces() []interface{} {
 	r := make([]interface{}, len(u))
 	for k, v := range u {

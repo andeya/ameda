@@ -21,7 +21,7 @@ func (u Uint8Slice) Copy() []uint8 {
 	return b
 }
 
-// Interfaces converts uint8 slice to interface{} slice.
+// Interfaces converts uint8 slice to interface slice.
 func (u Uint8Slice) Interfaces() []interface{} {
 	r := make([]interface{}, len(u))
 	for k, v := range u {
