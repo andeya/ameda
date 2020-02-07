@@ -22,6 +22,15 @@ func (i Int64Slice) Copy() []int64 {
 	return b
 }
 
+// Interfaces converts int64 slice to interface{} slice.
+func (i Int64Slice) Interfaces() []interface{} {
+	r := make([]interface{}, len(i))
+	for k, v := range i {
+		r[k] = v
+	}
+	return r
+}
+
 // Strings converts int64 slice to string slice.
 func (i Int64Slice) Strings() []string {
 	r := make([]string, len(i))
