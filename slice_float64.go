@@ -22,6 +22,15 @@ func (u Float64Slice) Copy() []float64 {
 	return b
 }
 
+// Interfaces converts float64 slice to interface{} slice.
+func (u Float64Slice) Interfaces() []interface{} {
+	r := make([]interface{}, len(u))
+	for k, v := range u {
+		r[k] = v
+	}
+	return r
+}
+
 // Strings converts float64 slice to string slice.
 func (u Float64Slice) Strings() []string {
 	r := make([]string, len(u))
