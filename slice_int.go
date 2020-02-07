@@ -81,11 +81,17 @@ func (i IntSlice) Int16s() ([]int16, error) {
 // Int32s converts int slice to int32 slice.
 func (i IntSlice) Int32s() ([]int32, error) {
 	r := make([]int32, len(i))
-	for k, v := range i {
-		if v > math.MaxInt32 || v < math.MinInt32 {
-			return nil, errOverflowValue
+	if is64BitPlatform {
+		for k, v := range i {
+			if v > math.MaxInt32 || v < math.MinInt32 {
+				return nil, errOverflowValue
+			}
+			r[k] = int32(v)
 		}
-		r[k] = int32(v)
+	} else {
+		for k, v := range i {
+			r[k] = int32(v)
+		}
 	}
 	return r, nil
 }
@@ -144,14 +150,23 @@ func (i IntSlice) Uint16s() ([]uint16, error) {
 // Uint32s converts int slice to uint32 slice.
 func (i IntSlice) Uint32s() ([]uint32, error) {
 	r := make([]uint32, len(i))
-	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+	if is64BitPlatform {
+		for k, v := range i {
+			if v < 0 {
+				return nil, errNegativeValue
+			}
+			if v > math.MaxUint32 {
+				return nil, errOverflowValue
+			}
+			r[k] = uint32(v)
 		}
-		if v > math.MaxUint32 {
-			return nil, errOverflowValue
+	} else {
+		for k, v := range i {
+			if v < 0 {
+				return nil, errNegativeValue
+			}
+			r[k] = uint32(v)
 		}
-		r[k] = uint32(v)
 	}
 	return r, nil
 }
