@@ -30,6 +30,17 @@ func (i Int8Slice) Strings() []string {
 	return r
 }
 
+// Bools converts int slice to bool slice.
+// NOTE:
+//  0 is false, everything else is true
+func (i Int8Slice) Bools() []bool {
+	r := make([]bool, len(i))
+	for k, v := range i {
+		r[k] = v != 0
+	}
+	return r
+}
+
 // Float32s converts int8 slice to float32 slice.
 func (i Int8Slice) Float32s() []float32 {
 	r := make([]float32, len(i))
