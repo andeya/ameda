@@ -2,7 +2,6 @@ package ameda
 
 import (
 	"sort"
-	"strconv"
 )
 
 // Int8Slice int8 slice object
@@ -34,7 +33,7 @@ func (i Int8Slice) Interfaces() []interface{} {
 func (i Int8Slice) Strings() []string {
 	r := make([]string, len(i))
 	for k, v := range i {
-		r[k] = strconv.FormatInt(int64(v), 10)
+		r[k] = Int8ToString(v)
 	}
 	return r
 }
@@ -45,7 +44,7 @@ func (i Int8Slice) Strings() []string {
 func (i Int8Slice) Bools() []bool {
 	r := make([]bool, len(i))
 	for k, v := range i {
-		r[k] = v != 0
+		r[k] = Int8ToBool(v)
 	}
 	return r
 }
@@ -54,7 +53,7 @@ func (i Int8Slice) Bools() []bool {
 func (i Int8Slice) Float32s() []float32 {
 	r := make([]float32, len(i))
 	for k, v := range i {
-		r[k] = float32(v)
+		r[k] = Int8ToFloat32(v)
 	}
 	return r
 }
@@ -63,7 +62,7 @@ func (i Int8Slice) Float32s() []float32 {
 func (i Int8Slice) Float64s() []float64 {
 	r := make([]float64, len(i))
 	for k, v := range i {
-		r[k] = float64(v)
+		r[k] = Int8ToFloat64(v)
 	}
 	return r
 }
@@ -72,7 +71,7 @@ func (i Int8Slice) Float64s() []float64 {
 func (i Int8Slice) Ints() []int {
 	r := make([]int, len(i))
 	for k, v := range i {
-		r[k] = int(v)
+		r[k] = Int8ToInt(v)
 	}
 	return r
 }
@@ -82,11 +81,11 @@ func (i Int8Slice) Int8s() []int8 {
 	return []int8(i)
 }
 
-// Int8s converts int8 slice to int16 slice.
+// Int16s converts int8 slice to int16 slice.
 func (i Int8Slice) Int16s() []int16 {
 	r := make([]int16, len(i))
 	for k, v := range i {
-		r[k] = int16(v)
+		r[k] = Int8ToInt16(v)
 	}
 	return r
 }
@@ -95,7 +94,7 @@ func (i Int8Slice) Int16s() []int16 {
 func (i Int8Slice) Int32s() []int32 {
 	r := make([]int32, len(i))
 	for k, v := range i {
-		r[k] = int32(v)
+		r[k] = Int8ToInt32(v)
 	}
 	return r
 }
@@ -104,67 +103,72 @@ func (i Int8Slice) Int32s() []int32 {
 func (i Int8Slice) Int64s() []int64 {
 	r := make([]int64, len(i))
 	for k, v := range i {
-		r[k] = int64(v)
+		r[k] = Int8ToInt64(v)
 	}
 	return r
 }
 
-// Uint8s converts int8 slice to uint slice.
+// Uints converts int8 slice to uint slice.
 func (i Int8Slice) Uints() ([]uint, error) {
+	var err error
 	r := make([]uint, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int8ToUint(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint(v)
 	}
 	return r, nil
 }
 
 // Uint8s converts int8 slice to uint8 slice.
 func (i Int8Slice) Uint8s() ([]uint8, error) {
+	var err error
 	r := make([]uint8, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int8ToUint8(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint8(v)
 	}
 	return r, nil
 }
 
-// Uint8s converts int8 slice to uint16 slice.
+// Uint16s converts int8 slice to uint16 slice.
 func (i Int8Slice) Uint16s() ([]uint16, error) {
+	var err error
 	r := make([]uint16, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int8ToUint16(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint16(v)
 	}
 	return r, nil
 }
 
 // Uint32s converts int8 slice to uint32 slice.
 func (i Int8Slice) Uint32s() ([]uint32, error) {
+	var err error
 	r := make([]uint32, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int8ToUint32(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint32(v)
 	}
 	return r, nil
 }
 
 // Uint64s converts int8 slice to uint64 slice.
 func (i Int8Slice) Uint64s() ([]uint64, error) {
+	var err error
 	r := make([]uint64, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int8ToUint64(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint64(v)
 	}
 	return r, nil
 }
