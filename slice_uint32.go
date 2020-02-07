@@ -11,8 +11,8 @@ type Uint32Slice []uint32
 
 // NewUint32Slice creates an Uint32Slice object.
 func NewUint32Slice(a []uint32) *Uint32Slice {
-	i := Uint32Slice(a)
-	return &i
+	u := Uint32Slice(a)
+	return &u
 }
 
 // Copy creates a copy of the uint32 slice.

@@ -11,8 +11,8 @@ type Uint16Slice []uint16
 
 // NewUint16Slice creates an Uint16Slice object.
 func NewUint16Slice(a []uint16) *Uint16Slice {
-	i := Uint16Slice(a)
-	return &i
+	u := Uint16Slice(a)
+	return &u
 }
 
 // Copy creates a copy of the uint16 slice.

@@ -11,8 +11,8 @@ type Uint64Slice []uint64
 
 // NewUint64Slice creates an Uint64Slice object.
 func NewUint64Slice(a []uint64) *Uint64Slice {
-	i := Uint64Slice(a)
-	return &i
+	u := Uint64Slice(a)
+	return &u
 }
 
 // Copy creates a copy of the uint64 slice.

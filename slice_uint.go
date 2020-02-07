@@ -11,8 +11,8 @@ type UintSlice []uint
 
 // NewUintSlice creates an UintSlice object.
 func NewUintSlice(a []uint) *UintSlice {
-	i := UintSlice(a)
-	return &i
+	u := UintSlice(a)
+	return &u
 }
 
 // Copy creates a copy of the uint slice.

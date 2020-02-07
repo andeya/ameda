@@ -10,8 +10,8 @@ type Uint8Slice []uint8
 
 // NewUint8Slice creates an Uint8Slice object.
 func NewUint8Slice(a []uint8) *Uint8Slice {
-	i := Uint8Slice(a)
-	return &i
+	u := Uint8Slice(a)
+	return &u
 }
 
 // Copy creates a copy of the uint8 slice.
