@@ -61,12 +61,21 @@ func (u Uint32Slice) Float64s() []float64 {
 }
 
 // Ints converts uint32 slice to int slice.
-func (u Uint32Slice) Ints() []int {
+func (u Uint32Slice) Ints() ([]int, error) {
 	r := make([]int, len(u))
-	for k, v := range u {
-		r[k] = int(v)
+	if is64BitPlatform {
+		for k, v := range u {
+			r[k] = int(v)
+		}
+	} else {
+		for k, v := range u {
+			if v > math.MaxInt32 {
+				return nil, errOverflowValue
+			}
+			r[k] = int(v)
+		}
 	}
-	return r
+	return r, nil
 }
 
 // Int8s converts uint32 slice to int8 slice.
