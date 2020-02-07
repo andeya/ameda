@@ -30,7 +30,7 @@ func (i Int8Slice) Strings() []string {
 	return r
 }
 
-// Bools converts int slice to bool slice.
+// Bools converts int8 slice to bool slice.
 // NOTE:
 //  0 is false, everything else is true
 func (i Int8Slice) Bools() []bool {
