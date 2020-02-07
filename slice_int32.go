@@ -1,9 +1,7 @@
 package ameda
 
 import (
-	"math"
 	"sort"
-	"strconv"
 )
 
 // Int32Slice int32 slice object
@@ -26,7 +24,7 @@ func (i Int32Slice) Copy() []int32 {
 func (i Int32Slice) Interfaces() []interface{} {
 	r := make([]interface{}, len(i))
 	for k, v := range i {
-		r[k] = v
+		r[k] = Int32ToInterface(v)
 	}
 	return r
 }
@@ -35,7 +33,7 @@ func (i Int32Slice) Interfaces() []interface{} {
 func (i Int32Slice) Strings() []string {
 	r := make([]string, len(i))
 	for k, v := range i {
-		r[k] = strconv.FormatInt(int64(v), 10)
+		r[k] = Int32ToString(v)
 	}
 	return r
 }
@@ -46,7 +44,7 @@ func (i Int32Slice) Strings() []string {
 func (i Int32Slice) Bools() []bool {
 	r := make([]bool, len(i))
 	for k, v := range i {
-		r[k] = v != 0
+		r[k] = Int32ToBool(v)
 	}
 	return r
 }
@@ -55,7 +53,7 @@ func (i Int32Slice) Bools() []bool {
 func (i Int32Slice) Float32s() []float32 {
 	r := make([]float32, len(i))
 	for k, v := range i {
-		r[k] = float32(v)
+		r[k] = Int32ToFloat32(v)
 	}
 	return r
 }
@@ -64,7 +62,7 @@ func (i Int32Slice) Float32s() []float32 {
 func (i Int32Slice) Float64s() []float64 {
 	r := make([]float64, len(i))
 	for k, v := range i {
-		r[k] = float64(v)
+		r[k] = Int32ToFloat64(v)
 	}
 	return r
 }
@@ -73,31 +71,33 @@ func (i Int32Slice) Float64s() []float64 {
 func (i Int32Slice) Ints() []int {
 	r := make([]int, len(i))
 	for k, v := range i {
-		r[k] = int(v)
+		r[k] = Int32ToInt(v)
 	}
 	return r
 }
 
 // Int8s converts int32 slice to int8 slice.
 func (i Int32Slice) Int8s() ([]int8, error) {
+	var err error
 	r := make([]int8, len(i))
 	for k, v := range i {
-		if v > math.MaxInt8 || v < math.MinInt8 {
-			return nil, errOverflowValue
+		r[k], err = Int32ToInt8(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = int8(v)
 	}
 	return r, nil
 }
 
 // Int16s converts int32 slice to int16 slice.
 func (i Int32Slice) Int16s() ([]int16, error) {
+	var err error
 	r := make([]int16, len(i))
 	for k, v := range i {
-		if v > math.MaxInt16 || v < math.MinInt16 {
-			return nil, errOverflowValue
+		r[k], err = Int32ToInt16(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = int16(v)
 	}
 	return r, nil
 }
@@ -111,73 +111,72 @@ func (i Int32Slice) Int32s() []int32 {
 func (i Int32Slice) Int64s() []int64 {
 	r := make([]int64, len(i))
 	for k, v := range i {
-		r[k] = int64(v)
+		r[k] = Int32ToInt64(v)
 	}
 	return r
 }
 
-// Uint8s converts int32 slice to uint slice.
+// Uints converts int32 slice to uint slice.
 func (i Int32Slice) Uints() ([]uint, error) {
+	var err error
 	r := make([]uint, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int32ToUint(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint(v)
 	}
 	return r, nil
 }
 
 // Uint8s converts int32 slice to uint8 slice.
 func (i Int32Slice) Uint8s() ([]uint8, error) {
+	var err error
 	r := make([]uint8, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int32ToUint8(v)
+		if err != nil {
+			return nil, err
 		}
-		if v > math.MaxUint8 {
-			return nil, errOverflowValue
-		}
-		r[k] = uint8(v)
 	}
 	return r, nil
 }
 
 // Uint16s converts int32 slice to uint16 slice.
 func (i Int32Slice) Uint16s() ([]uint16, error) {
+	var err error
 	r := make([]uint16, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int32ToUint16(v)
+		if err != nil {
+			return nil, err
 		}
-		if v > math.MaxUint16 {
-			return nil, errOverflowValue
-		}
-		r[k] = uint16(v)
 	}
 	return r, nil
 }
 
 // Uint32s converts int32 slice to uint32 slice.
 func (i Int32Slice) Uint32s() ([]uint32, error) {
+	var err error
 	r := make([]uint32, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int32ToUint32(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint32(v)
 	}
 	return r, nil
 }
 
 // Uint64s converts int32 slice to uint64 slice.
 func (i Int32Slice) Uint64s() ([]uint64, error) {
+	var err error
 	r := make([]uint64, len(i))
 	for k, v := range i {
-		if v < 0 {
-			return nil, errNegativeValue
+		r[k], err = Int32ToUint64(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint64(v)
 	}
 	return r, nil
 }
