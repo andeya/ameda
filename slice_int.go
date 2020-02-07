@@ -22,6 +22,15 @@ func (i IntSlice) Copy() []int {
 	return b
 }
 
+// Interfaces converts int slice to interface{} slice.
+func (i IntSlice) Interfaces() []interface{} {
+	r := make([]interface{}, len(i))
+	for k, v := range i {
+		r[k] = v
+	}
+	return r
+}
+
 // Strings converts int slice to string slice.
 func (i IntSlice) Strings() []string {
 	r := make([]string, len(i))
