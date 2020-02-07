@@ -5,11 +5,6 @@ import (
 	"strconv"
 )
 
-// IntToIntPtr converts int to *int.
-func IntToIntPtr(v int) *int {
-	return &v
-}
-
 // IntToInterface converts int to interface.
 func IntToInterface(v int) interface{} {
 	return v
@@ -63,6 +58,11 @@ func IntToFloat64(v int) float64 {
 func IntToFloat64Ptr(v int) *float64 {
 	r := IntToFloat64(v)
 	return &r
+}
+
+// IntToIntPtr converts int to *int.
+func IntToIntPtr(v int) *int {
+	return &v
 }
 
 // IntToInt8 converts int to int8.
