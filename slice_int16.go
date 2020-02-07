@@ -31,6 +31,17 @@ func (i Int16Slice) Strings() []string {
 	return r
 }
 
+// Bools converts int16 slice to bool slice.
+// NOTE:
+//  0 is false, everything else is true
+func (i Int16Slice) Bools() []bool {
+	r := make([]bool, len(i))
+	for k, v := range i {
+		r[k] = v != 0
+	}
+	return r
+}
+
 // Float32s converts int16 slice to float32 slice.
 func (i Int16Slice) Float32s() []float32 {
 	r := make([]float32, len(i))
