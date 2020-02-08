@@ -510,3 +510,63 @@ func InterfaceToInt64Ptr(i interface{}, emptyAsFalse ...bool) (*int64, error) {
 	r, err := InterfaceToInt64(i, emptyAsFalse...)
 	return &r, err
 }
+
+// InterfaceToUint converts interface to uint.
+func InterfaceToUint(i interface{}, emptyStringAsZero ...bool) (uint, error) {
+	switch v := i.(type) {
+	case bool:
+		return BoolToUint(v), nil
+	case nil:
+		return 0, nil
+	case int:
+		return IntToUint(v)
+	case int8:
+		return Int8ToUint(v)
+	case int16:
+		return Int16ToUint(v)
+	case int32:
+		return Int32ToUint(v)
+	case int64:
+		return Int64ToUint(v)
+	case uint:
+		return v, nil
+	case uint8:
+		return Uint8ToUint(v), nil
+	case uint16:
+		return Uint16ToUint(v), nil
+	case uint32:
+		return Uint32ToUint(v), nil
+	case uint64:
+		return Uint64ToUint(v)
+	case uintptr:
+		return uint(v), nil
+	case string:
+		return StringToUint(v, emptyStringAsZero...)
+	default:
+		r := IndirectValue(reflect.ValueOf(i))
+		switch r.Kind() {
+		case reflect.Bool:
+			return BoolToUint(r.Bool()), nil
+		case reflect.Invalid:
+			return 0, nil
+		case reflect.Float32, reflect.Float64:
+			return Float64ToUint(r.Float())
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return Int64ToUint(r.Int())
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return Uint64ToUint(r.Uint())
+		case reflect.String:
+			return StringToUint(r.String(), emptyStringAsZero...)
+		}
+		if isEmptyAsZero(emptyStringAsZero) {
+			return BoolToUint(!r.IsZero()), nil
+		}
+		return 0, fmt.Errorf("cannot convert %#v of type %T to uint", i, i)
+	}
+}
+
+// InterfaceToUintPtr converts interface to *uint.
+func InterfaceToUintPtr(i interface{}, emptyAsFalse ...bool) (*uint, error) {
+	r, err := InterfaceToUint(i, emptyAsFalse...)
+	return &r, err
+}
