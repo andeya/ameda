@@ -465,7 +465,7 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (s StringSlice) Reduce(fn func(curr StringSlice, k int, v string, accumulator string) string, initialValue ...string) string {
+func (s StringSlice) Reduce(fn func(curr StringSlice, k int, v, accumulator string) string, initialValue ...string) string {
 	if len(s) == 0 {
 		return ""
 	}
@@ -491,7 +491,7 @@ func (s StringSlice) Reduce(fn func(curr StringSlice, k int, v string, accumulat
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (s StringSlice) ReduceRight(fn func(curr StringSlice, k int, v string, accumulator string) string, initialValue ...string) string {
+func (s StringSlice) ReduceRight(fn func(curr StringSlice, k int, v, accumulator string) string, initialValue ...string) string {
 	if len(s) == 0 {
 		return ""
 	}

@@ -443,7 +443,7 @@ L:
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (u UintSlice) Reduce(
-	fn func(curr UintSlice, k int, v uint, accumulator uint) uint, initialValue ...uint,
+	fn func(curr UintSlice, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
 	if len(u) == 0 {
 		return 0
@@ -471,7 +471,7 @@ func (u UintSlice) Reduce(
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (u UintSlice) ReduceRight(
-	fn func(curr UintSlice, k int, v uint, accumulator uint) uint, initialValue ...uint,
+	fn func(curr UintSlice, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
 	if len(u) == 0 {
 		return 0

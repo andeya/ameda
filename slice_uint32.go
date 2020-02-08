@@ -439,7 +439,7 @@ L:
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (u Uint32Slice) Reduce(
-	fn func(curr Uint32Slice, k int, v uint32, accumulator uint32) uint32, initialValue ...uint32,
+	fn func(curr Uint32Slice, k int, v, accumulator uint32) uint32, initialValue ...uint32,
 ) uint32 {
 	if len(u) == 0 {
 		return 0
@@ -467,7 +467,7 @@ func (u Uint32Slice) Reduce(
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (u Uint32Slice) ReduceRight(
-	fn func(curr Uint32Slice, k int, v uint32, accumulator uint32) uint32, initialValue ...uint32,
+	fn func(curr Uint32Slice, k int, v, accumulator uint32) uint32, initialValue ...uint32,
 ) uint32 {
 	if len(u) == 0 {
 		return 0

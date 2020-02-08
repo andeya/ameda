@@ -393,7 +393,7 @@ L:
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (b BoolSlice) Reduce(
-	fn func(curr BoolSlice, k int, v bool, accumulator bool) bool, initialValue ...bool,
+	fn func(curr BoolSlice, k int, v, accumulator bool) bool, initialValue ...bool,
 ) bool {
 	if len(b) == 0 {
 		return false
@@ -421,7 +421,7 @@ func (b BoolSlice) Reduce(
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
 func (b BoolSlice) ReduceRight(
-	fn func(curr BoolSlice, k int, v bool, accumulator bool) bool, initialValue ...bool,
+	fn func(curr BoolSlice, k int, v, accumulator bool) bool, initialValue ...bool,
 ) bool {
 	if len(b) == 0 {
 		return false
