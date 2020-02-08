@@ -5,7 +5,23 @@ import (
 	"reflect"
 )
 
-// InterfaceToBool converts i to bool type.
+// InterfaceToInterfacePtr converts interface to *interface.
+func InterfaceToInterfacePtr(i interface{}) *interface{} {
+	return &i
+}
+
+// InterfaceToString converts interface to string.
+func InterfaceToString(i interface{}) string {
+	return fmt.Sprintf("%v", i)
+}
+
+// InterfaceToStringPtr converts interface to *string.
+func InterfaceToStringPtr(i interface{}) *string {
+	v := InterfaceToString(i)
+	return &v
+}
+
+// InterfaceToBool converts interface to bool.
 // NOTE:
 //  0 is false, other numbers are true
 func InterfaceToBool(i interface{}, emptyAsFalse ...bool) (bool, error) {
@@ -57,4 +73,12 @@ func InterfaceToBool(i interface{}, emptyAsFalse ...bool) (bool, error) {
 		}
 		return false, fmt.Errorf("cannot convert %#v of type %T to bool", i, i)
 	}
+}
+
+// InterfaceToBoolPtr converts interface to *bool.
+// NOTE:
+//  0 is false, other numbers are true
+func InterfaceToBoolPtr(i interface{}, emptyAsFalse ...bool) (*bool, error) {
+	r, err := InterfaceToBool(i, emptyAsFalse...)
+	return &r, err
 }
