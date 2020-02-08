@@ -186,16 +186,20 @@ func (u Uint64Slice) Int64s() ([]int64, error) {
 }
 
 // Uint64sToUints converts uint64 slice to uint slice.
-func Uint64sToUints(u []uint64) []uint {
+func Uint64sToUints(u []uint64) ([]uint, error) {
+	var err error
 	r := make([]uint, len(u))
 	for k, v := range u {
-		r[k] = Uint64ToUint(v)
+		r[k], err = Uint64ToUint(v)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return r
+	return r, nil
 }
 
 // Uints converts uint64 slice to uint slice.
-func (u Uint64Slice) Uints() []uint {
+func (u Uint64Slice) Uints() ([]uint, error) {
 	return Uint64sToUints(u)
 }
 
