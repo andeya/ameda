@@ -13,15 +13,20 @@ func NewFloat64Slice(a []float64) *Float64Slice {
 	return &f
 }
 
-// Copy creates a copy of the float64 slice.
-func (f Float64Slice) Copy() []float64 {
+// Float64sCopy creates a copy of the float64 slice.
+func Float64sCopy(f []float64) []float64 {
 	b := make([]float64, len(f))
 	copy(b, f)
 	return b
 }
 
-// Interfaces converts float64 slice to interface slice.
-func (f Float64Slice) Interfaces() []interface{} {
+// Copy creates a copy of the float64 slice.
+func (f Float64Slice) Copy() []float64 {
+	return Float64sCopy(f)
+}
+
+// Float64sToInterfaces converts float64 slice to interface slice.
+func Float64sToInterfaces(f []float64) []interface{} {
 	r := make([]interface{}, len(f))
 	for k, v := range f {
 		r[k] = Float64ToInterface(v)
@@ -29,11 +34,32 @@ func (f Float64Slice) Interfaces() []interface{} {
 	return r
 }
 
-// Strings converts float64 slice to string slice.
-func (f Float64Slice) Strings() []string {
+// Interfaces converts float64 slice to interface slice.
+func (f Float64Slice) Interfaces() []interface{} {
+	return Float64sToInterfaces(f)
+}
+
+// Float64sToStrings converts float64 slice to string slice.
+func Float64sToStrings(f []float64) []string {
 	r := make([]string, len(f))
 	for k, v := range f {
 		r[k] = Float64ToString(v)
+	}
+	return r
+}
+
+// Strings converts float64 slice to string slice.
+func (f Float64Slice) Strings() []string {
+	return Float64sToStrings(f)
+}
+
+// Float64sToBools converts float64 slice to bool slice.
+// NOTE:
+//  0 is false, everything else is true
+func Float64sToBools(f []float64) []bool {
+	r := make([]bool, len(f))
+	for k, v := range f {
+		r[k] = Float64ToBool(v)
 	}
 	return r
 }
@@ -42,15 +68,11 @@ func (f Float64Slice) Strings() []string {
 // NOTE:
 //  0 is false, everything else is true
 func (f Float64Slice) Bools() []bool {
-	r := make([]bool, len(f))
-	for k, v := range f {
-		r[k] = Float64ToBool(v)
-	}
-	return r
+	return Float64sToBools(f)
 }
 
-// Float32s converts float64 slice to float32 slice.
-func (f Float64Slice) Float32s() ([]float32, error) {
+// Float64sToFloat32s converts float64 slice to float32 slice.
+func Float64sToFloat32s(f []float64) ([]float32, error) {
 	var err error
 	r := make([]float32, len(f))
 	for k, v := range f {
@@ -62,13 +84,18 @@ func (f Float64Slice) Float32s() ([]float32, error) {
 	return r, nil
 }
 
+// Float32s converts float64 slice to float32 slice.
+func (f Float64Slice) Float32s() ([]float32, error) {
+	return Float64sToFloat32s(f)
+}
+
 // Float64s converts to []float64.
 func (f Float64Slice) Float64s() []float64 {
 	return []float64(f)
 }
 
-// Ints converts float64 slice to int slice.
-func (f Float64Slice) Ints() ([]int, error) {
+// Float64sToInts converts float64 slice to int slice.
+func Float64sToInts(f []float64) ([]int, error) {
 	var err error
 	r := make([]int, len(f))
 	for k, v := range f {
@@ -80,8 +107,13 @@ func (f Float64Slice) Ints() ([]int, error) {
 	return r, nil
 }
 
-// Int8s converts float64 slice to int8 slice.
-func (f Float64Slice) Int8s() ([]int8, error) {
+// Ints converts float64 slice to int slice.
+func (f Float64Slice) Ints() ([]int, error) {
+	return Float64sToInts(f)
+}
+
+// Float64sToInt8s converts float64 slice to int8 slice.
+func Float64sToInt8s(f []float64) ([]int8, error) {
 	var err error
 	r := make([]int8, len(f))
 	for k, v := range f {
@@ -93,8 +125,13 @@ func (f Float64Slice) Int8s() ([]int8, error) {
 	return r, nil
 }
 
-// Int16s converts float64 slice to int16 slice.
-func (f Float64Slice) Int16s() ([]int16, error) {
+// Int8s converts float64 slice to int8 slice.
+func (f Float64Slice) Int8s() ([]int8, error) {
+	return Float64sToInt8s(f)
+}
+
+// Float64sToInt16s converts float64 slice to int16 slice.
+func Float64sToInt16s(f []float64) ([]int16, error) {
 	var err error
 	r := make([]int16, len(f))
 	for k, v := range f {
@@ -106,8 +143,13 @@ func (f Float64Slice) Int16s() ([]int16, error) {
 	return r, nil
 }
 
-// Int32s converts float64 slice to int32 slice.
-func (f Float64Slice) Int32s() ([]int32, error) {
+// Int16s converts float64 slice to int16 slice.
+func (f Float64Slice) Int16s() ([]int16, error) {
+	return Float64sToInt16s(f)
+}
+
+// Float64sToInt32s converts float64 slice to int32 slice.
+func Float64sToInt32s(f []float64) ([]int32, error) {
 	var err error
 	r := make([]int32, len(f))
 	for k, v := range f {
@@ -119,8 +161,13 @@ func (f Float64Slice) Int32s() ([]int32, error) {
 	return r, nil
 }
 
-// Int64s converts float64 slice to int64 slice.
-func (f Float64Slice) Int64s() ([]int64, error) {
+// Int32s converts float64 slice to int32 slice.
+func (f Float64Slice) Int32s() ([]int32, error) {
+	return Float64sToInt32s(f)
+}
+
+// Float64sToInt64s converts float64 slice to int64 slice.
+func Float64sToInt64s(f []float64) ([]int64, error) {
 	var err error
 	r := make([]int64, len(f))
 	for k, v := range f {
@@ -132,8 +179,13 @@ func (f Float64Slice) Int64s() ([]int64, error) {
 	return r, nil
 }
 
-// Uints converts float64 slice to uint slice.
-func (f Float64Slice) Uints() ([]uint, error) {
+// Int64s converts float64 slice to int64 slice.
+func (f Float64Slice) Int64s() ([]int64, error) {
+	return Float64sToInt64s(f)
+}
+
+// Float64sToUints converts float64 slice to uint slice.
+func Float64sToUints(f []float64) ([]uint, error) {
 	var err error
 	r := make([]uint, len(f))
 	for k, v := range f {
@@ -145,8 +197,13 @@ func (f Float64Slice) Uints() ([]uint, error) {
 	return r, nil
 }
 
-// Uint8s converts float64 slice to uint8 slice.
-func (f Float64Slice) Uint8s() ([]uint8, error) {
+// Uints converts float64 slice to uint slice.
+func (f Float64Slice) Uints() ([]uint, error) {
+	return Float64sToUints(f)
+}
+
+// Float64sToUint8s converts float64 slice to uint8 slice.
+func Float64sToUint8s(f []float64) ([]uint8, error) {
 	var err error
 	r := make([]uint8, len(f))
 	for k, v := range f {
@@ -158,8 +215,13 @@ func (f Float64Slice) Uint8s() ([]uint8, error) {
 	return r, nil
 }
 
-// Uint16s converts float64 slice to uint16 slice.
-func (f Float64Slice) Uint16s() ([]uint16, error) {
+// Uint8s converts float64 slice to uint8 slice.
+func (f Float64Slice) Uint8s() ([]uint8, error) {
+	return Float64sToUint8s(f)
+}
+
+// Float64sToUint16s converts float64 slice to uint16 slice.
+func Float64sToUint16s(f []float64) ([]uint16, error) {
 	var err error
 	r := make([]uint16, len(f))
 	for k, v := range f {
@@ -171,8 +233,13 @@ func (f Float64Slice) Uint16s() ([]uint16, error) {
 	return r, nil
 }
 
-// Uint32s converts float64 slice to uint32 slice.
-func (f Float64Slice) Uint32s() ([]uint32, error) {
+// Uint16s converts float64 slice to uint16 slice.
+func (f Float64Slice) Uint16s() ([]uint16, error) {
+	return Float64sToUint16s(f)
+}
+
+// Float64sToUint32s converts float64 slice to uint32 slice.
+func Float64sToUint32s(f []float64) ([]uint32, error) {
 	var err error
 	r := make([]uint32, len(f))
 	for k, v := range f {
@@ -184,8 +251,13 @@ func (f Float64Slice) Uint32s() ([]uint32, error) {
 	return r, nil
 }
 
-// Uint64s converts float64 slice to uint64 slice.
-func (f Float64Slice) Uint64s() ([]uint64, error) {
+// Uint32s converts float64 slice to uint32 slice.
+func (f Float64Slice) Uint32s() ([]uint32, error) {
+	return Float64sToUint32s(f)
+}
+
+// Float64sToUint64s converts float64 slice to uint64 slice.
+func Float64sToUint64s(f []float64) ([]uint64, error) {
 	var err error
 	r := make([]uint64, len(f))
 	for k, v := range f {
@@ -195,6 +267,11 @@ func (f Float64Slice) Uint64s() ([]uint64, error) {
 		}
 	}
 	return r, nil
+}
+
+// Uint64s converts float64 slice to uint64 slice.
+func (f Float64Slice) Uint64s() ([]uint64, error) {
+	return Float64sToUint64s(f)
 }
 
 // Concat is used to merge two or more slices.
