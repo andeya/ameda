@@ -13,15 +13,20 @@ func NewInt8Slice(a []int8) *Int8Slice {
 	return &i
 }
 
-// Copy creates a copy of the int8 slice.
-func (i Int8Slice) Copy() []int8 {
+// Int8sCopy creates a copy of the int8 slice.
+func Int8sCopy(i []int8) []int8 {
 	b := make([]int8, len(i))
 	copy(b, i)
 	return b
 }
 
-// Interfaces converts int8 slice to interface slice.
-func (i Int8Slice) Interfaces() []interface{} {
+// Copy creates a copy of the int8 slice.
+func (i Int8Slice) Copy() []int8 {
+	return Int8sCopy(i)
+}
+
+// Int8sToInterfaces converts int8 slice to interface slice.
+func Int8sToInterfaces(i []int8) []interface{} {
 	r := make([]interface{}, len(i))
 	for k, v := range i {
 		r[k] = v
@@ -29,11 +34,32 @@ func (i Int8Slice) Interfaces() []interface{} {
 	return r
 }
 
-// Strings converts int8 slice to string slice.
-func (i Int8Slice) Strings() []string {
+// Interfaces converts int8 slice to interface slice.
+func (i Int8Slice) Interfaces() []interface{} {
+	return Int8sToInterfaces(i)
+}
+
+// Int8sToStrings converts int8 slice to string slice.
+func Int8sToStrings(i []int8) []string {
 	r := make([]string, len(i))
 	for k, v := range i {
 		r[k] = Int8ToString(v)
+	}
+	return r
+}
+
+// Strings converts int8 slice to string slice.
+func (i Int8Slice) Strings() []string {
+	return Int8sToStrings(i)
+}
+
+// Int8sToBools converts int8 slice to bool slice.
+// NOTE:
+// Int8sTo 0 is false, everything else is true
+func Int8sToBools(i []int8) []bool {
+	r := make([]bool, len(i))
+	for k, v := range i {
+		r[k] = Int8ToBool(v)
 	}
 	return r
 }
@@ -42,15 +68,11 @@ func (i Int8Slice) Strings() []string {
 // NOTE:
 //  0 is false, everything else is true
 func (i Int8Slice) Bools() []bool {
-	r := make([]bool, len(i))
-	for k, v := range i {
-		r[k] = Int8ToBool(v)
-	}
-	return r
+	return Int8sToBools(i)
 }
 
-// Float32s converts int8 slice to float32 slice.
-func (i Int8Slice) Float32s() []float32 {
+// Int8sToFloat32s converts int8 slice to float32 slice.
+func Int8sToFloat32s(i []int8) []float32 {
 	r := make([]float32, len(i))
 	for k, v := range i {
 		r[k] = Int8ToFloat32(v)
@@ -58,8 +80,13 @@ func (i Int8Slice) Float32s() []float32 {
 	return r
 }
 
-// Float64s converts int8 slice to float64 slice.
-func (i Int8Slice) Float64s() []float64 {
+// Float32s converts int8 slice to float32 slice.
+func (i Int8Slice) Float32s() []float32 {
+	return Int8sToFloat32s(i)
+}
+
+// Int8sToFloat64s converts int8 slice to float64 slice.
+func Int8sToFloat64s(i []int8) []float64 {
 	r := make([]float64, len(i))
 	for k, v := range i {
 		r[k] = Int8ToFloat64(v)
@@ -67,8 +94,13 @@ func (i Int8Slice) Float64s() []float64 {
 	return r
 }
 
-// Ints converts int8 slice to int slice.
-func (i Int8Slice) Ints() []int {
+// Float64s converts int8 slice to float64 slice.
+func (i Int8Slice) Float64s() []float64 {
+	return Int8sToFloat64s(i)
+}
+
+// Int8sToInts converts int8 slice to int slice.
+func Int8sToInts(i []int8) []int {
 	r := make([]int, len(i))
 	for k, v := range i {
 		r[k] = Int8ToInt(v)
@@ -76,13 +108,18 @@ func (i Int8Slice) Ints() []int {
 	return r
 }
 
+// Ints converts int8 slice to int slice.
+func (i Int8Slice) Ints() []int {
+	return Int8sToInts(i)
+}
+
 // Int8s converts to []int8.
 func (i Int8Slice) Int8s() []int8 {
 	return []int8(i)
 }
 
-// Int16s converts int8 slice to int16 slice.
-func (i Int8Slice) Int16s() []int16 {
+// Int8sToInt16s converts int8 slice to int16 slice.
+func Int8sToInt16s(i []int8) []int16 {
 	r := make([]int16, len(i))
 	for k, v := range i {
 		r[k] = Int8ToInt16(v)
@@ -90,8 +127,13 @@ func (i Int8Slice) Int16s() []int16 {
 	return r
 }
 
-// Int32s converts int8 slice to int32 slice.
-func (i Int8Slice) Int32s() []int32 {
+// Int16s converts int8 slice to int16 slice.
+func (i Int8Slice) Int16s() []int16 {
+	return Int8sToInt16s(i)
+}
+
+// Int8sToInt32s converts int8 slice to int32 slice.
+func Int8sToInt32s(i []int8) []int32 {
 	r := make([]int32, len(i))
 	for k, v := range i {
 		r[k] = Int8ToInt32(v)
@@ -99,8 +141,13 @@ func (i Int8Slice) Int32s() []int32 {
 	return r
 }
 
-// Int64s converts int8 slice to int64 slice.
-func (i Int8Slice) Int64s() []int64 {
+// Int32s converts int8 slice to int32 slice.
+func (i Int8Slice) Int32s() []int32 {
+	return Int8sToInt32s(i)
+}
+
+// Int8sToInt64s converts int8 slice to int64 slice.
+func Int8sToInt64s(i []int8) []int64 {
 	r := make([]int64, len(i))
 	for k, v := range i {
 		r[k] = Int8ToInt64(v)
@@ -108,8 +155,13 @@ func (i Int8Slice) Int64s() []int64 {
 	return r
 }
 
-// Uints converts int8 slice to uint slice.
-func (i Int8Slice) Uints() ([]uint, error) {
+// Int64s converts int8 slice to int64 slice.
+func (i Int8Slice) Int64s() []int64 {
+	return Int8sToInt64s(i)
+}
+
+// Int8sToUints converts int8 slice to uint slice.
+func Int8sToUints(i []int8) ([]uint, error) {
 	var err error
 	r := make([]uint, len(i))
 	for k, v := range i {
@@ -121,8 +173,13 @@ func (i Int8Slice) Uints() ([]uint, error) {
 	return r, nil
 }
 
-// Uint8s converts int8 slice to uint8 slice.
-func (i Int8Slice) Uint8s() ([]uint8, error) {
+// Uints converts int8 slice to uint slice.
+func (i Int8Slice) Uints() ([]uint, error) {
+	return Int8sToUints(i)
+}
+
+// Int8sToUint8s converts int8 slice to uint8 slice.
+func Int8sToUint8s(i []int8) ([]uint8, error) {
 	var err error
 	r := make([]uint8, len(i))
 	for k, v := range i {
@@ -134,8 +191,13 @@ func (i Int8Slice) Uint8s() ([]uint8, error) {
 	return r, nil
 }
 
-// Uint16s converts int8 slice to uint16 slice.
-func (i Int8Slice) Uint16s() ([]uint16, error) {
+// Uint8s converts int8 slice to uint8 slice.
+func (i Int8Slice) Uint8s() ([]uint8, error) {
+	return Int8sToUint8s(i)
+}
+
+// Int8sToUint16s converts int8 slice to uint16 slice.
+func Int8sToUint16s(i []int8) ([]uint16, error) {
 	var err error
 	r := make([]uint16, len(i))
 	for k, v := range i {
@@ -147,8 +209,13 @@ func (i Int8Slice) Uint16s() ([]uint16, error) {
 	return r, nil
 }
 
-// Uint32s converts int8 slice to uint32 slice.
-func (i Int8Slice) Uint32s() ([]uint32, error) {
+// Uint16s converts int8 slice to uint16 slice.
+func (i Int8Slice) Uint16s() ([]uint16, error) {
+	return Int8sToUint16s(i)
+}
+
+// Int8sToUint32s converts int8 slice to uint32 slice.
+func Int8sToUint32s(i []int8) ([]uint32, error) {
 	var err error
 	r := make([]uint32, len(i))
 	for k, v := range i {
@@ -160,8 +227,13 @@ func (i Int8Slice) Uint32s() ([]uint32, error) {
 	return r, nil
 }
 
-// Uint64s converts int8 slice to uint64 slice.
-func (i Int8Slice) Uint64s() ([]uint64, error) {
+// Uint32s converts int8 slice to uint32 slice.
+func (i Int8Slice) Uint32s() ([]uint32, error) {
+	return Int8sToUint32s(i)
+}
+
+// Int8sToUint64s converts int8 slice to uint64 slice.
+func Int8sToUint64s(i []int8) ([]uint64, error) {
 	var err error
 	r := make([]uint64, len(i))
 	for k, v := range i {
@@ -171,6 +243,11 @@ func (i Int8Slice) Uint64s() ([]uint64, error) {
 		}
 	}
 	return r, nil
+}
+
+// Uint64s converts int8 slice to uint64 slice.
+func (i Int8Slice) Uint64s() ([]uint64, error) {
+	return Int8sToUint64s(i)
 }
 
 // Concat is used to merge two or more slices.
