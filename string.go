@@ -21,10 +21,10 @@ func StringToStringPtr(v string) *string {
 }
 
 // StringToBool converts string to bool.
-func StringToBool(v string, emptyAsZero ...bool) (bool, error) {
+func StringToBool(v string, emptyAsFalse ...bool) (bool, error) {
 	r, err := strconv.ParseBool(v)
 	if err != nil {
-		if !isEmptyAsZero(emptyAsZero) {
+		if !isEmptyAsZero(emptyAsFalse) {
 			return false, err
 		}
 	}
@@ -32,8 +32,8 @@ func StringToBool(v string, emptyAsZero ...bool) (bool, error) {
 }
 
 // StringToBoolPtr converts string to *bool.
-func StringToBoolPtr(v string, emptyAsZero ...bool) (*bool, error) {
-	r, err := StringToBool(v, emptyAsZero...)
+func StringToBoolPtr(v string, emptyAsFalse ...bool) (*bool, error) {
+	r, err := StringToBool(v, emptyAsFalse...)
 	return &r, err
 }
 
