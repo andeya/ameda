@@ -5,18 +5,18 @@ import (
 )
 
 // StringToInterface converts string to interface.
-func StringToInterface(v string, emptyAsZero ...bool) interface{} {
+func StringToInterface(v string) interface{} {
 	return v
 }
 
 // StringToInterfacePtr converts string to *interface.
-func StringToInterfacePtr(v string, emptyAsZero ...bool) *interface{} {
-	r := StringToInterface(v, emptyAsZero...)
+func StringToInterfacePtr(v string) *interface{} {
+	r := StringToInterface(v)
 	return &r
 }
 
 // StringToStringPtr converts string to *string.
-func StringToStringPtr(v string, emptyAsZero ...bool) *string {
+func StringToStringPtr(v string) *string {
 	return &v
 }
 
