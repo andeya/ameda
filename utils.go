@@ -1,13 +1,16 @@
 package ameda
 
-import "errors"
+import (
+	"errors"
+	"strconv"
+)
 
 var (
 	errNegativeValue = errors.New("contains negative value")
 	errOverflowValue = errors.New("contains overflow value")
 )
 
-const is64BitPlatform bool = (32 << (^uint(0) >> 63)) == 64
+const is64BitPlatform bool = strconv.IntSize == 64
 
 func isEmptyAsZero(emptyAsZero []bool) bool {
 	return len(emptyAsZero) > 0 && emptyAsZero[0]
