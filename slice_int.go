@@ -54,7 +54,7 @@ func (i IntSlice) Strings() []string {
 }
 
 // IntsToBools converts int slice to bool slice.
-// IntsToNOTE:
+// NOTE:
 // IntsTo 0 is false, everything else is true
 func IntsToBools(i []int) []bool {
 	r := make([]bool, len(i))
