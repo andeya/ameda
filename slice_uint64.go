@@ -1,9 +1,7 @@
 package ameda
 
 import (
-	"math"
 	"sort"
-	"strconv"
 )
 
 // Uint64Slice uint64 slice object
@@ -15,27 +13,53 @@ func NewUint64Slice(a []uint64) *Uint64Slice {
 	return &u
 }
 
-// Copy creates a copy of the uint64 slice.
-func (u Uint64Slice) Copy() []uint64 {
+// Uint64sCopy creates a copy of the uint64 slice.
+func Uint64sCopy(u []uint64) []uint64 {
 	b := make([]uint64, len(u))
 	copy(b, u)
 	return b
 }
 
-// Interfaces converts uint64 slice to interface slice.
-func (u Uint64Slice) Interfaces() []interface{} {
+// Copy creates a copy of the uint64 slice.
+func (u Uint64Slice) Copy() []uint64 {
+	return Uint64sCopy(u)
+}
+
+// Uint64sToInterfaces converts uint64 slice to interface slice.
+func Uint64sToInterfaces(u []uint64) []interface{} {
 	r := make([]interface{}, len(u))
 	for k, v := range u {
-		r[k] = v
+		r[k] = Uint64ToInterface(v)
+	}
+	return r
+}
+
+// Interfaces converts uint64 slice to interface slice.
+func (u Uint64Slice) Interfaces() []interface{} {
+	return Uint64sToInterfaces(u)
+}
+
+// Uint64sToStrings converts uint64 slice to string slice.
+func Uint64sToStrings(u []uint64) []string {
+	r := make([]string, len(u))
+	for k, v := range u {
+		r[k] = Uint64ToString(v)
 	}
 	return r
 }
 
 // Strings converts uint64 slice to string slice.
 func (u Uint64Slice) Strings() []string {
-	r := make([]string, len(u))
+	return Uint64sToStrings(u)
+}
+
+// Uint64sToBools converts uint64 slice to bool slice.
+// NOTE:
+//  0 is false, everything else is true
+func Uint64sToBools(u []uint64) []bool {
+	r := make([]bool, len(u))
 	for k, v := range u {
-		r[k] = strconv.FormatUint(v, 10)
+		r[k] = Uint64ToBool(v)
 	}
 	return r
 }
@@ -44,47 +68,59 @@ func (u Uint64Slice) Strings() []string {
 // NOTE:
 //  0 is false, everything else is true
 func (u Uint64Slice) Bools() []bool {
-	r := make([]bool, len(u))
+	return Uint64sToBools(u)
+}
+
+// Uint64sToFloat32s converts uint64 slice to float32 slice.
+func Uint64sToFloat32s(u []uint64) []float32 {
+	r := make([]float32, len(u))
 	for k, v := range u {
-		r[k] = v != 0
+		r[k] = Uint64ToFloat32(v)
 	}
 	return r
 }
 
-// Float64s converts uint64 slice to float32 slice.
+// Float32s converts uint64 slice to float32 slice.
 func (u Uint64Slice) Float32s() []float32 {
-	r := make([]float32, len(u))
+	return Uint64sToFloat32s(u)
+}
+
+// Uint64sToFloat64s converts uint64 slice to float64 slice.
+func Uint64sToFloat64s(u []uint64) []float64 {
+	r := make([]float64, len(u))
 	for k, v := range u {
-		r[k] = float32(v)
+		r[k] = Uint64ToFloat64(v)
 	}
 	return r
 }
 
 // Float64s converts uint64 slice to float64 slice.
 func (u Uint64Slice) Float64s() []float64 {
-	r := make([]float64, len(u))
+	return Uint64sToFloat64s(u)
+}
+
+// Uint64sToInts converts uint64 slice to int slice.
+func Uint64sToInts(u []uint64) []int {
+	r := make([]int, len(u))
 	for k, v := range u {
-		r[k] = float64(v)
+		r[k] = Uint64ToInt(v)
 	}
 	return r
 }
 
 // Ints converts uint64 slice to int slice.
-func (u Uint64Slice) Ints() ([]int, error) {
-	r := make([]int, len(u))
-	if is64BitPlatform {
-		for k, v := range u {
-			if v > math.MaxInt64 {
-				return nil, errOverflowValue
-			}
-			r[k] = int(v)
-		}
-	} else {
-		for k, v := range u {
-			if v > math.MaxInt32 {
-				return nil, errOverflowValue
-			}
-			r[k] = int(v)
+func (u Uint64Slice) Ints() []int {
+	return Uint64sToInts(u)
+}
+
+// Uint64sToInt8s converts uint64 slice to int8 slice.
+func Uint64sToInt8s(u []uint64) ([]int8, error) {
+	var err error
+	r := make([]int8, len(u))
+	for k, v := range u {
+		r[k], err = Uint64ToInt8(v)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return r, nil
@@ -92,65 +128,85 @@ func (u Uint64Slice) Ints() ([]int, error) {
 
 // Int8s converts uint64 slice to int8 slice.
 func (u Uint64Slice) Int8s() ([]int8, error) {
-	r := make([]int8, len(u))
+	return Uint64sToInt8s(u)
+}
+
+// Uint64sToInt16s converts uint64 slice to int16 slice.
+func Uint64sToInt16s(u []uint64) ([]int16, error) {
+	var err error
+	r := make([]int16, len(u))
 	for k, v := range u {
-		if v > math.MaxInt8 {
-			return nil, errOverflowValue
+		r[k], err = Uint64ToInt16(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = int8(v)
 	}
 	return r, nil
 }
 
 // Int16s converts uint64 slice to int16 slice.
 func (u Uint64Slice) Int16s() ([]int16, error) {
-	r := make([]int16, len(u))
+	return Uint64sToInt16s(u)
+}
+
+// Uint64sToInt32s converts uint64 slice to int32 slice.
+func Uint64sToInt32s(u []uint64) ([]int32, error) {
+	var err error
+	r := make([]int32, len(u))
 	for k, v := range u {
-		if v > math.MaxInt16 {
-			return nil, errOverflowValue
+		r[k], err = Uint64ToInt32(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = int16(v)
 	}
 	return r, nil
 }
 
 // Int32s converts uint64 slice to int32 slice.
 func (u Uint64Slice) Int32s() ([]int32, error) {
-	r := make([]int32, len(u))
+	return Uint64sToInt32s(u)
+}
+
+// Uint64sToInt64s converts uint64 slice to int64 slice.
+func Uint64sToInt64s(u []uint64) ([]int64, error) {
+	var err error
+	r := make([]int64, len(u))
 	for k, v := range u {
-		if v > math.MaxInt32 {
-			return nil, errOverflowValue
+		r[k], err = Uint64ToInt64(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = int32(v)
 	}
 	return r, nil
 }
 
 // Int64s converts uint64 slice to int64 slice.
 func (u Uint64Slice) Int64s() ([]int64, error) {
-	r := make([]int64, len(u))
+	return Uint64sToInt64s(u)
+}
+
+// Uint64sToUints converts uint64 slice to uint slice.
+func Uint64sToUints(u []uint64) []uint {
+	r := make([]uint, len(u))
 	for k, v := range u {
-		if v > math.MaxInt64 {
-			return nil, errOverflowValue
-		}
-		r[k] = int64(v)
+		r[k] = Uint64ToUint(v)
 	}
-	return r, nil
+	return r
 }
 
 // Uints converts uint64 slice to uint slice.
-func (u Uint64Slice) Uints() ([]uint, error) {
-	r := make([]uint, len(u))
-	if is64BitPlatform {
-		for k, v := range u {
-			r[k] = uint(v)
-		}
-	} else {
-		for k, v := range u {
-			if v > math.MaxUint32 {
-				return nil, errOverflowValue
-			}
-			r[k] = uint(v)
+func (u Uint64Slice) Uints() []uint {
+	return Uint64sToUints(u)
+}
+
+// Uint64sToUint8s converts uint64 slice to uint8 slice.
+func Uint64sToUint8s(u []uint64) ([]uint8, error) {
+	var err error
+	r := make([]uint8, len(u))
+	for k, v := range u {
+		r[k], err = Uint64ToUint8(v)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return r, nil
@@ -158,38 +214,51 @@ func (u Uint64Slice) Uints() ([]uint, error) {
 
 // Uint8s converts uint64 slice to uint8 slice.
 func (u Uint64Slice) Uint8s() ([]uint8, error) {
-	r := make([]uint8, len(u))
-	for k, v := range u {
-		if v > math.MaxUint8 {
-			return nil, errOverflowValue
-		}
-		r[k] = uint8(v)
-	}
-	return r, nil
+	return Uint64sToUint8s(u)
 }
 
-// Uint64s converts uint64 slice to uint16 slice.
-func (u Uint64Slice) Uint16s() ([]uint16, error) {
+// Uint64sToUint16s converts uint64 slice to uint16 slice.
+func Uint64sToUint16s(u []uint64) ([]uint16, error) {
+	var err error
 	r := make([]uint16, len(u))
 	for k, v := range u {
-		if v > math.MaxUint16 {
-			return nil, errOverflowValue
+		r[k], err = Uint64ToUint16(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint16(v)
 	}
 	return r, nil
 }
 
-// Uint64s converts uint64 slice to uint32 slice.
-func (u Uint64Slice) Uint32s() ([]uint32, error) {
-	r := make([]uint32, len(u))
+// Uint16s converts uint64 slice to uint16 slice.
+func (u Uint64Slice) Uint16s() ([]uint16, error) {
+	var err error
+	r := make([]uint16, len(u))
 	for k, v := range u {
-		if v > math.MaxUint32 {
-			return nil, errOverflowValue
+		r[k], err = Uint64ToUint16(v)
+		if err != nil {
+			return nil, err
 		}
-		r[k] = uint32(v)
 	}
 	return r, nil
+}
+
+// Uint64sToUint32s converts uint64 slice to uint32 slice.
+func Uint64sToUint32s(u []uint64) ([]uint32, error) {
+	var err error
+	r := make([]uint32, len(u))
+	for k, v := range u {
+		r[k], err = Uint64ToUint32(v)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return r, nil
+}
+
+// Uint32s converts uint64 slice to uint32 slice.
+func (u Uint64Slice) Uint32s() ([]uint32, error) {
+	return Uint64sToUint32s(u)
 }
 
 // Uint64s converts to []uint64.
