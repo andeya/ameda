@@ -270,3 +270,123 @@ func InterfaceToIntPtr(i interface{}, emptyAsFalse ...bool) (*int, error) {
 	r, err := InterfaceToInt(i, emptyAsFalse...)
 	return &r, err
 }
+
+// InterfaceToInt8 converts interface to int8.
+func InterfaceToInt8(i interface{}, emptyStringAsZero ...bool) (int8, error) {
+	switch v := i.(type) {
+	case bool:
+		return BoolToInt8(v), nil
+	case nil:
+		return 0, nil
+	case int:
+		return IntToInt8(v)
+	case int8:
+		return v, nil
+	case int16:
+		return Int16ToInt8(v)
+	case int32:
+		return Int32ToInt8(v)
+	case int64:
+		return Int64ToInt8(v)
+	case uint:
+		return UintToInt8(v)
+	case uint8:
+		return Uint8ToInt8(v)
+	case uint16:
+		return Uint16ToInt8(v)
+	case uint32:
+		return Uint32ToInt8(v)
+	case uint64:
+		return Uint64ToInt8(v)
+	case uintptr:
+		return UintToInt8(uint(v))
+	case string:
+		return StringToInt8(v, emptyStringAsZero...)
+	default:
+		r := IndirectValue(reflect.ValueOf(i))
+		switch r.Kind() {
+		case reflect.Bool:
+			return BoolToInt8(r.Bool()), nil
+		case reflect.Invalid:
+			return 0, nil
+		case reflect.Float32, reflect.Float64:
+			return Float64ToInt8(r.Float())
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return Int64ToInt8(r.Int())
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return Uint64ToInt8(r.Uint())
+		case reflect.String:
+			return StringToInt8(r.String(), emptyStringAsZero...)
+		}
+		if isEmptyAsZero(emptyStringAsZero) {
+			return BoolToInt8(!r.IsZero()), nil
+		}
+		return 0, fmt.Errorf("cannot convert %#v of type %T to int8", i, i)
+	}
+}
+
+// InterfaceToInt8Ptr converts interface to *int8.
+func InterfaceToInt8Ptr(i interface{}, emptyAsFalse ...bool) (*int8, error) {
+	r, err := InterfaceToInt8(i, emptyAsFalse...)
+	return &r, err
+}
+
+// InterfaceToInt16 converts interface to int16.
+func InterfaceToInt16(i interface{}, emptyStringAsZero ...bool) (int16, error) {
+	switch v := i.(type) {
+	case bool:
+		return BoolToInt16(v), nil
+	case nil:
+		return 0, nil
+	case int:
+		return IntToInt16(v)
+	case int8:
+		return Int8ToInt16(v), nil
+	case int16:
+		return v, nil
+	case int32:
+		return Int32ToInt16(v)
+	case int64:
+		return Int64ToInt16(v)
+	case uint:
+		return UintToInt16(v)
+	case uint8:
+		return Uint8ToInt16(v), nil
+	case uint16:
+		return Uint16ToInt16(v)
+	case uint32:
+		return Uint32ToInt16(v)
+	case uint64:
+		return Uint64ToInt16(v)
+	case uintptr:
+		return UintToInt16(uint(v))
+	case string:
+		return StringToInt16(v, emptyStringAsZero...)
+	default:
+		r := IndirectValue(reflect.ValueOf(i))
+		switch r.Kind() {
+		case reflect.Bool:
+			return BoolToInt16(r.Bool()), nil
+		case reflect.Invalid:
+			return 0, nil
+		case reflect.Float32, reflect.Float64:
+			return Float64ToInt16(r.Float())
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return Int64ToInt16(r.Int())
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return Uint64ToInt16(r.Uint())
+		case reflect.String:
+			return StringToInt16(r.String(), emptyStringAsZero...)
+		}
+		if isEmptyAsZero(emptyStringAsZero) {
+			return BoolToInt16(!r.IsZero()), nil
+		}
+		return 0, fmt.Errorf("cannot convert %#v of type %T to int16", i, i)
+	}
+}
+
+// InterfaceToInt16Ptr converts interface to *int16.
+func InterfaceToInt16Ptr(i interface{}, emptyAsFalse ...bool) (*int16, error) {
+	r, err := InterfaceToInt16(i, emptyAsFalse...)
+	return &r, err
+}
