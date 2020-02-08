@@ -55,7 +55,7 @@ func (i Int8Slice) Strings() []string {
 
 // Int8sToBools converts int8 slice to bool slice.
 // NOTE:
-// Int8sTo 0 is false, everything else is true
+//  0 is false, everything else is true
 func Int8sToBools(i []int8) []bool {
 	r := make([]bool, len(i))
 	for k, v := range i {
