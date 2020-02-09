@@ -660,9 +660,9 @@ func (i *InterfaceSlice) RemoveOne(element ...interface{}) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (i *InterfaceSlice) RemoveAll(element ...interface{}) int {
+func (i *InterfaceSlice) RemoveEvery(element ...interface{}) int {
 	a := *i
 	m := make(map[interface{}]bool, len(element))
 	for _, v := range element {

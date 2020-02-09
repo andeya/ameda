@@ -679,9 +679,9 @@ func (s *StringSlice) RemoveOne(element ...string) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (s *StringSlice) RemoveAll(element ...string) int {
+func (s *StringSlice) RemoveEvery(element ...string) int {
 	a := *s
 	m := make(map[string]bool, len(element))
 	for _, v := range element {

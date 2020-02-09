@@ -668,9 +668,9 @@ func (f *Float32Slice) RemoveOne(element ...float32) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (f *Float32Slice) RemoveAll(element ...float32) int {
+func (f *Float32Slice) RemoveEvery(element ...float32) int {
 	a := *f
 	m := make(map[float32]bool, len(element))
 	for _, v := range element {

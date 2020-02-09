@@ -632,9 +632,9 @@ func (u *Uint8Slice) RemoveOne(element ...uint8) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint8Slice) RemoveAll(element ...uint8) int {
+func (u *Uint8Slice) RemoveEvery(element ...uint8) int {
 	a := *u
 	m := make(map[uint8]bool, len(element))
 	for _, v := range element {

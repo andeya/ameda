@@ -648,9 +648,9 @@ func (i *Int8Slice) RemoveOne(element ...int8) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (i *Int8Slice) RemoveAll(element ...int8) int {
+func (i *Int8Slice) RemoveEvery(element ...int8) int {
 	a := *i
 	m := make(map[int8]bool, len(element))
 	for _, v := range element {

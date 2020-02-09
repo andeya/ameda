@@ -240,9 +240,9 @@ func TestIntSlice_RemoveOne(t *testing.T) {
 	assert.Equal(t, IntSlice{-1, -1, 0, 1, 1}, slice)
 }
 
-func TestIntSlice_RemoveAll(t *testing.T) {
+func TestIntSlice_RemoveEvery(t *testing.T) {
 	slice := IntSlice{-1, 0, -1, 0, 1, 1}
-	n := slice.RemoveAll(0)
+	n := slice.RemoveEvery(0)
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, IntSlice{-1, -1, 1, 1}, slice)
 }

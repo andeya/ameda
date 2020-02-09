@@ -594,9 +594,9 @@ func (b *BoolSlice) RemoveOne(element ...bool) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (b *BoolSlice) RemoveAll(element ...bool) int {
+func (b *BoolSlice) RemoveEvery(element ...bool) int {
 	a := *b
 	m := make(map[bool]bool, len(element))
 	for _, v := range element {

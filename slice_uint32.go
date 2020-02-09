@@ -656,9 +656,9 @@ func (u *Uint32Slice) RemoveOne(element ...uint32) int {
 	return n
 }
 
-// RemoveAll removes all the elements from the slice,
+// RemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint32Slice) RemoveAll(element ...uint32) int {
+func (u *Uint32Slice) RemoveEvery(element ...uint32) int {
 	a := *u
 	m := make(map[uint32]bool, len(element))
 	for _, v := range element {

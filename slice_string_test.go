@@ -243,9 +243,9 @@ func TestStringSlice_RemoveOne(t *testing.T) {
 	assert.Equal(t, StringSlice{"-1", "-1", "0", "1", "1"}, slice)
 }
 
-func TestStringSlice_RemoveAll(t *testing.T) {
+func TestStringSlice_RemoveEvery(t *testing.T) {
 	slice := StringSlice{"-1", "0", "-1", "0", "1", "1"}
-	n := slice.RemoveAll("0")
+	n := slice.RemoveEvery("0")
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, StringSlice{"-1", "-1", "1", "1"}, slice)
 }
