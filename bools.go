@@ -1,12 +1,11 @@
 package ameda
 
-// BoolSlice bool slice object
-type BoolSlice []bool
-
-// NewBoolSlice creates an BoolSlice object.
-func NewBoolSlice(a []bool) *BoolSlice {
-	i := BoolSlice(a)
-	return &i
+// OneBool try to return the first element, otherwise return zero value.
+func OneBool(b []bool) bool {
+	if len(b) > 0 {
+		return b[0]
+	}
+	return false
 }
 
 // BoolsCopy creates a copy of the bool slice.
@@ -14,11 +13,6 @@ func BoolsCopy(b []bool) []bool {
 	r := make([]bool, len(b))
 	copy(r, b)
 	return r
-}
-
-// Copy creates a copy of the bool slice.
-func (b BoolSlice) Copy() []bool {
-	return BoolsCopy(b)
 }
 
 // BoolsToInterfaces converts int8 slice to interface slice.
@@ -30,11 +24,6 @@ func BoolsToInterfaces(b []bool) []interface{} {
 	return r
 }
 
-// Interfaces converts int8 slice to interface slice.
-func (b BoolSlice) Interfaces() []interface{} {
-	return BoolsToInterfaces(b)
-}
-
 // BoolsToStrings converts int8 slice to string slice.
 func BoolsToStrings(b []bool) []string {
 	r := make([]string, len(b))
@@ -42,16 +31,6 @@ func BoolsToStrings(b []bool) []string {
 		r[k] = BoolToString(v)
 	}
 	return r
-}
-
-// Strings converts int8 slice to string slice.
-func (b BoolSlice) Strings() []string {
-	return BoolsToStrings(b)
-}
-
-// Bools converts int8 slice to bool slice.
-func (b BoolSlice) Bools() []bool {
-	return []bool(b)
 }
 
 // BoolsToFloat32s converts int8 slice to float32 slice.
@@ -63,11 +42,6 @@ func BoolsToFloat32s(b []bool) []float32 {
 	return r
 }
 
-// Float32s converts int8 slice to float32 slice.
-func (b BoolSlice) Float32s() []float32 {
-	return BoolsToFloat32s(b)
-}
-
 // BoolsToFloat64s converts int8 slice to float64 slice.
 func BoolsToFloat64s(b []bool) []float64 {
 	r := make([]float64, len(b))
@@ -77,30 +51,11 @@ func BoolsToFloat64s(b []bool) []float64 {
 	return r
 }
 
-// Float64s converts int8 slice to float64 slice.
-func (b BoolSlice) Float64s() []float64 {
-	return BoolsToFloat64s(b)
-}
-
 // BoolsToInts converts int8 slice to int slice.
 func BoolsToInts(b []bool) []int {
 	r := make([]int, len(b))
 	for k, v := range b {
 		r[k] = BoolToInt(v)
-	}
-	return r
-}
-
-// Ints converts int8 slice to int slice.
-func (b BoolSlice) Ints() []int {
-	return BoolsToInts(b)
-}
-
-// Int8s converts to []int8.
-func (b BoolSlice) Int8s() []int8 {
-	r := make([]int8, len(b))
-	for k, v := range b {
-		r[k] = BoolToInt8(v)
 	}
 	return r
 }
@@ -114,11 +69,6 @@ func BoolsToInt16s(b []bool) []int16 {
 	return r
 }
 
-// Int16s converts int8 slice to int16 slice.
-func (b BoolSlice) Int16s() []int16 {
-	return BoolsToInt16s(b)
-}
-
 // BoolsToInt32s converts int8 slice to int32 slice.
 func BoolsToInt32s(b []bool) []int32 {
 	r := make([]int32, len(b))
@@ -126,11 +76,6 @@ func BoolsToInt32s(b []bool) []int32 {
 		r[k] = BoolToInt32(v)
 	}
 	return r
-}
-
-// Int32s converts int8 slice to int32 slice.
-func (b BoolSlice) Int32s() []int32 {
-	return BoolsToInt32s(b)
 }
 
 // BoolsToInt64s converts int8 slice to int64 slice.
@@ -142,11 +87,6 @@ func BoolsToInt64s(b []bool) []int64 {
 	return r
 }
 
-// Int64s converts int8 slice to int64 slice.
-func (b BoolSlice) Int64s() []int64 {
-	return BoolsToInt64s(b)
-}
-
 // BoolsToUints converts bool slice to uint slice.
 func BoolsToUints(b []bool) []uint {
 	r := make([]uint, len(b))
@@ -156,13 +96,8 @@ func BoolsToUints(b []bool) []uint {
 	return r
 }
 
-// Uints converts bool slice to uint slice.
-func (b BoolSlice) Uints() []uint {
-	return BoolsToUints(b)
-}
-
-// Uint8s converts to []uint8.
-func (b BoolSlice) Uint8s() []uint8 {
+// BoolsToUint8s converts bool slice to uint8 slice.
+func BoolsToUint8s(b []bool) []uint8 {
 	r := make([]uint8, len(b))
 	for k, v := range b {
 		r[k] = BoolToUint8(v)
@@ -179,11 +114,6 @@ func BoolsToUint16s(b []bool) []uint16 {
 	return r
 }
 
-// Uint16s converts bool slice to uint16 slice.
-func (b BoolSlice) Uint16s() []uint16 {
-	return BoolsToUint16s(b)
-}
-
 // BoolsToUint32s converts bool slice to uint32 slice.
 func BoolsToUint32s(b []bool) []uint32 {
 	r := make([]uint32, len(b))
@@ -191,11 +121,6 @@ func BoolsToUint32s(b []bool) []uint32 {
 		r[k] = BoolToUint32(v)
 	}
 	return r
-}
-
-// Uint32s converts bool slice to uint32 slice.
-func (b BoolSlice) Uint32s() []uint32 {
-	return BoolsToUint32s(b)
 }
 
 // BoolsToUint64s converts bool slice to uint64 slice.
@@ -207,21 +132,15 @@ func BoolsToUint64s(b []bool) []uint64 {
 	return r
 }
 
-// Uint64s converts bool slice to uint64 slice.
-func (b BoolSlice) Uint64s() []uint64 {
-	return BoolsToUint64s(b)
-}
-
-// Concat is used to merge two or more slices.
+// BoolsConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (b BoolSlice) Concat(a ...[]bool) []bool {
-	totalLen := len(b)
+func BoolsConcat(a ...[]bool) []bool {
+	var totalLen int
 	for _, v := range a {
 		totalLen += len(v)
 	}
 	ret := make([]bool, totalLen)
-	n := copy(ret, b)
-	dst := ret[n:]
+	dst := ret
 	for _, v := range a {
 		n := copy(dst, v)
 		dst = dst[n:]
@@ -229,7 +148,7 @@ func (b BoolSlice) Concat(a ...[]bool) []bool {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// BoolsCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -238,21 +157,21 @@ func (b BoolSlice) Concat(a ...[]bool) []bool {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (b BoolSlice) CopyWithin(target, start int, end ...int) {
+func BoolsCopyWithin(b []bool, target, start int, end ...int) {
 	target = fixIndex(len(b), target, true)
 	if target == len(b) {
 		return
 	}
-	sub := b.Slice(start, end...)
+	sub := BoolsSlice(b, start, end...)
 	for k, v := range sub {
 		b[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// BoolsEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (b BoolSlice) Every(fn func(curr BoolSlice, k int, v bool) bool) bool {
+func BoolsEvery(b []bool, fn func(b []bool, k int, v bool) bool) bool {
 	for k, v := range b {
 		if !fn(b, k, v) {
 			return false
@@ -261,7 +180,7 @@ func (b BoolSlice) Every(fn func(curr BoolSlice, k int, v bool) bool) bool {
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// BoolsFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -270,7 +189,7 @@ func (b BoolSlice) Every(fn func(curr BoolSlice, k int, v bool) bool) bool {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (b BoolSlice) Fill(value bool, start int, end ...int) {
+func BoolsFill(b []bool, value bool, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(b), start, end...)
 	if !ok {
 		return
@@ -280,9 +199,9 @@ func (b BoolSlice) Fill(value bool, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (b BoolSlice) Filter(fn func(curr BoolSlice, k int, v bool) bool) []bool {
-	ret := make([]bool, 0)
+// BoolsFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func BoolsFilter(b []bool, fn func(b []bool, k int, v bool) bool) []bool {
+	ret := make([]bool, 0, 16)
 	for k, v := range b {
 		if fn(b, k, v) {
 			ret = append(ret, v)
@@ -291,10 +210,10 @@ func (b BoolSlice) Filter(fn func(curr BoolSlice, k int, v bool) bool) []bool {
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// BoolsFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (b BoolSlice) Find(fn func(curr BoolSlice, k int, v bool) bool) (k int, v bool) {
+func BoolsFind(b []bool, fn func(b []bool, k int, v bool) bool) (k int, v bool) {
 	for k, v := range b {
 		if fn(b, k, v) {
 			return k, v
@@ -303,17 +222,17 @@ func (b BoolSlice) Find(fn func(curr BoolSlice, k int, v bool) bool) (k int, v b
 	return -1, false
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// BoolsIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (b BoolSlice) Includes(valueToFind bool, fromIndex ...int) bool {
-	return b.IndexOf(valueToFind, fromIndex...) > -1
+func BoolsIncludes(b []bool, valueToFind bool, fromIndex ...int) bool {
+	return BoolsIndexOf(b, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// BoolsIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (b BoolSlice) IndexOf(searchElement bool, fromIndex ...int) int {
+func BoolsIndexOf(b []bool, searchElement bool, fromIndex ...int) int {
 	idx := getFromIndex(len(b), fromIndex...)
 	for k, v := range b[idx:] {
 		if searchElement == v {
@@ -323,10 +242,10 @@ func (b BoolSlice) IndexOf(searchElement bool, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// BoolsLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (b BoolSlice) LastIndexOf(searchElement bool, fromIndex ...int) int {
+func BoolsLastIndexOf(b []bool, searchElement bool, fromIndex ...int) int {
 	idx := getFromIndex(len(b), fromIndex...)
 	for k := len(b) - 1; k >= idx; k-- {
 		if searchElement == b[k] {
@@ -336,9 +255,9 @@ func (b BoolSlice) LastIndexOf(searchElement bool, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// BoolsMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (b BoolSlice) Map(fn func(curr BoolSlice, k int, v bool) bool) []bool {
+func BoolsMap(b []bool, fn func(b []bool, k int, v bool) bool) []bool {
 	ret := make([]bool, len(b))
 	for k, v := range b {
 		ret[k] = fn(b, k, v)
@@ -346,9 +265,9 @@ func (b BoolSlice) Map(fn func(curr BoolSlice, k int, v bool) bool) []bool {
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// BoolsPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (b *BoolSlice) Pop() (elem bool, found bool) {
+func BoolsPop(b *[]bool) (elem bool, found bool) {
 	a := *b
 	if len(a) == 0 {
 		return false, false
@@ -360,15 +279,15 @@ func (b *BoolSlice) Pop() (elem bool, found bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (b *BoolSlice) Push(element ...bool) int {
+// BoolsPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func BoolsPush(b *[]bool, element ...bool) int {
 	*b = append(*b, element...)
 	return len(*b)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// BoolsPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (b *BoolSlice) PushOnce(element ...bool) int {
+func BoolsPushOnce(b *[]bool, element ...bool) int {
 	a := *b
 L:
 	for _, v := range element {
@@ -383,7 +302,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// BoolsReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -392,8 +311,9 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (b BoolSlice) Reduce(
-	fn func(curr BoolSlice, k int, v, accumulator bool) bool, initialValue ...bool,
+func BoolsReduce(
+	b []bool,
+	fn func(b []bool, k int, v, accumulator bool) bool, initialValue ...bool,
 ) bool {
 	if len(b) == 0 {
 		return false
@@ -411,7 +331,7 @@ func (b BoolSlice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// BoolsReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -420,8 +340,9 @@ func (b BoolSlice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (b BoolSlice) ReduceRight(
-	fn func(curr BoolSlice, k int, v, accumulator bool) bool, initialValue ...bool,
+func BoolsReduceRight(
+	b []bool,
+	fn func(b []bool, k int, v, accumulator bool) bool, initialValue ...bool,
 ) bool {
 	if len(b) == 0 {
 		return false
@@ -439,8 +360,8 @@ func (b BoolSlice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (b BoolSlice) Reverse() {
+// BoolsReverse reverses an slice in place.
+func BoolsReverse(b []bool) {
 	first := 0
 	last := len(b) - 1
 	for first < last {
@@ -450,9 +371,9 @@ func (b BoolSlice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// BoolsShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (b *BoolSlice) Shift() (element bool, found bool) {
+func BoolsShift(b *[]bool) (element bool, found bool) {
 	a := *b
 	if len(a) == 0 {
 		return false, false
@@ -463,21 +384,21 @@ func (b *BoolSlice) Shift() (element bool, found bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// BoolsSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (b BoolSlice) Slice(begin int, end ...int) []bool {
+func BoolsSlice(b []bool, begin int, end ...int) []bool {
 	fixedStart, fixedEnd, ok := fixRange(len(b), begin, end...)
 	if !ok {
 		return []bool{}
 	}
-	return b[fixedStart:fixedEnd].Copy()
+	return BoolsCopy(b[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// BoolsSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (b BoolSlice) Some(fn func(curr BoolSlice, k int, v bool) bool) bool {
+func BoolsSome(b []bool, fn func(b []bool, k int, v bool) bool) bool {
 	for k, v := range b {
 		if fn(b, k, v) {
 			return true
@@ -486,14 +407,9 @@ func (b BoolSlice) Some(fn func(curr BoolSlice, k int, v bool) bool) bool {
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (b BoolSlice) Len() int {
-	return len(b)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// BoolsSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (b *BoolSlice) Splice(start, deleteCount int, items ...bool) {
+func BoolsSplice(b *[]bool, start, deleteCount int, items ...bool) {
 	a := *b
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -508,7 +424,7 @@ func (b *BoolSlice) Splice(start, deleteCount int, items ...bool) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := BoolsCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -522,15 +438,15 @@ func (b *BoolSlice) Splice(start, deleteCount int, items ...bool) {
 	*b = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (b *BoolSlice) Unshift(element ...bool) int {
+// BoolsUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func BoolsUnshift(b *[]bool, element ...bool) int {
 	*b = append(element, *b...)
 	return len(*b)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// BoolsUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (b *BoolSlice) UnshiftOnce(element ...bool) int {
+func BoolsUnshiftOnce(b *[]bool, element ...bool) int {
 	a := *b
 	if len(element) == 0 {
 		return len(a)
@@ -555,38 +471,35 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// BoolsDistinct creates a new slice in place, which will delete the same elements,
 // and returns the new length of the slice.
-func (b *BoolSlice) Distinct() int {
-	a := (*b)[:0]
-	m := make(map[bool]bool, len(a))
-	for _, v := range *b {
-		if m[v] {
-			continue
+func BoolsDistinct(b *[]bool) int {
+	a := *b
+	r := a[:0]
+	for _, v := range a {
+		switch len(r) {
+		case 0:
+			r = append(r, v)
+		case 1:
+			if r[0] != v {
+				r = append(r, v)
+				*b = r
+				return len(r)
+			}
 		}
-		a = append(a, v)
-		m[v] = true
 	}
-	n := len(m)
-	*b = a[:n:n]
-	return n
+	*b = r
+	return len(r)
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// BoolsRemoveFirst removes the first matched element from the slice,
 // and returns the new length of the slice.
-func (b *BoolSlice) RemoveOne(element ...bool) int {
+func BoolsRemoveFirst(b *[]bool, element bool) int {
 	a := *b
-	m := make(map[bool]bool, len(element))
-	for _, v := range element {
-		if m[v] {
-			continue
-		}
-		m[v] = true
-		for kk, vv := range a {
-			if vv == v {
-				a = append(a[:kk], a[kk+1:]...)
-				break
-			}
+	for k, v := range a {
+		if v == element {
+			a = append(a[:k], a[k+1:]...)
+			break
 		}
 	}
 	n := len(a)
@@ -594,20 +507,13 @@ func (b *BoolSlice) RemoveOne(element ...bool) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// BoolsRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (b *BoolSlice) RemoveEvery(element ...bool) int {
+func BoolsRemoveEvery(b *[]bool, element bool) int {
 	a := *b
-	m := make(map[bool]bool, len(element))
-	for _, v := range element {
-		if m[v] {
-			continue
-		}
-		m[v] = true
-		for kk, vv := range a {
-			if vv == v {
-				a = append(a[:kk], a[kk+1:]...)
-			}
+	for k, v := range a {
+		if v == element {
+			a = append(a[:k], a[k+1:]...)
 		}
 	}
 	n := len(a)
