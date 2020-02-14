@@ -134,14 +134,14 @@ func BoolsToUint64s(b []bool) []uint64 {
 
 // BoolsConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func BoolsConcat(a ...[]bool) []bool {
+func BoolsConcat(b ...[]bool) []bool {
 	var totalLen int
-	for _, v := range a {
+	for _, v := range b {
 		totalLen += len(v)
 	}
 	ret := make([]bool, totalLen)
 	dst := ret
-	for _, v := range a {
+	for _, v := range b {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
@@ -471,7 +471,7 @@ L:
 	return len(r)
 }
 
-// BoolsDistinct creates a new slice in place, which will delete the same elements,
+// BoolsDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
 func BoolsDistinct(b *[]bool) int {
 	a := *b
