@@ -52,7 +52,7 @@ func StringsToBools(s []string, emptyAsZero ...bool) ([]bool, error) {
 	for k, v := range s {
 		r[k], err = StringToBool(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -70,7 +70,7 @@ func StringsToFloat32s(s []string, emptyAsZero ...bool) ([]float32, error) {
 	for k, v := range s {
 		r[k], err = StringToFloat32(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -88,7 +88,7 @@ func StringsToFloat64s(s []string, emptyAsZero ...bool) ([]float64, error) {
 	for k, v := range s {
 		r[k], err = StringToFloat64(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -106,7 +106,7 @@ func StringsToInts(s []string, emptyAsZero ...bool) ([]int, error) {
 	for k, v := range s {
 		r[k], err = StringToInt(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -124,7 +124,7 @@ func StringsToInt8s(s []string, emptyAsZero ...bool) ([]int8, error) {
 	for k, v := range s {
 		r[k], err = StringToInt8(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -142,7 +142,7 @@ func StringsToInt16s(s []string, emptyAsZero ...bool) ([]int16, error) {
 	for k, v := range s {
 		r[k], err = StringToInt16(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -160,7 +160,7 @@ func StringsToInt32s(s []string, emptyAsZero ...bool) ([]int32, error) {
 	for k, v := range s {
 		r[k], err = StringToInt32(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -178,7 +178,7 @@ func StringsToInt64s(s []string, emptyAsZero ...bool) ([]int64, error) {
 	for k, v := range s {
 		r[k], err = StringToInt64(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -196,7 +196,7 @@ func StringsToUints(s []string, emptyAsZero ...bool) ([]uint, error) {
 	for k, v := range s {
 		r[k], err = StringToUint(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -214,7 +214,7 @@ func StringsToUint8s(s []string, emptyAsZero ...bool) ([]uint8, error) {
 	for k, v := range s {
 		r[k], err = StringToUint8(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -232,7 +232,7 @@ func StringsToUint16s(s []string, emptyAsZero ...bool) ([]uint16, error) {
 	for k, v := range s {
 		r[k], err = StringToUint16(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -250,7 +250,7 @@ func StringsToUint32s(s []string, emptyAsZero ...bool) ([]uint32, error) {
 	for k, v := range s {
 		r[k], err = StringToUint32(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -268,7 +268,7 @@ func StringsToUint64s(s []string, emptyAsZero ...bool) ([]uint64, error) {
 	for k, v := range s {
 		r[k], err = StringToUint64(v, emptyAsZero...)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

@@ -78,7 +78,7 @@ func Float64sToFloat32s(f []float64) ([]float32, error) {
 	for k, v := range f {
 		r[k], err = Float64ToFloat32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -101,7 +101,7 @@ func Float64sToInts(f []float64) ([]int, error) {
 	for k, v := range f {
 		r[k], err = Float64ToInt(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -119,7 +119,7 @@ func Float64sToInt8s(f []float64) ([]int8, error) {
 	for k, v := range f {
 		r[k], err = Float64ToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -137,7 +137,7 @@ func Float64sToInt16s(f []float64) ([]int16, error) {
 	for k, v := range f {
 		r[k], err = Float64ToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -155,7 +155,7 @@ func Float64sToInt32s(f []float64) ([]int32, error) {
 	for k, v := range f {
 		r[k], err = Float64ToInt32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -173,7 +173,7 @@ func Float64sToInt64s(f []float64) ([]int64, error) {
 	for k, v := range f {
 		r[k], err = Float64ToInt64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -191,7 +191,7 @@ func Float64sToUints(f []float64) ([]uint, error) {
 	for k, v := range f {
 		r[k], err = Float64ToUint(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -209,7 +209,7 @@ func Float64sToUint8s(f []float64) ([]uint8, error) {
 	for k, v := range f {
 		r[k], err = Float64ToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -227,7 +227,7 @@ func Float64sToUint16s(f []float64) ([]uint16, error) {
 	for k, v := range f {
 		r[k], err = Float64ToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -245,7 +245,7 @@ func Float64sToUint32s(f []float64) ([]uint32, error) {
 	for k, v := range f {
 		r[k], err = Float64ToUint32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -263,7 +263,7 @@ func Float64sToUint64s(f []float64) ([]uint64, error) {
 	for k, v := range f {
 		r[k], err = Float64ToUint64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

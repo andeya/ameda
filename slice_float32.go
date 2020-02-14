@@ -97,7 +97,7 @@ func Float32sToInts(f []float32) ([]int, error) {
 	for k, v := range f {
 		r[k], err = Float32ToInt(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -115,7 +115,7 @@ func Float32sToInt8s(f []float32) ([]int8, error) {
 	for k, v := range f {
 		r[k], err = Float32ToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -133,7 +133,7 @@ func Float32sToInt16s(f []float32) ([]int16, error) {
 	for k, v := range f {
 		r[k], err = Float32ToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -151,7 +151,7 @@ func Float32sToInt32s(f []float32) ([]int32, error) {
 	for k, v := range f {
 		r[k], err = Float32ToInt32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -169,7 +169,7 @@ func Float32sToInt64s(f []float32) ([]int64, error) {
 	for k, v := range f {
 		r[k], err = Float32ToInt64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -187,7 +187,7 @@ func Float32sToUints(f []float32) ([]uint, error) {
 	for k, v := range f {
 		r[k], err = Float32ToUint(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -205,7 +205,7 @@ func Float32sToUint8s(f []float32) ([]uint8, error) {
 	for k, v := range f {
 		r[k], err = Float32ToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -223,7 +223,7 @@ func Float32sToUint16s(f []float32) ([]uint16, error) {
 	for k, v := range f {
 		r[k], err = Float32ToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -241,7 +241,7 @@ func Float32sToUint32s(f []float32) ([]uint32, error) {
 	for k, v := range f {
 		r[k], err = Float32ToUint32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -259,7 +259,7 @@ func Float32sToUint64s(f []float32) ([]uint64, error) {
 	for k, v := range f {
 		r[k], err = Float32ToUint64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

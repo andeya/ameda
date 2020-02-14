@@ -120,7 +120,7 @@ func Uint8sToInt8s(u []uint8) ([]int8, error) {
 	for k, v := range u {
 		r[k], err = Uint8ToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

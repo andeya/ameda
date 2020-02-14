@@ -111,7 +111,7 @@ func IntsToInt8s(i []int) ([]int8, error) {
 	for k, v := range i {
 		r[k], err = IntToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -129,7 +129,7 @@ func IntsToInt16s(i []int) ([]int16, error) {
 	for k, v := range i {
 		r[k], err = IntToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -147,7 +147,7 @@ func IntsToInt32s(i []int) ([]int32, error) {
 	for k, v := range i {
 		r[k], err = IntToInt32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -179,7 +179,7 @@ func IntsToUints(i []int) ([]uint, error) {
 	for k, v := range i {
 		r[k], err = IntToUint(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -197,7 +197,7 @@ func IntsToUint8s(i []int) ([]uint8, error) {
 	for k, v := range i {
 		r[k], err = IntToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -215,7 +215,7 @@ func IntsToUint16s(i []int) ([]uint16, error) {
 	for k, v := range i {
 		r[k], err = IntToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -233,7 +233,7 @@ func IntsToUint32s(i []int) ([]uint32, error) {
 	for k, v := range i {
 		r[k], err = IntToUint32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -251,7 +251,7 @@ func IntsToUint64s(i []int) ([]uint64, error) {
 	for k, v := range i {
 		r[k], err = IntToUint64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

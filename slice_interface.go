@@ -49,7 +49,7 @@ func InterfacesToBools(i []interface{}) ([]bool, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToBool(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -69,7 +69,7 @@ func InterfacesToFloat32s(i []interface{}) ([]float32, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToFloat32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -87,7 +87,7 @@ func InterfacesToFloat64s(i []interface{}) ([]float64, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToFloat64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -105,7 +105,7 @@ func InterfacesToInts(i []interface{}) ([]int, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToInt(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -123,7 +123,7 @@ func InterfacesToInt8s(i []interface{}) ([]int8, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -141,7 +141,7 @@ func InterfacesToInt16s(i []interface{}) ([]int16, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -159,7 +159,7 @@ func InterfacesToInt32s(i []interface{}) ([]int32, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToInt32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -177,7 +177,7 @@ func InterfacesToInt64s(i []interface{}) ([]int64, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToInt64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -195,7 +195,7 @@ func InterfacesToUints(i []interface{}) ([]uint, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToUint(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -213,7 +213,7 @@ func InterfacesToUint8s(i []interface{}) ([]uint8, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -231,7 +231,7 @@ func InterfacesToUint16s(i []interface{}) ([]uint16, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -249,7 +249,7 @@ func InterfacesToUint32s(i []interface{}) ([]uint32, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToUint32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -267,7 +267,7 @@ func InterfacesToUint64s(i []interface{}) ([]uint64, error) {
 	for k, v := range i {
 		r[k], err = InterfaceToUint64(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

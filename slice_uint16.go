@@ -120,7 +120,7 @@ func Uint16sToInt8s(u []uint16) ([]int8, error) {
 	for k, v := range u {
 		r[k], err = Uint16ToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -138,7 +138,7 @@ func Uint16sToInt16s(u []uint16) ([]int16, error) {
 	for k, v := range u {
 		r[k], err = Uint16ToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -198,7 +198,7 @@ func Uint16sToUint8s(u []uint16) ([]uint8, error) {
 	for k, v := range u {
 		r[k], err = Uint16ToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil

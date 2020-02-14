@@ -120,7 +120,7 @@ func Uint32sToInt8s(u []uint32) ([]int8, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToInt8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -138,7 +138,7 @@ func Uint32sToInt16s(u []uint32) ([]int16, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToInt16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -156,7 +156,7 @@ func Uint32sToInt32s(u []uint32) ([]int32, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToInt32(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -202,7 +202,7 @@ func Uint32sToUint8s(u []uint32) ([]uint8, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToUint8(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -220,7 +220,7 @@ func Uint32sToUint16s(u []uint32) ([]uint16, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
@@ -233,7 +233,7 @@ func (u Uint32Slice) Uint16s() ([]uint16, error) {
 	for k, v := range u {
 		r[k], err = Uint32ToUint16(v)
 		if err != nil {
-			return nil, err
+			return r, err
 		}
 	}
 	return r, nil
