@@ -22,7 +22,7 @@ func init() {
 		panic(err)
 	}
 	if a[0] != 1 || a[1] < 9 {
-		panic("Required go version ≥1.9, but current version is " + goVersion)
+		panic("required go>=1.9, but current version is go" + goVersion)
 	}
 }
 
