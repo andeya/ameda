@@ -1,6 +1,7 @@
 package ameda
 
 import (
+	"fmt"
 	"reflect"
 	"runtime"
 	"strings"
@@ -15,24 +16,15 @@ type Value struct {
 	_iPtr  unsafe.Pointer // avoid being GC
 }
 
-func init() {
-	goVersion := strings.TrimPrefix(runtime.Version(), "go")
-	a, err := StringsToInts(strings.Split(goVersion, "."))
-	if err != nil {
-		panic(err)
-	}
-	if a[0] != 1 || a[1] < 9 {
-		panic("required go>=1.9, but current version is go" + goVersion)
-	}
-}
-
 // ValueOf unpacks i to go underlying type data.
 func ValueOf(i interface{}) Value {
+	checkValueUsable()
 	return newT(unsafe.Pointer(&i))
 }
 
 // ValueFrom gets go underlying type data from reflect.Value.
 func ValueFrom(v reflect.Value) Value {
+	checkValueUsable()
 	return newT(unsafe.Pointer(&v))
 }
 
@@ -51,6 +43,7 @@ func newT(iPtr unsafe.Pointer) Value {
 //  *A and A returns the same runtime type ID;
 //  It is 10 times performance of t.String().
 func RuntimeTypeID(t reflect.Type) int32 {
+	checkValueUsable()
 	typPtr := uintptrElem(uintptr(unsafe.Pointer(&t)) + ptrOffset)
 	return *(*int32)(unsafe.Pointer(typPtr + rtypeStrOffset))
 }
@@ -155,6 +148,26 @@ func pointerElem(p unsafe.Pointer) unsafe.Pointer {
 	return *(*unsafe.Pointer)(p)
 }
 
+var errValueUsable error
+
+func init() {
+	goVersion := strings.TrimPrefix(runtime.Version(), "go")
+	a, err := StringsToInts(strings.Split(goVersion, "."))
+	if err != nil {
+		errValueUsable = err
+		return
+	}
+	if a[0] != 1 || a[1] < 9 {
+		errValueUsable = fmt.Errorf("required go>=1.9, but current version is go" + goVersion)
+	}
+}
+
+func checkValueUsable() {
+	if errValueUsable != nil {
+		panic(errValueUsable)
+	}
+}
+
 var (
 	e         = emptyInterface{typ: new(rtype)}
 	ptrOffset = func() uintptr {
@@ -176,6 +189,8 @@ var (
 		return unsafe.Offsetof(new(reflect.SliceHeader).Data)
 	}()
 )
+
+// NOTE: The following definitions must be consistent with those in the standard package!!!
 
 const (
 	kindMask = (1 << 5) - 1
