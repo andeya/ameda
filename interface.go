@@ -2,6 +2,7 @@ package ameda
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 )
 
@@ -75,7 +76,7 @@ func InterfaceToBool(i interface{}, emptyAsFalse ...bool) (bool, error) {
 			return StringToBool(r.String(), emptyAsFalse...)
 		}
 		if isEmptyAsZero(emptyAsFalse) {
-			return !r.IsZero(), nil
+			return !isZero(r), nil
 		}
 		return false, fmt.Errorf("cannot convert %#v of type %T to bool", i, i)
 	}
@@ -139,7 +140,7 @@ func InterfaceToFloat32(i interface{}, emptyStringAsZero ...bool) (float32, erro
 			return StringToFloat32(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToFloat32(!r.IsZero()), nil
+			return BoolToFloat32(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to float32", i, i)
 	}
@@ -199,9 +200,49 @@ func InterfaceToFloat64(i interface{}, emptyStringAsZero ...bool) (float64, erro
 			return StringToFloat64(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToFloat64(!r.IsZero()), nil
+			return BoolToFloat64(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to float64", i, i)
+	}
+}
+
+// isZero reports whether v is the zero value for its type.
+// It panics if the argument is invalid.
+func isZero(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return math.Float64bits(v.Float()) == 0
+	case reflect.Complex64, reflect.Complex128:
+		c := v.Complex()
+		return math.Float64bits(real(c)) == 0 && math.Float64bits(imag(c)) == 0
+	case reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			if !isZero(v.Index(i)) {
+				return false
+			}
+		}
+		return true
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
+		return v.IsNil()
+	case reflect.String:
+		return v.Len() == 0
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			if !isZero(v.Field(i)) {
+				return false
+			}
+		}
+		return true
+	default:
+		// This should never happens, but will act as a safeguard for
+		// later, as a default value doesn't makes sense here.
+		panic(&reflect.ValueError{"reflect.Value.IsZero", v.Kind()})
 	}
 }
 
@@ -259,7 +300,7 @@ func InterfaceToInt(i interface{}, emptyStringAsZero ...bool) (int, error) {
 			return StringToInt(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToInt(!r.IsZero()), nil
+			return BoolToInt(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to int", i, i)
 	}
@@ -319,7 +360,7 @@ func InterfaceToInt8(i interface{}, emptyStringAsZero ...bool) (int8, error) {
 			return StringToInt8(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToInt8(!r.IsZero()), nil
+			return BoolToInt8(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to int8", i, i)
 	}
@@ -379,7 +420,7 @@ func InterfaceToInt16(i interface{}, emptyStringAsZero ...bool) (int16, error) {
 			return StringToInt16(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToInt16(!r.IsZero()), nil
+			return BoolToInt16(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to int16", i, i)
 	}
@@ -439,7 +480,7 @@ func InterfaceToInt32(i interface{}, emptyStringAsZero ...bool) (int32, error) {
 			return StringToInt32(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToInt32(!r.IsZero()), nil
+			return BoolToInt32(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to int32", i, i)
 	}
@@ -499,7 +540,7 @@ func InterfaceToInt64(i interface{}, emptyStringAsZero ...bool) (int64, error) {
 			return StringToInt64(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToInt64(!r.IsZero()), nil
+			return BoolToInt64(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to int64", i, i)
 	}
@@ -559,7 +600,7 @@ func InterfaceToUint(i interface{}, emptyStringAsZero ...bool) (uint, error) {
 			return StringToUint(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToUint(!r.IsZero()), nil
+			return BoolToUint(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to uint", i, i)
 	}
@@ -619,7 +660,7 @@ func InterfaceToUint8(i interface{}, emptyStringAsZero ...bool) (uint8, error) {
 			return StringToUint8(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToUint8(!r.IsZero()), nil
+			return BoolToUint8(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to uint8", i, i)
 	}
@@ -679,7 +720,7 @@ func InterfaceToUint16(i interface{}, emptyStringAsZero ...bool) (uint16, error)
 			return StringToUint16(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToUint16(!r.IsZero()), nil
+			return BoolToUint16(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to uint16", i, i)
 	}
@@ -739,7 +780,7 @@ func InterfaceToUint32(i interface{}, emptyStringAsZero ...bool) (uint32, error)
 			return StringToUint32(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToUint32(!r.IsZero()), nil
+			return BoolToUint32(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to uint32", i, i)
 	}
@@ -799,7 +840,7 @@ func InterfaceToUint64(i interface{}, emptyStringAsZero ...bool) (uint64, error)
 			return StringToUint64(r.String(), emptyStringAsZero...)
 		}
 		if isEmptyAsZero(emptyStringAsZero) {
-			return BoolToUint64(!r.IsZero()), nil
+			return BoolToUint64(!isZero(r)), nil
 		}
 		return 0, fmt.Errorf("cannot convert %#v of type %T to uint64", i, i)
 	}
