@@ -362,7 +362,8 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func Float32sReduce(f []float32,
+func Float32sReduce(
+	f []float32,
 	fn func(f []float32, k int, v, accumulator float32) float32, initialValue ...float32,
 ) float32 {
 	if len(f) == 0 {
@@ -390,7 +391,8 @@ func Float32sReduce(f []float32,
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func Float32sReduceRight(f []float32,
+func Float32sReduceRight(
+	f []float32,
 	fn func(f []float32, k int, v, accumulator float32) float32, initialValue ...float32,
 ) float32 {
 	if len(f) == 0 {
