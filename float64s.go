@@ -1,8 +1,12 @@
 package ameda
 
-import (
-	"sort"
-)
+// OneFloat64 try to return the first element, otherwise return zero value.
+func OneFloat64(f []float64) float64 {
+	if len(f) > 0 {
+		return f[0]
+	}
+	return 0
+}
 
 // Float64sCopy creates a copy of the float64 slice.
 func Float64sCopy(f []float64) []float64 {
@@ -444,7 +448,7 @@ func Float64sSlice(f []float64, begin int, end ...int) []float64 {
 	if !ok {
 		return []float64{}
 	}
-	return f[fixedStart:fixedEnd].Copy()
+	return Float64sCopy(f[fixedStart:fixedEnd])
 }
 
 // Float64sSome tests whether at least one element in the slice passes the test implemented by the provided function.
