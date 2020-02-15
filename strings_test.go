@@ -8,11 +8,19 @@ import (
 )
 
 func TestStringsConcat(t *testing.T) {
-	a := []string{"a"}
-	b := []string{"b"}
-	c := []string{"c"}
+	a := []string{"a", "0"}
+	b := []string{"b", "1"}
+	c := []string{"c", "2"}
 	r := StringsConcat(a, b, c)
-	assert.Equal(t, []string{"a", "b", "c"}, r)
+	assert.Equal(t, []string{"a", "0", "b", "1", "c", "2"}, r)
+}
+
+func TestStringsIntersect(t *testing.T) {
+	x := []string{"a", "b", "a", "b", "b", "a", "a"}
+	y := []string{"a", "b", "c", "a", "b", "c", "b", "c", "c"}
+	z := []string{"a", "b", "c", "d", "a", "b", "c", "d", "b", "c", "d", "c", "d", "d"}
+	r := StringsIntersect(x, y, z)
+	assert.Equal(t, map[string]int{"a": 2, "b": 3}, r)
 }
 
 func TestStringsCopyWithin(t *testing.T) {
@@ -220,9 +228,10 @@ func TestStringsUnshiftOnce(t *testing.T) {
 
 func TestStringsDistinct(t *testing.T) {
 	slice := []string{"-1", "0", "-1", "0", "1", "1"}
-	n := StringsDistinct(&slice)
-	assert.Equal(t, len(slice), n)
+	distinctCount := StringsDistinct(&slice)
+	assert.Equal(t, len(slice), len(distinctCount))
 	assert.Equal(t, []string{"-1", "0", "1"}, slice)
+	assert.Equal(t, map[string]int{"-1": 2, "0": 2, "1": 2}, distinctCount)
 }
 
 func TestStringsRemoveFirst(t *testing.T) {

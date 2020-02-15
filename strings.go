@@ -197,22 +197,6 @@ func StringsToUint64s(s []string, emptyAsZero ...bool) ([]uint64, error) {
 	return r, nil
 }
 
-// StringsConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func StringsConcat(s ...[]string) []string {
-	var totalLen int
-	for _, v := range s {
-		totalLen += len(v)
-	}
-	ret := make([]string, totalLen)
-	dst := ret
-	for _, v := range s {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // StringsCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -536,23 +520,6 @@ L:
 	return len(r)
 }
 
-// StringsDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func StringsDistinct(s *[]string) int {
-	a := (*s)[:0]
-	m := make(map[string]bool, len(a))
-	for _, v := range *s {
-		if m[v] {
-			continue
-		}
-		a = append(a, v)
-		m[v] = true
-	}
-	n := len(m)
-	*s = a[:n:n]
-	return n
-}
-
 // StringsRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
 func StringsRemoveFirst(s *[]string, element ...string) int {
@@ -594,4 +561,84 @@ func StringsRemoveEvery(s *[]string, element ...string) int {
 	n := len(a)
 	*s = a[:n:n]
 	return n
+}
+
+// StringsConcat is used to merge two or more slices.
+// This method does not change the existing slices, but instead returns a new slice.
+func StringsConcat(s ...[]string) []string {
+	var totalLen int
+	for _, v := range s {
+		totalLen += len(v)
+	}
+	ret := make([]string, totalLen)
+	dst := ret
+	for _, v := range s {
+		n := copy(dst, v)
+		dst = dst[n:]
+	}
+	return ret
+}
+
+// StringsIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func StringsIntersect(s ...[]string) (intersectCount map[string]int) {
+	if len(s) == 0 {
+		return nil
+	}
+	for _, v := range s {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[string]int, len(s))
+	for k, v := range s {
+		counts[k] = stringsDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// StringsDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func StringsDistinct(s *[]string) (distinctCount map[string]int) {
+	a := (*s)[:0]
+	distinctCount = stringsDistinct(*s, &a)
+	n := len(distinctCount)
+	*s = a[:n:n]
+	return distinctCount
+}
+
+func stringsDistinct(src []string, dst *[]string) map[string]int {
+	m := make(map[string]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }
