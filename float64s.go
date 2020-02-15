@@ -189,15 +189,14 @@ func Float64sToUint64s(f []float64) ([]uint64, error) {
 
 // Float64sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func Float64sConcat(f []float64, a ...[]float64) []float64 {
-	totalLen := len(f)
-	for _, v := range a {
+func Float64sConcat(f ...[]float64) []float64 {
+	var totalLen int
+	for _, v := range f {
 		totalLen += len(v)
 	}
 	ret := make([]float64, totalLen)
-	n := copy(ret, f)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range f {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
