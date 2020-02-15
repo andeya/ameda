@@ -619,3 +619,68 @@ func float64sDistinct(src []float64, dst *[]float64) map[float64]int {
 	}
 	return m
 }
+
+// Float64SetUnion calculates between multiple collections: set1 ∪ set2 ∪ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Float64SetUnion(set1, set2 []float64, others ...[]float64) []float64 {
+	m := make(map[float64]struct{}, len(set1)+len(set2))
+	r := make([]float64, 0, len(m))
+	for _, set := range append([][]float64{set1, set2}, others...) {
+		for _, v := range set {
+			_, ok := m[v]
+			if ok {
+				continue
+			}
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
+
+// Float64SetIntersect calculates between multiple collections: set1 ∩ set2 ∩ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Float64SetIntersect(set1, set2 []float64, others ...[]float64) []float64 {
+	sets := append([][]float64{set2}, others...)
+	setsCount := make([]map[float64]int, len(sets))
+	for k, v := range sets {
+		setsCount[k] = float64sDistinct(v, nil)
+	}
+	m := make(map[float64]struct{}, len(set1))
+	r := make([]float64, 0, len(m))
+L:
+	for _, v := range set1 {
+		if _, ok := m[v]; ok {
+			continue
+		}
+		m[v] = struct{}{}
+		for _, m2 := range setsCount {
+			if m2[v] == 0 {
+				continue L
+			}
+		}
+		r = append(r, v)
+	}
+	return r
+}
+
+// Float64SetDifference calculates between multiple collections: set1 - set2 - others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Float64SetDifference(set1, set2 []float64, others ...[]float64) []float64 {
+	m := make(map[float64]struct{}, len(set1))
+	r := make([]float64, 0, len(set1))
+	sets := append([][]float64{set2}, others...)
+	for _, v := range sets {
+		inter := Float64SetIntersect(set1, v)
+		for _, v := range inter {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range set1 {
+		if _, ok := m[v]; !ok {
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}

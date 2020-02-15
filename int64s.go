@@ -627,3 +627,68 @@ func int64sDistinct(src []int64, dst *[]int64) map[int64]int {
 	}
 	return m
 }
+
+// Int64SetUnion calculates between multiple collections: set1 ∪ set2 ∪ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int64SetUnion(set1, set2 []int64, others ...[]int64) []int64 {
+	m := make(map[int64]struct{}, len(set1)+len(set2))
+	r := make([]int64, 0, len(m))
+	for _, set := range append([][]int64{set1, set2}, others...) {
+		for _, v := range set {
+			_, ok := m[v]
+			if ok {
+				continue
+			}
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
+
+// Int64SetIntersect calculates between multiple collections: set1 ∩ set2 ∩ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int64SetIntersect(set1, set2 []int64, others ...[]int64) []int64 {
+	sets := append([][]int64{set2}, others...)
+	setsCount := make([]map[int64]int, len(sets))
+	for k, v := range sets {
+		setsCount[k] = int64sDistinct(v, nil)
+	}
+	m := make(map[int64]struct{}, len(set1))
+	r := make([]int64, 0, len(m))
+L:
+	for _, v := range set1 {
+		if _, ok := m[v]; ok {
+			continue
+		}
+		m[v] = struct{}{}
+		for _, m2 := range setsCount {
+			if m2[v] == 0 {
+				continue L
+			}
+		}
+		r = append(r, v)
+	}
+	return r
+}
+
+// Int64SetDifference calculates between multiple collections: set1 - set2 - others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int64SetDifference(set1, set2 []int64, others ...[]int64) []int64 {
+	m := make(map[int64]struct{}, len(set1))
+	r := make([]int64, 0, len(set1))
+	sets := append([][]int64{set2}, others...)
+	for _, v := range sets {
+		inter := Int64SetIntersect(set1, v)
+		for _, v := range inter {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range set1 {
+		if _, ok := m[v]; !ok {
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}

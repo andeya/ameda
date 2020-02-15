@@ -645,3 +645,68 @@ func stringsDistinct(src []string, dst *[]string) map[string]int {
 	}
 	return m
 }
+
+// StringSetUnion calculates between multiple collections: set1 ∪ set2 ∪ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func StringSetUnion(set1, set2 []string, others ...[]string) []string {
+	m := make(map[string]struct{}, len(set1)+len(set2))
+	r := make([]string, 0, len(m))
+	for _, set := range append([][]string{set1, set2}, others...) {
+		for _, v := range set {
+			_, ok := m[v]
+			if ok {
+				continue
+			}
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
+
+// StringSetIntersect calculates between multiple collections: set1 ∩ set2 ∩ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func StringSetIntersect(set1, set2 []string, others ...[]string) []string {
+	sets := append([][]string{set2}, others...)
+	setsCount := make([]map[string]int, len(sets))
+	for k, v := range sets {
+		setsCount[k] = stringsDistinct(v, nil)
+	}
+	m := make(map[string]struct{}, len(set1))
+	r := make([]string, 0, len(m))
+L:
+	for _, v := range set1 {
+		if _, ok := m[v]; ok {
+			continue
+		}
+		m[v] = struct{}{}
+		for _, m2 := range setsCount {
+			if m2[v] == 0 {
+				continue L
+			}
+		}
+		r = append(r, v)
+	}
+	return r
+}
+
+// StringSetDifference calculates between multiple collections: set1 - set2 - others...
+// This method does not change the existing slices, but instead returns a new slice.
+func StringSetDifference(set1, set2 []string, others ...[]string) []string {
+	m := make(map[string]struct{}, len(set1))
+	r := make([]string, 0, len(set1))
+	sets := append([][]string{set2}, others...)
+	for _, v := range sets {
+		inter := StringSetIntersect(set1, v)
+		for _, v := range inter {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range set1 {
+		if _, ok := m[v]; !ok {
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}

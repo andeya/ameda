@@ -613,3 +613,68 @@ func int16sDistinct(src []int16, dst *[]int16) map[int16]int {
 	}
 	return m
 }
+
+// Int16SetUnion calculates between multiple collections: set1 ∪ set2 ∪ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int16SetUnion(set1, set2 []int16, others ...[]int16) []int16 {
+	m := make(map[int16]struct{}, len(set1)+len(set2))
+	r := make([]int16, 0, len(m))
+	for _, set := range append([][]int16{set1, set2}, others...) {
+		for _, v := range set {
+			_, ok := m[v]
+			if ok {
+				continue
+			}
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
+
+// Int16SetIntersect calculates between multiple collections: set1 ∩ set2 ∩ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int16SetIntersect(set1, set2 []int16, others ...[]int16) []int16 {
+	sets := append([][]int16{set2}, others...)
+	setsCount := make([]map[int16]int, len(sets))
+	for k, v := range sets {
+		setsCount[k] = int16sDistinct(v, nil)
+	}
+	m := make(map[int16]struct{}, len(set1))
+	r := make([]int16, 0, len(m))
+L:
+	for _, v := range set1 {
+		if _, ok := m[v]; ok {
+			continue
+		}
+		m[v] = struct{}{}
+		for _, m2 := range setsCount {
+			if m2[v] == 0 {
+				continue L
+			}
+		}
+		r = append(r, v)
+	}
+	return r
+}
+
+// Int16SetDifference calculates between multiple collections: set1 - set2 - others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int16SetDifference(set1, set2 []int16, others ...[]int16) []int16 {
+	m := make(map[int16]struct{}, len(set1))
+	r := make([]int16, 0, len(set1))
+	sets := append([][]int16{set2}, others...)
+	for _, v := range sets {
+		inter := Int16SetIntersect(set1, v)
+		for _, v := range inter {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range set1 {
+		if _, ok := m[v]; !ok {
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}

@@ -247,3 +247,15 @@ func TestStringsRemoveEvery(t *testing.T) {
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, []string{"-1", "-1", "1", "1"}, slice)
 }
+
+func TestStringSet(t *testing.T) {
+	set1 := []string{"1", "2", "3", "6", "8"}
+	set2 := []string{"2", "3", "5", "0"}
+	set3 := []string{"2", "6", "7"}
+	un := StringSetUnion(set1, set2, set3)
+	assert.Equal(t, []string{"1", "2", "3", "6", "8", "5", "0", "7"}, un)
+	in := StringSetIntersect(set1, set2, set3)
+	assert.Equal(t, []string{"2"}, in)
+	di := StringSetDifference(set1, set2, set3)
+	assert.Equal(t, []string{"1", "8"}, di)
+}

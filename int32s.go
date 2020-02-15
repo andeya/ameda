@@ -617,3 +617,68 @@ func int32sDistinct(src []int32, dst *[]int32) map[int32]int {
 	}
 	return m
 }
+
+// Int32SetUnion calculates between multiple collections: set1 ∪ set2 ∪ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int32SetUnion(set1, set2 []int32, others ...[]int32) []int32 {
+	m := make(map[int32]struct{}, len(set1)+len(set2))
+	r := make([]int32, 0, len(m))
+	for _, set := range append([][]int32{set1, set2}, others...) {
+		for _, v := range set {
+			_, ok := m[v]
+			if ok {
+				continue
+			}
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
+
+// Int32SetIntersect calculates between multiple collections: set1 ∩ set2 ∩ others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int32SetIntersect(set1, set2 []int32, others ...[]int32) []int32 {
+	sets := append([][]int32{set2}, others...)
+	setsCount := make([]map[int32]int, len(sets))
+	for k, v := range sets {
+		setsCount[k] = int32sDistinct(v, nil)
+	}
+	m := make(map[int32]struct{}, len(set1))
+	r := make([]int32, 0, len(m))
+L:
+	for _, v := range set1 {
+		if _, ok := m[v]; ok {
+			continue
+		}
+		m[v] = struct{}{}
+		for _, m2 := range setsCount {
+			if m2[v] == 0 {
+				continue L
+			}
+		}
+		r = append(r, v)
+	}
+	return r
+}
+
+// Int32SetDifference calculates between multiple collections: set1 - set2 - others...
+// This method does not change the existing slices, but instead returns a new slice.
+func Int32SetDifference(set1, set2 []int32, others ...[]int32) []int32 {
+	m := make(map[int32]struct{}, len(set1))
+	r := make([]int32, 0, len(set1))
+	sets := append([][]int32{set2}, others...)
+	for _, v := range sets {
+		inter := Int32SetIntersect(set1, v)
+		for _, v := range inter {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range set1 {
+		if _, ok := m[v]; !ok {
+			r = append(r, v)
+			m[v] = struct{}{}
+		}
+	}
+	return r
+}
