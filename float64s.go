@@ -187,22 +187,6 @@ func Float64sToUint64s(f []float64) ([]uint64, error) {
 	return r, nil
 }
 
-// Float64sConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func Float64sConcat(f ...[]float64) []float64 {
-	var totalLen int
-	for _, v := range f {
-		totalLen += len(v)
-	}
-	ret := make([]float64, totalLen)
-	dst := ret
-	for _, v := range f {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // Float64sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -526,23 +510,6 @@ L:
 	return len(r)
 }
 
-// Float64sDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func Float64sDistinct(f *[]float64) int {
-	a := (*f)[:0]
-	m := make(map[float64]bool, len(a))
-	for _, v := range *f {
-		if m[v] {
-			continue
-		}
-		a = append(a, v)
-		m[v] = true
-	}
-	n := len(m)
-	*f = a[:n:n]
-	return n
-}
-
 // Float64sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
 func Float64sRemoveFirst(f *[]float64, element ...float64) int {
@@ -584,4 +551,68 @@ func Float64sRemoveEvery(f *[]float64, element ...float64) int {
 	n := len(a)
 	*f = a[:n:n]
 	return n
+}
+
+// Float64sIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func Float64sIntersect(f ...[]float64) (intersectCount map[float64]int) {
+	if len(f) == 0 {
+		return nil
+	}
+	for _, v := range f {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[float64]int, len(f))
+	for k, v := range f {
+		counts[k] = float64sDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// Float64sDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func Float64sDistinct(f *[]float64) (distinctCount map[float64]int) {
+	a := (*f)[:0]
+	distinctCount = float64sDistinct(*f, &a)
+	n := len(distinctCount)
+	*f = a[:n:n]
+	return distinctCount
+}
+
+func float64sDistinct(src []float64, dst *[]float64) map[float64]int {
+	m := make(map[float64]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }

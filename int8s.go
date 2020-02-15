@@ -168,22 +168,6 @@ func Int8sToUint64s(i []int8) ([]uint64, error) {
 	return r, nil
 }
 
-// Int8sConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func Int8sConcat(i ...[]int8) []int8 {
-	var totalLen int
-	for _, v := range i {
-		totalLen += len(v)
-	}
-	ret := make([]int8, totalLen)
-	dst := ret
-	for _, v := range i {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // Int8sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -505,23 +489,6 @@ L:
 	return len(r)
 }
 
-// Int8sDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func Int8sDistinct(i *[]int8) int {
-	a := (*i)[:0]
-	m := make(map[int8]bool, len(a))
-	for _, v := range *i {
-		if m[v] {
-			continue
-		}
-		a = append(a, v)
-		m[v] = true
-	}
-	n := len(m)
-	*i = a[:n:n]
-	return n
-}
-
 // Int8sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
 func Int8sRemoveFirst(i *[]int8, element ...int8) int {
@@ -563,4 +530,84 @@ func Int8sRemoveEvery(i *[]int8, element ...int8) int {
 	n := len(a)
 	*i = a[:n:n]
 	return n
+}
+
+// Int8sConcat is used to merge two or more slices.
+// This method does not change the existing slices, but instead returns a new slice.
+func Int8sConcat(i ...[]int8) []int8 {
+	var totalLen int
+	for _, v := range i {
+		totalLen += len(v)
+	}
+	ret := make([]int8, totalLen)
+	dst := ret
+	for _, v := range i {
+		n := copy(dst, v)
+		dst = dst[n:]
+	}
+	return ret
+}
+
+// Int8sIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func Int8sIntersect(i ...[]int8) (intersectCount map[int8]int) {
+	if len(i) == 0 {
+		return nil
+	}
+	for _, v := range i {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[int8]int, len(i))
+	for k, v := range i {
+		counts[k] = int8sDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// Int8sDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func Int8sDistinct(i *[]int8) (distinctCount map[int8]int) {
+	a := (*i)[:0]
+	distinctCount = int8sDistinct(*i, &a)
+	n := len(distinctCount)
+	*i = a[:n:n]
+	return distinctCount
+}
+
+func int8sDistinct(src []int8, dst *[]int8) map[int8]int {
+	m := make(map[int8]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }

@@ -155,22 +155,6 @@ func Uint16sToUint64s(u []uint16) []uint64 {
 	return r
 }
 
-// Uint16sConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func Uint16sConcat(u ...[]uint16) []uint16 {
-	var totalLen int
-	for _, v := range u {
-		totalLen += len(v)
-	}
-	ret := make([]uint16, totalLen)
-	dst := ret
-	for _, v := range u {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // Uint16sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -494,23 +478,6 @@ L:
 	return len(r)
 }
 
-// Uint16sDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func Uint16sDistinct(u *[]uint16) int {
-	a := (*u)[:0]
-	m := make(map[uint16]bool, len(a))
-	for _, v := range *u {
-		if m[v] {
-			continue
-		}
-		a = append(a, v)
-		m[v] = true
-	}
-	n := len(m)
-	*u = a[:n:n]
-	return n
-}
-
 // Uint16sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
 func Uint16sRemoveFirst(u *[]uint16, element ...uint16) int {
@@ -552,4 +519,84 @@ func Uint16sRemoveEvery(u *[]uint16, element ...uint16) int {
 	n := len(a)
 	*u = a[:n:n]
 	return n
+}
+
+// Uint16sConcat is used to merge two or more slices.
+// This method does not change the existing slices, but instead returns a new slice.
+func Uint16sConcat(u ...[]uint16) []uint16 {
+	var totalLen int
+	for _, v := range u {
+		totalLen += len(v)
+	}
+	ret := make([]uint16, totalLen)
+	dst := ret
+	for _, v := range u {
+		n := copy(dst, v)
+		dst = dst[n:]
+	}
+	return ret
+}
+
+// Uint16sIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func Uint16sIntersect(u ...[]uint16) (intersectCount map[uint16]int) {
+	if len(u) == 0 {
+		return nil
+	}
+	for _, v := range u {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[uint16]int, len(u))
+	for k, v := range u {
+		counts[k] = uint16sDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// Uint16sDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func Uint16sDistinct(u *[]uint16) (distinctCount map[uint16]int) {
+	a := (*u)[:0]
+	distinctCount = uint16sDistinct(*u, &a)
+	n := len(distinctCount)
+	*u = a[:n:n]
+	return distinctCount
+}
+
+func uint16sDistinct(src []uint16, dst *[]uint16) map[uint16]int {
+	m := make(map[uint16]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }

@@ -217,9 +217,10 @@ func TestIntsUnshiftOnce(t *testing.T) {
 
 func TestIntsDistinct(t *testing.T) {
 	slice := []int{-1, 0, -1, 0, 1, 1}
-	n := IntsDistinct(&slice)
-	assert.Equal(t, len(slice), n)
+	r := IntsDistinct(&slice)
+	assert.Equal(t, len(slice), len(r))
 	assert.Equal(t, []int{-1, 0, 1}, slice)
+	assert.Equal(t, map[int]int{-1: 2, 0: 2, 1: 2}, r)
 }
 
 func TestIntsRemoveOne(t *testing.T) {

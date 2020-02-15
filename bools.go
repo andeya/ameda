@@ -132,22 +132,6 @@ func BoolsToUint64s(b []bool) []uint64 {
 	return r
 }
 
-// BoolsConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func BoolsConcat(b ...[]bool) []bool {
-	var totalLen int
-	for _, v := range b {
-		totalLen += len(v)
-	}
-	ret := make([]bool, totalLen)
-	dst := ret
-	for _, v := range b {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // BoolsCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -471,27 +455,6 @@ L:
 	return len(r)
 }
 
-// BoolsDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func BoolsDistinct(b *[]bool) int {
-	a := *b
-	r := a[:0]
-	for _, v := range a {
-		switch len(r) {
-		case 0:
-			r = append(r, v)
-		case 1:
-			if r[0] != v {
-				r = append(r, v)
-				*b = r
-				return len(r)
-			}
-		}
-	}
-	*b = r
-	return len(r)
-}
-
 // BoolsRemoveFirst removes the first matched element from the slice,
 // and returns the new length of the slice.
 func BoolsRemoveFirst(b *[]bool, element bool) int {
@@ -519,4 +482,84 @@ func BoolsRemoveEvery(b *[]bool, element bool) int {
 	n := len(a)
 	*b = a[:n:n]
 	return n
+}
+
+// BoolsConcat is used to merge two or more slices.
+// This method does not change the existing slices, but instead returns a new slice.
+func BoolsConcat(b ...[]bool) []bool {
+	var totalLen int
+	for _, v := range b {
+		totalLen += len(v)
+	}
+	ret := make([]bool, totalLen)
+	dst := ret
+	for _, v := range b {
+		n := copy(dst, v)
+		dst = dst[n:]
+	}
+	return ret
+}
+
+// BoolsIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func BoolsIntersect(b ...[]bool) (intersectCount map[bool]int) {
+	if len(b) == 0 {
+		return nil
+	}
+	for _, v := range b {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[bool]int, len(b))
+	for k, v := range b {
+		counts[k] = boolsDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// BoolsDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func BoolsDistinct(b *[]bool) (distinctCount map[bool]int) {
+	a := (*b)[:0]
+	distinctCount = boolsDistinct(*b, &a)
+	n := len(distinctCount)
+	*b = a[:n:n]
+	return distinctCount
+}
+
+func boolsDistinct(src []bool, dst *[]bool) map[bool]int {
+	m := make(map[bool]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }

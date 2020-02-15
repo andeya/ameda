@@ -175,22 +175,6 @@ func UintsToUint64s(u []uint) []uint64 {
 	return r
 }
 
-// UintsConcat is used to merge two or more slices.
-// This method does not change the existing slices, but instead returns a new slice.
-func UintsConcat(u ...[]uint) []uint {
-	var totalLen int
-	for _, v := range u {
-		totalLen += len(v)
-	}
-	ret := make([]uint, totalLen)
-	dst := ret
-	for _, v := range u {
-		n := copy(dst, v)
-		dst = dst[n:]
-	}
-	return ret
-}
-
 // UintsCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
@@ -512,23 +496,6 @@ L:
 	return len(r)
 }
 
-// UintsDistinct creates a new slice in place set that removes the same elements
-// and returns the new length of the slice.
-func UintsDistinct(u *[]uint) int {
-	a := (*u)[:0]
-	m := make(map[uint]bool, len(a))
-	for _, v := range *u {
-		if m[v] {
-			continue
-		}
-		a = append(a, v)
-		m[v] = true
-	}
-	n := len(m)
-	*u = a[:n:n]
-	return n
-}
-
 // UintsRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
 func UintsRemoveFirst(u *[]uint, element ...uint) int {
@@ -570,4 +537,84 @@ func UintsRemoveEvery(u *[]uint, element ...uint) int {
 	n := len(a)
 	*u = a[:n:n]
 	return n
+}
+
+// UintsConcat is used to merge two or more slices.
+// This method does not change the existing slices, but instead returns a new slice.
+func UintsConcat(u ...[]uint) []uint {
+	var totalLen int
+	for _, v := range u {
+		totalLen += len(v)
+	}
+	ret := make([]uint, totalLen)
+	dst := ret
+	for _, v := range u {
+		n := copy(dst, v)
+		dst = dst[n:]
+	}
+	return ret
+}
+
+// UintsIntersect calculates intersection of two or more slices,
+// and returns the count of each element.
+func UintsIntersect(u ...[]uint) (intersectCount map[uint]int) {
+	if len(u) == 0 {
+		return nil
+	}
+	for _, v := range u {
+		if len(v) == 0 {
+			return nil
+		}
+	}
+	counts := make([]map[uint]int, len(u))
+	for k, v := range u {
+		counts[k] = uintsDistinct(v, nil)
+	}
+	intersectCount = counts[0]
+L:
+	for k, v := range intersectCount {
+		for _, c := range counts[1:] {
+			v2 := c[k]
+			if v2 == 0 {
+				delete(intersectCount, k)
+				continue L
+			}
+			if v > v2 {
+				v = v2
+			}
+		}
+		intersectCount[k] = v
+	}
+	return intersectCount
+}
+
+// UintsDistinct creates a new slice in place set that removes the same elements
+// and returns the count of each element.
+func UintsDistinct(u *[]uint) (distinctCount map[uint]int) {
+	a := (*u)[:0]
+	distinctCount = uintsDistinct(*u, &a)
+	n := len(distinctCount)
+	*u = a[:n:n]
+	return distinctCount
+}
+
+func uintsDistinct(src []uint, dst *[]uint) map[uint]int {
+	m := make(map[uint]int, len(src))
+	if dst == nil {
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+		}
+	} else {
+		a := *dst
+		for _, v := range src {
+			n := m[v]
+			m[v] = n + 1
+			if n == 0 {
+				a = append(a, v)
+			}
+		}
+		*dst = a
+	}
+	return m
 }
