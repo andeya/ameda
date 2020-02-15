@@ -1,16 +1,11 @@
 package ameda
 
-import (
-	"sort"
-)
-
-// UintSlice uint slice object
-type UintSlice []uint
-
-// NewUintSlice creates an UintSlice object.
-func NewUintSlice(a []uint) *UintSlice {
-	u := UintSlice(a)
-	return &u
+// OneUint try to return the first element, otherwise return zero value.
+func OneUint(u []uint) uint {
+	if len(u) > 0 {
+		return u[0]
+	}
+	return 0
 }
 
 // UintsCopy creates a copy of the uint slice.
@@ -18,11 +13,6 @@ func UintsCopy(u []uint) []uint {
 	b := make([]uint, len(u))
 	copy(b, u)
 	return b
-}
-
-// Copy creates a copy of the uint slice.
-func (u UintSlice) Copy() []uint {
-	return UintsCopy(u)
 }
 
 // UintsToInterfaces converts uint slice to interface slice.
@@ -34,11 +24,6 @@ func UintsToInterfaces(u []uint) []interface{} {
 	return r
 }
 
-// Interfaces converts uint slice to interface slice.
-func (u UintSlice) Interfaces() []interface{} {
-	return UintsToInterfaces(u)
-}
-
 // UintsToStrings converts uint slice to string slice.
 func UintsToStrings(u []uint) []string {
 	r := make([]string, len(u))
@@ -46,11 +31,6 @@ func UintsToStrings(u []uint) []string {
 		r[k] = UintToString(v)
 	}
 	return r
-}
-
-// Strings converts uint slice to string slice.
-func (u UintSlice) Strings() []string {
-	return UintsToStrings(u)
 }
 
 // UintsToBools converts uint slice to bool slice.
@@ -64,13 +44,6 @@ func UintsToBools(u []uint) []bool {
 	return r
 }
 
-// Bools converts uint slice to bool slice.
-// NOTE:
-//  0 is false, everything else is true
-func (u UintSlice) Bools() []bool {
-	return UintsToBools(u)
-}
-
 // UintsToFloat32s converts uint slice to float32 slice.
 func UintsToFloat32s(u []uint) []float32 {
 	r := make([]float32, len(u))
@@ -80,11 +53,6 @@ func UintsToFloat32s(u []uint) []float32 {
 	return r
 }
 
-// Float32s converts uint slice to float32 slice.
-func (u UintSlice) Float32s() []float32 {
-	return UintsToFloat32s(u)
-}
-
 // UintsToFloat64s converts uint slice to float64 slice.
 func UintsToFloat64s(u []uint) []float64 {
 	r := make([]float64, len(u))
@@ -92,11 +60,6 @@ func UintsToFloat64s(u []uint) []float64 {
 		r[k] = UintToFloat64(v)
 	}
 	return r
-}
-
-// Float64s converts uint slice to float64 slice.
-func (u UintSlice) Float64s() []float64 {
-	return UintsToFloat64s(u)
 }
 
 // UintsToInts converts uint slice to int slice.
@@ -112,11 +75,6 @@ func UintsToInts(u []uint) ([]int, error) {
 	return r, nil
 }
 
-// Ints converts uint slice to int slice.
-func (u UintSlice) Ints() ([]int, error) {
-	return UintsToInts(u)
-}
-
 // UintsToInt8s converts uint slice to int8 slice.
 func UintsToInt8s(u []uint) ([]int8, error) {
 	var err error
@@ -128,11 +86,6 @@ func UintsToInt8s(u []uint) ([]int8, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int8s converts uint slice to int8 slice.
-func (u UintSlice) Int8s() ([]int8, error) {
-	return UintsToInt8s(u)
 }
 
 // UintsToInt16s converts uint slice to int16 slice.
@@ -148,11 +101,6 @@ func UintsToInt16s(u []uint) ([]int16, error) {
 	return r, nil
 }
 
-// Int16s converts uint slice to int16 slice.
-func (u UintSlice) Int16s() ([]int16, error) {
-	return UintsToInt16s(u)
-}
-
 // UintsToInt32s converts uint slice to int32 slice.
 func UintsToInt32s(u []uint) ([]int32, error) {
 	var err error
@@ -164,11 +112,6 @@ func UintsToInt32s(u []uint) ([]int32, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int32s converts uint slice to int32 slice.
-func (u UintSlice) Int32s() ([]int32, error) {
-	return UintsToInt32s(u)
 }
 
 // UintsToInt64s converts uint slice to int64 slice.
@@ -184,16 +127,6 @@ func UintsToInt64s(u []uint) ([]int64, error) {
 	return r, nil
 }
 
-// Int64s converts uint slice to int64 slice.
-func (u UintSlice) Int64s() ([]int64, error) {
-	return UintsToInt64s(u)
-}
-
-// Uints converts to []uint.
-func (u UintSlice) Uints() []uint {
-	return []uint(u)
-}
-
 // UintsToUint8s converts uint slice to uint8 slice.
 func UintsToUint8s(u []uint) ([]uint8, error) {
 	var err error
@@ -205,11 +138,6 @@ func UintsToUint8s(u []uint) ([]uint8, error) {
 		}
 	}
 	return r, nil
-}
-
-// Uint8s converts uint slice to uint8 slice.
-func (u UintSlice) Uint8s() ([]uint8, error) {
-	return UintsToUint8s(u)
 }
 
 // UintsToUint16s converts uint slice to uint16 slice.
@@ -225,11 +153,6 @@ func UintsToUint16s(u []uint) ([]uint16, error) {
 	return r, nil
 }
 
-// Uint16s converts uint slice to uint16 slice.
-func (u UintSlice) Uint16s() ([]uint16, error) {
-	return UintsToUint16s(u)
-}
-
 // UintsToUint32s converts uint slice to uint32 slice.
 func UintsToUint32s(u []uint) ([]uint32, error) {
 	var err error
@@ -243,11 +166,6 @@ func UintsToUint32s(u []uint) ([]uint32, error) {
 	return r, nil
 }
 
-// Uint32s converts uint slice to uint32 slice.
-func (u UintSlice) Uint32s() ([]uint32, error) {
-	return UintsToUint32s(u)
-}
-
 // UintsToUint64s converts uint slice to uint64 slice.
 func UintsToUint64s(u []uint) []uint64 {
 	r := make([]uint64, len(u))
@@ -257,14 +175,9 @@ func UintsToUint64s(u []uint) []uint64 {
 	return r
 }
 
-// Uint64s converts uint slice to uint64 slice.
-func (u UintSlice) Uint64s() []uint64 {
-	return UintsToUint64s(u)
-}
-
-// Concat is used to merge two or more slices.
+// UintsConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (u UintSlice) Concat(a ...[]uint) []uint {
+func UintsConcat(u []uint, a ...[]uint) []uint {
 	totalLen := len(u)
 	for _, v := range a {
 		totalLen += len(v)
@@ -279,7 +192,7 @@ func (u UintSlice) Concat(a ...[]uint) []uint {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// UintsCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -288,21 +201,21 @@ func (u UintSlice) Concat(a ...[]uint) []uint {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u UintSlice) CopyWithin(target, start int, end ...int) {
+func UintsCopyWithin(u []uint, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
 		return
 	}
-	sub := u.Slice(start, end...)
+	sub := UintsSlice(u, start, end...)
 	for k, v := range sub {
 		u[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// UintsEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (u UintSlice) Every(fn func(curr UintSlice, k int, v uint) bool) bool {
+func UintsEvery(u []uint, fn func(u []uint, k int, v uint) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
 			return false
@@ -311,7 +224,7 @@ func (u UintSlice) Every(fn func(curr UintSlice, k int, v uint) bool) bool {
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// UintsFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -320,7 +233,7 @@ func (u UintSlice) Every(fn func(curr UintSlice, k int, v uint) bool) bool {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u UintSlice) Fill(value uint, start int, end ...int) {
+func UintsFill(u []uint, value uint, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
 		return
@@ -330,8 +243,8 @@ func (u UintSlice) Fill(value uint, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (u UintSlice) Filter(fn func(curr UintSlice, k int, v uint) bool) []uint {
+// UintsFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func UintsFilter(u []uint, fn func(u []uint, k int, v uint) bool) []uint {
 	ret := make([]uint, 0)
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -341,10 +254,10 @@ func (u UintSlice) Filter(fn func(curr UintSlice, k int, v uint) bool) []uint {
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// UintsFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (u UintSlice) Find(fn func(curr UintSlice, k int, v uint) bool) (k int, v uint) {
+func UintsFind(u []uint, fn func(u []uint, k int, v uint) bool) (k int, v uint) {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return k, v
@@ -353,17 +266,17 @@ func (u UintSlice) Find(fn func(curr UintSlice, k int, v uint) bool) (k int, v u
 	return -1, 0
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// UintsIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u UintSlice) Includes(valueToFind uint, fromIndex ...int) bool {
-	return u.IndexOf(valueToFind, fromIndex...) > -1
+func UintsIncludes(u []uint, valueToFind uint, fromIndex ...int) bool {
+	return UintsIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// UintsIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u UintSlice) IndexOf(searchElement uint, fromIndex ...int) int {
+func UintsIndexOf(u []uint, searchElement uint, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
 		if searchElement == v {
@@ -373,10 +286,10 @@ func (u UintSlice) IndexOf(searchElement uint, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// UintsLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u UintSlice) LastIndexOf(searchElement uint, fromIndex ...int) int {
+func UintsLastIndexOf(u []uint, searchElement uint, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
 		if searchElement == u[k] {
@@ -386,9 +299,9 @@ func (u UintSlice) LastIndexOf(searchElement uint, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// UintsMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (u UintSlice) Map(fn func(curr UintSlice, k int, v uint) uint) []uint {
+func UintsMap(u []uint, fn func(u []uint, k int, v uint) uint) []uint {
 	ret := make([]uint, len(u))
 	for k, v := range u {
 		ret[k] = fn(u, k, v)
@@ -396,9 +309,9 @@ func (u UintSlice) Map(fn func(curr UintSlice, k int, v uint) uint) []uint {
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// UintsPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (u *UintSlice) Pop() (uint, bool) {
+func UintsPop(u *[]uint) (uint, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -410,15 +323,15 @@ func (u *UintSlice) Pop() (uint, bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (u *UintSlice) Push(element ...uint) int {
+// UintsPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func UintsPush(u *[]uint, element ...uint) int {
 	*u = append(*u, element...)
 	return len(*u)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// UintsPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (u *UintSlice) PushOnce(element ...uint) int {
+func UintsPushOnce(u *[]uint, element ...uint) int {
 	a := *u
 L:
 	for _, v := range element {
@@ -433,7 +346,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// UintsReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -442,8 +355,8 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u UintSlice) Reduce(
-	fn func(curr UintSlice, k int, v, accumulator uint) uint, initialValue ...uint,
+func UintsReduce(u []uint,
+	fn func(u []uint, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
 	if len(u) == 0 {
 		return 0
@@ -461,7 +374,7 @@ func (u UintSlice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// UintsReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -470,8 +383,8 @@ func (u UintSlice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u UintSlice) ReduceRight(
-	fn func(curr UintSlice, k int, v, accumulator uint) uint, initialValue ...uint,
+func UintsReduceRight(u []uint,
+	fn func(u []uint, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
 	if len(u) == 0 {
 		return 0
@@ -489,8 +402,8 @@ func (u UintSlice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (u UintSlice) Reverse() {
+// UintsReverse reverses an slice in place.
+func UintsReverse(u []uint) {
 	first := 0
 	last := len(u) - 1
 	for first < last {
@@ -500,9 +413,9 @@ func (u UintSlice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// UintsShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (u *UintSlice) Shift() (uint, bool) {
+func UintsShift(u *[]uint) (uint, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -513,21 +426,21 @@ func (u *UintSlice) Shift() (uint, bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// UintsSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (u UintSlice) Slice(begin int, end ...int) []uint {
+func UintsSlice(u []uint, begin int, end ...int) []uint {
 	fixedStart, fixedEnd, ok := fixRange(len(u), begin, end...)
 	if !ok {
 		return []uint{}
 	}
-	return u[fixedStart:fixedEnd].Copy()
+	return UintsCopy(u[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// UintsSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (u UintSlice) Some(fn func(curr UintSlice, k int, v uint) bool) bool {
+func UintsSome(u []uint, fn func(u []uint, k int, v uint) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return true
@@ -536,30 +449,9 @@ func (u UintSlice) Some(fn func(curr UintSlice, k int, v uint) bool) bool {
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (u UintSlice) Len() int {
-	return len(u)
-}
-
-// Less reports whether the element with
-// index m should sort before the element with index n.
-func (u UintSlice) Less(m, n int) bool {
-	return u[m] < u[n]
-}
-
-// Swap swaps the elements with indexes m and n.
-func (u UintSlice) Swap(m, n int) {
-	u[m], u[n] = u[n], u[m]
-}
-
-// Sort sorts the elements of an slice in place and returns the sorted slice.
-func (u UintSlice) Sort() {
-	sort.Sort(u)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// UintsSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (u *UintSlice) Splice(start, deleteCount int, items ...uint) {
+func UintsSplice(u *[]uint, start, deleteCount int, items ...uint) {
 	a := *u
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -574,7 +466,7 @@ func (u *UintSlice) Splice(start, deleteCount int, items ...uint) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := UintsCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -588,15 +480,15 @@ func (u *UintSlice) Splice(start, deleteCount int, items ...uint) {
 	*u = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (u *UintSlice) Unshift(element ...uint) int {
+// UintsUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func UintsUnshift(u *[]uint, element ...uint) int {
 	*u = append(element, *u...)
 	return len(*u)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// UintsUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (u *UintSlice) UnshiftOnce(element ...uint) int {
+func UintsUnshiftOnce(u *[]uint, element ...uint) int {
 	a := *u
 	if len(element) == 0 {
 		return len(a)
@@ -621,9 +513,9 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// UintsDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
-func (u *UintSlice) Distinct() int {
+func UintsDistinct(u *[]uint) int {
 	a := (*u)[:0]
 	m := make(map[uint]bool, len(a))
 	for _, v := range *u {
@@ -638,9 +530,9 @@ func (u *UintSlice) Distinct() int {
 	return n
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// UintsRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func (u *UintSlice) RemoveOne(element ...uint) int {
+func UintsRemoveFirst(u *[]uint, element ...uint) int {
 	a := *u
 	m := make(map[uint]bool, len(element))
 	for _, v := range element {
@@ -660,9 +552,9 @@ func (u *UintSlice) RemoveOne(element ...uint) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// UintsRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (u *UintSlice) RemoveEvery(element ...uint) int {
+func UintsRemoveEvery(u *[]uint, element ...uint) int {
 	a := *u
 	m := make(map[uint]bool, len(element))
 	for _, v := range element {
