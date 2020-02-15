@@ -5,7 +5,7 @@ func OneInterface(i []interface{}) interface{} {
 	if len(i) > 0 {
 		return i[0]
 	}
-	return 0
+	return nil
 }
 
 // InterfacesCopy creates a copy of the interface slice.
