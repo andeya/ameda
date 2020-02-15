@@ -199,15 +199,14 @@ func StringsToUint64s(s []string, emptyAsZero ...bool) ([]uint64, error) {
 
 // StringsConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func StringsConcat(s []string, a ...[]string) []string {
-	totalLen := len(s)
-	for _, v := range a {
+func StringsConcat(s ...[]string) []string {
+	var totalLen int
+	for _, v := range s {
 		totalLen += len(v)
 	}
 	ret := make([]string, totalLen)
-	n := copy(ret, s)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range s {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
