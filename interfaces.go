@@ -197,15 +197,14 @@ func InterfacesToUint64s(i []interface{}) ([]uint64, error) {
 
 // InterfacesConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func InterfacesConcat(i []interface{}, a ...[]interface{}) []interface{} {
-	totalLen := len(i)
-	for _, v := range a {
+func InterfacesConcat(i ...[]interface{}) []interface{} {
+	var totalLen int
+	for _, v := range i {
 		totalLen += len(v)
 	}
 	ret := make([]interface{}, totalLen)
-	n := copy(ret, i)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range i {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
