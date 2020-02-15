@@ -177,15 +177,14 @@ func IntsToUint64s(i []int) ([]uint64, error) {
 
 // IntsConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func IntsConcat(i []int, a ...[]int) []int {
-	totalLen := len(i)
-	for _, v := range a {
+func IntsConcat(i ...[]int) []int {
+	var totalLen int
+	for _, v := range i {
 		totalLen += len(v)
 	}
 	ret := make([]int, totalLen)
-	n := copy(ret, i)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range i {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
