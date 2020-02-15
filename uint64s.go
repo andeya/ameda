@@ -1,16 +1,11 @@
 package ameda
 
-import (
-	"sort"
-)
-
-// Uint64Slice uint64 slice object
-type Uint64Slice []uint64
-
-// NewUint64Slice creates an Uint64Slice object.
-func NewUint64Slice(a []uint64) *Uint64Slice {
-	u := Uint64Slice(a)
-	return &u
+// OneUint64 try to return the first element, otherwise return zero value.
+func OneUint64(u []uint64) uint64 {
+	if len(u) > 0 {
+		return u[0]
+	}
+	return 0
 }
 
 // Uint64sCopy creates a copy of the uint64 slice.
@@ -18,11 +13,6 @@ func Uint64sCopy(u []uint64) []uint64 {
 	b := make([]uint64, len(u))
 	copy(b, u)
 	return b
-}
-
-// Copy creates a copy of the uint64 slice.
-func (u Uint64Slice) Copy() []uint64 {
-	return Uint64sCopy(u)
 }
 
 // Uint64sToInterfaces converts uint64 slice to interface slice.
@@ -34,11 +24,6 @@ func Uint64sToInterfaces(u []uint64) []interface{} {
 	return r
 }
 
-// Interfaces converts uint64 slice to interface slice.
-func (u Uint64Slice) Interfaces() []interface{} {
-	return Uint64sToInterfaces(u)
-}
-
 // Uint64sToStrings converts uint64 slice to string slice.
 func Uint64sToStrings(u []uint64) []string {
 	r := make([]string, len(u))
@@ -46,11 +31,6 @@ func Uint64sToStrings(u []uint64) []string {
 		r[k] = Uint64ToString(v)
 	}
 	return r
-}
-
-// Strings converts uint64 slice to string slice.
-func (u Uint64Slice) Strings() []string {
-	return Uint64sToStrings(u)
 }
 
 // Uint64sToBools converts uint64 slice to bool slice.
@@ -64,13 +44,6 @@ func Uint64sToBools(u []uint64) []bool {
 	return r
 }
 
-// Bools converts uint64 slice to bool slice.
-// NOTE:
-//  0 is false, everything else is true
-func (u Uint64Slice) Bools() []bool {
-	return Uint64sToBools(u)
-}
-
 // Uint64sToFloat32s converts uint64 slice to float32 slice.
 func Uint64sToFloat32s(u []uint64) []float32 {
 	r := make([]float32, len(u))
@@ -78,11 +51,6 @@ func Uint64sToFloat32s(u []uint64) []float32 {
 		r[k] = Uint64ToFloat32(v)
 	}
 	return r
-}
-
-// Float32s converts uint64 slice to float32 slice.
-func (u Uint64Slice) Float32s() []float32 {
-	return Uint64sToFloat32s(u)
 }
 
 // Uint64sToFloat64s converts uint64 slice to float64 slice.
@@ -94,11 +62,6 @@ func Uint64sToFloat64s(u []uint64) []float64 {
 	return r
 }
 
-// Float64s converts uint64 slice to float64 slice.
-func (u Uint64Slice) Float64s() []float64 {
-	return Uint64sToFloat64s(u)
-}
-
 // Uint64sToInts converts uint64 slice to int slice.
 func Uint64sToInts(u []uint64) []int {
 	r := make([]int, len(u))
@@ -106,11 +69,6 @@ func Uint64sToInts(u []uint64) []int {
 		r[k] = Uint64ToInt(v)
 	}
 	return r
-}
-
-// Ints converts uint64 slice to int slice.
-func (u Uint64Slice) Ints() []int {
-	return Uint64sToInts(u)
 }
 
 // Uint64sToInt8s converts uint64 slice to int8 slice.
@@ -126,11 +84,6 @@ func Uint64sToInt8s(u []uint64) ([]int8, error) {
 	return r, nil
 }
 
-// Int8s converts uint64 slice to int8 slice.
-func (u Uint64Slice) Int8s() ([]int8, error) {
-	return Uint64sToInt8s(u)
-}
-
 // Uint64sToInt16s converts uint64 slice to int16 slice.
 func Uint64sToInt16s(u []uint64) ([]int16, error) {
 	var err error
@@ -142,11 +95,6 @@ func Uint64sToInt16s(u []uint64) ([]int16, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int16s converts uint64 slice to int16 slice.
-func (u Uint64Slice) Int16s() ([]int16, error) {
-	return Uint64sToInt16s(u)
 }
 
 // Uint64sToInt32s converts uint64 slice to int32 slice.
@@ -162,11 +110,6 @@ func Uint64sToInt32s(u []uint64) ([]int32, error) {
 	return r, nil
 }
 
-// Int32s converts uint64 slice to int32 slice.
-func (u Uint64Slice) Int32s() ([]int32, error) {
-	return Uint64sToInt32s(u)
-}
-
 // Uint64sToInt64s converts uint64 slice to int64 slice.
 func Uint64sToInt64s(u []uint64) ([]int64, error) {
 	var err error
@@ -178,11 +121,6 @@ func Uint64sToInt64s(u []uint64) ([]int64, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int64s converts uint64 slice to int64 slice.
-func (u Uint64Slice) Int64s() ([]int64, error) {
-	return Uint64sToInt64s(u)
 }
 
 // Uint64sToUints converts uint64 slice to uint slice.
@@ -198,11 +136,6 @@ func Uint64sToUints(u []uint64) ([]uint, error) {
 	return r, nil
 }
 
-// Uints converts uint64 slice to uint slice.
-func (u Uint64Slice) Uints() ([]uint, error) {
-	return Uint64sToUints(u)
-}
-
 // Uint64sToUint8s converts uint64 slice to uint8 slice.
 func Uint64sToUint8s(u []uint64) ([]uint8, error) {
 	var err error
@@ -216,26 +149,8 @@ func Uint64sToUint8s(u []uint64) ([]uint8, error) {
 	return r, nil
 }
 
-// Uint8s converts uint64 slice to uint8 slice.
-func (u Uint64Slice) Uint8s() ([]uint8, error) {
-	return Uint64sToUint8s(u)
-}
-
 // Uint64sToUint16s converts uint64 slice to uint16 slice.
 func Uint64sToUint16s(u []uint64) ([]uint16, error) {
-	var err error
-	r := make([]uint16, len(u))
-	for k, v := range u {
-		r[k], err = Uint64ToUint16(v)
-		if err != nil {
-			return r, err
-		}
-	}
-	return r, nil
-}
-
-// Uint16s converts uint64 slice to uint16 slice.
-func (u Uint64Slice) Uint16s() ([]uint16, error) {
 	var err error
 	r := make([]uint16, len(u))
 	for k, v := range u {
@@ -260,19 +175,9 @@ func Uint64sToUint32s(u []uint64) ([]uint32, error) {
 	return r, nil
 }
 
-// Uint32s converts uint64 slice to uint32 slice.
-func (u Uint64Slice) Uint32s() ([]uint32, error) {
-	return Uint64sToUint32s(u)
-}
-
-// Uint64s converts to []uint64.
-func (u Uint64Slice) Uint64s() []uint64 {
-	return []uint64(u)
-}
-
-// Concat is used to merge two or more slices.
+// Uint64sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (u Uint64Slice) Concat(a ...[]uint64) []uint64 {
+func Uint64sConcat(u []uint64, a ...[]uint64) []uint64 {
 	totalLen := len(u)
 	for _, v := range a {
 		totalLen += len(v)
@@ -287,7 +192,7 @@ func (u Uint64Slice) Concat(a ...[]uint64) []uint64 {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// Uint64sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -296,21 +201,21 @@ func (u Uint64Slice) Concat(a ...[]uint64) []uint64 {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u Uint64Slice) CopyWithin(target, start int, end ...int) {
+func Uint64sCopyWithin(u []uint64, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
 		return
 	}
-	sub := u.Slice(start, end...)
+	sub := Uint64sSlice(u, start, end...)
 	for k, v := range sub {
 		u[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// Uint64sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (u Uint64Slice) Every(fn func(curr Uint64Slice, k int, v uint64) bool) bool {
+func Uint64sEvery(u []uint64, fn func(u []uint64, k int, v uint64) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
 			return false
@@ -319,7 +224,7 @@ func (u Uint64Slice) Every(fn func(curr Uint64Slice, k int, v uint64) bool) bool
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// Uint64sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -328,7 +233,7 @@ func (u Uint64Slice) Every(fn func(curr Uint64Slice, k int, v uint64) bool) bool
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u Uint64Slice) Fill(value uint64, start int, end ...int) {
+func Uint64sFill(u []uint64, value uint64, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
 		return
@@ -338,8 +243,8 @@ func (u Uint64Slice) Fill(value uint64, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (u Uint64Slice) Filter(fn func(curr Uint64Slice, k int, v uint64) bool) []uint64 {
+// Uint64sFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func Uint64sFilter(u []uint64, fn func(u []uint64, k int, v uint64) bool) []uint64 {
 	ret := make([]uint64, 0)
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -349,10 +254,10 @@ func (u Uint64Slice) Filter(fn func(curr Uint64Slice, k int, v uint64) bool) []u
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// Uint64sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (u Uint64Slice) Find(fn func(curr Uint64Slice, k int, v uint64) bool) (k int, v uint64) {
+func Uint64sFind(u []uint64, fn func(u []uint64, k int, v uint64) bool) (k int, v uint64) {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return k, v
@@ -361,17 +266,17 @@ func (u Uint64Slice) Find(fn func(curr Uint64Slice, k int, v uint64) bool) (k in
 	return -1, 0
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// Uint64sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint64Slice) Includes(valueToFind uint64, fromIndex ...int) bool {
-	return u.IndexOf(valueToFind, fromIndex...) > -1
+func Uint64sIncludes(u []uint64, valueToFind uint64, fromIndex ...int) bool {
+	return Uint64sIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// Uint64sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint64Slice) IndexOf(searchElement uint64, fromIndex ...int) int {
+func Uint64sIndexOf(u []uint64, searchElement uint64, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
 		if searchElement == v {
@@ -381,10 +286,10 @@ func (u Uint64Slice) IndexOf(searchElement uint64, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// Uint64sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint64Slice) LastIndexOf(searchElement uint64, fromIndex ...int) int {
+func Uint64sLastIndexOf(u []uint64, searchElement uint64, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
 		if searchElement == u[k] {
@@ -394,9 +299,9 @@ func (u Uint64Slice) LastIndexOf(searchElement uint64, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// Uint64sMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (u Uint64Slice) Map(fn func(curr Uint64Slice, k int, v uint64) uint64) []uint64 {
+func Uint64sMap(u []uint64, fn func(u []uint64, k int, v uint64) uint64) []uint64 {
 	ret := make([]uint64, len(u))
 	for k, v := range u {
 		ret[k] = fn(u, k, v)
@@ -404,9 +309,9 @@ func (u Uint64Slice) Map(fn func(curr Uint64Slice, k int, v uint64) uint64) []ui
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// Uint64sPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (u *Uint64Slice) Pop() (uint64, bool) {
+func Uint64sPop(u *[]uint64) (uint64, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -418,15 +323,15 @@ func (u *Uint64Slice) Pop() (uint64, bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (u *Uint64Slice) Push(element ...uint64) int {
+// Uint64sPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func Uint64sPush(u *[]uint64, element ...uint64) int {
 	*u = append(*u, element...)
 	return len(*u)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// Uint64sPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (u *Uint64Slice) PushOnce(element ...uint64) int {
+func Uint64sPushOnce(u *[]uint64, element ...uint64) int {
 	a := *u
 L:
 	for _, v := range element {
@@ -441,7 +346,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// Uint64sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -450,8 +355,9 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u Uint64Slice) Reduce(
-	fn func(curr Uint64Slice, k int, v, accumulator uint64) uint64, initialValue ...uint64,
+func Uint64sReduce(
+	u []uint64,
+	fn func(u []uint64, k int, v, accumulator uint64) uint64, initialValue ...uint64,
 ) uint64 {
 	if len(u) == 0 {
 		return 0
@@ -469,7 +375,7 @@ func (u Uint64Slice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// Uint64sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -478,8 +384,9 @@ func (u Uint64Slice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u Uint64Slice) ReduceRight(
-	fn func(curr Uint64Slice, k int, v, accumulator uint64) uint64, initialValue ...uint64,
+func Uint64sReduceRight(
+	u []uint64,
+	fn func(u []uint64, k int, v, accumulator uint64) uint64, initialValue ...uint64,
 ) uint64 {
 	if len(u) == 0 {
 		return 0
@@ -497,8 +404,8 @@ func (u Uint64Slice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (u Uint64Slice) Reverse() {
+// Uint64sReverse reverses an slice in place.
+func Uint64sReverse(u []uint64) {
 	first := 0
 	last := len(u) - 1
 	for first < last {
@@ -508,9 +415,9 @@ func (u Uint64Slice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// Uint64sShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (u *Uint64Slice) Shift() (uint64, bool) {
+func Uint64sShift(u *[]uint64) (uint64, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -521,21 +428,21 @@ func (u *Uint64Slice) Shift() (uint64, bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// Uint64sSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (u Uint64Slice) Slice(begin int, end ...int) []uint64 {
+func Uint64sSlice(u []uint64, begin int, end ...int) []uint64 {
 	fixedStart, fixedEnd, ok := fixRange(len(u), begin, end...)
 	if !ok {
 		return []uint64{}
 	}
-	return u[fixedStart:fixedEnd].Copy()
+	return Uint64sCopy(u[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// Uint64sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (u Uint64Slice) Some(fn func(curr Uint64Slice, k int, v uint64) bool) bool {
+func Uint64sSome(u []uint64, fn func(u []uint64, k int, v uint64) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return true
@@ -544,30 +451,9 @@ func (u Uint64Slice) Some(fn func(curr Uint64Slice, k int, v uint64) bool) bool 
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (u Uint64Slice) Len() int {
-	return len(u)
-}
-
-// Less reports whether the element with
-// index m should sort before the element with index n.
-func (u Uint64Slice) Less(m, n int) bool {
-	return u[m] < u[n]
-}
-
-// Swap swaps the elements with indexes m and n.
-func (u Uint64Slice) Swap(m, n int) {
-	u[m], u[n] = u[n], u[m]
-}
-
-// Sort sorts the elements of an slice in place and returns the sorted slice.
-func (u Uint64Slice) Sort() {
-	sort.Sort(u)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// Uint64sSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (u *Uint64Slice) Splice(start, deleteCount int, items ...uint64) {
+func Uint64sSplice(u *[]uint64, start, deleteCount int, items ...uint64) {
 	a := *u
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -582,7 +468,7 @@ func (u *Uint64Slice) Splice(start, deleteCount int, items ...uint64) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := Uint64sCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -596,15 +482,15 @@ func (u *Uint64Slice) Splice(start, deleteCount int, items ...uint64) {
 	*u = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (u *Uint64Slice) Unshift(element ...uint64) int {
+// Uint64sUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func Uint64sUnshift(u *[]uint64, element ...uint64) int {
 	*u = append(element, *u...)
 	return len(*u)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Uint64sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (u *Uint64Slice) UnshiftOnce(element ...uint64) int {
+func Uint64sUnshiftOnce(u *[]uint64, element ...uint64) int {
 	a := *u
 	if len(element) == 0 {
 		return len(a)
@@ -629,9 +515,9 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// Uint64sDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
-func (u *Uint64Slice) Distinct() int {
+func Uint64sDistinct(u *[]uint64) int {
 	a := (*u)[:0]
 	m := make(map[uint64]bool, len(a))
 	for _, v := range *u {
@@ -646,9 +532,9 @@ func (u *Uint64Slice) Distinct() int {
 	return n
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// Uint64sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint64Slice) RemoveOne(element ...uint64) int {
+func Uint64sRemoveFirst(u *[]uint64, element ...uint64) int {
 	a := *u
 	m := make(map[uint64]bool, len(element))
 	for _, v := range element {
@@ -668,9 +554,9 @@ func (u *Uint64Slice) RemoveOne(element ...uint64) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// Uint64sRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint64Slice) RemoveEvery(element ...uint64) int {
+func Uint64sRemoveEvery(u *[]uint64, element ...uint64) int {
 	a := *u
 	m := make(map[uint64]bool, len(element))
 	for _, v := range element {
