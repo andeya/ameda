@@ -169,15 +169,14 @@ func Int16sToUint64s(i []int16) ([]uint64, error) {
 
 // Int16sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func Int16sConcat(i []int16, a ...[]int16) []int16 {
-	totalLen := len(i)
-	for _, v := range a {
+func Int16sConcat(i ...[]int16) []int16 {
+	var totalLen int
+	for _, v := range i {
 		totalLen += len(v)
 	}
 	ret := make([]int16, totalLen)
-	n := copy(ret, i)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range i {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
