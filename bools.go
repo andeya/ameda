@@ -533,9 +533,12 @@ L:
 	return intersectCount
 }
 
-// BoolsDistinct creates a new slice in place set that removes the same elements
-// and returns the count of each element.
-func BoolsDistinct(b *[]bool) (distinctCount map[bool]int) {
+// BoolsDistinct calculates the count of each different element,
+// and only saves these different elements in place if changeSlice is true.
+func BoolsDistinct(b *[]bool, changeSlice bool) (distinctCount map[bool]int) {
+	if !changeSlice {
+		return boolsDistinct(*b, nil)
+	}
 	a := (*b)[:0]
 	distinctCount = boolsDistinct(*b, &a)
 	n := len(distinctCount)

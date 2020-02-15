@@ -584,9 +584,12 @@ L:
 	return intersectCount
 }
 
-// IntsDistinct creates a new slice in place set that removes the same elements
-// and returns the count of each element.
-func IntsDistinct(i *[]int) (distinctCount map[int]int) {
+// IntsDistinct calculates the count of each different element,
+// and only saves these different elements in place if changeSlice is true.
+func IntsDistinct(i *[]int, changeSlice bool) (distinctCount map[int]int) {
+	if !changeSlice {
+		return intsDistinct(*i, nil)
+	}
 	a := (*i)[:0]
 	distinctCount = intsDistinct(*i, &a)
 	n := len(distinctCount)

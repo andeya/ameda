@@ -586,9 +586,12 @@ L:
 	return intersectCount
 }
 
-// Float64sDistinct creates a new slice in place set that removes the same elements
-// and returns the count of each element.
-func Float64sDistinct(f *[]float64) (distinctCount map[float64]int) {
+// Float64sDistinct calculates the count of each different element,
+// and only saves these different elements in place if changeSlice is true.
+func Float64sDistinct(f *[]float64, changeSlice bool) (distinctCount map[float64]int) {
+	if !changeSlice {
+		return float64sDistinct(*f, nil)
+	}
 	a := (*f)[:0]
 	distinctCount = float64sDistinct(*f, &a)
 	n := len(distinctCount)

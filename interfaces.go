@@ -610,9 +610,12 @@ L:
 	return intersectCount
 }
 
-// InterfacesDistinct creates a new slice in place set that removes the same elements
-// and returns the count of each element.
-func InterfacesDistinct(i *[]interface{}) (distinctCount map[interface{}]int) {
+// InterfacesDistinct calculates the count of each different element,
+// and only saves these different elements in place if changeSlice is true.
+func InterfacesDistinct(i *[]interface{}, changeSlice bool) (distinctCount map[interface{}]int) {
+	if !changeSlice {
+		return interfacesDistinct(*i, nil)
+	}
 	a := (*i)[:0]
 	distinctCount = interfacesDistinct(*i, &a)
 	n := len(distinctCount)

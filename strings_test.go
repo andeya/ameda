@@ -228,7 +228,7 @@ func TestStringsUnshiftOnce(t *testing.T) {
 
 func TestStringsDistinct(t *testing.T) {
 	slice := []string{"-1", "0", "-1", "0", "1", "1"}
-	distinctCount := StringsDistinct(&slice)
+	distinctCount := StringsDistinct(&slice, true)
 	assert.Equal(t, len(slice), len(distinctCount))
 	assert.Equal(t, []string{"-1", "0", "1"}, slice)
 	assert.Equal(t, map[string]int{"-1": 2, "0": 2, "1": 2}, distinctCount)

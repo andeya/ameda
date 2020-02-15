@@ -578,13 +578,16 @@ L:
 	return intersectCount
 }
 
-// Uint32sDistinct creates a new slice in place set that removes the same elements
-// and returns the count of each element.
-func Uint32sDistinct(u *[]uint32) (distinctCount map[uint32]int) {
-	a := (*u)[:0]
-	distinctCount = uint32sDistinct(*u, &a)
+// Uint32sDistinct calculates the count of each different element,
+// and only saves these different elements in place if changeSlice is true.
+func Uint32sDistinct(i *[]uint32, changeSlice bool) (distinctCount map[uint32]int) {
+	if !changeSlice {
+		return uint32sDistinct(*i, nil)
+	}
+	a := (*i)[:0]
+	distinctCount = uint32sDistinct(*i, &a)
 	n := len(distinctCount)
-	*u = a[:n:n]
+	*i = a[:n:n]
 	return distinctCount
 }
 
