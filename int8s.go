@@ -170,15 +170,14 @@ func Int8sToUint64s(i []int8) ([]uint64, error) {
 
 // Int8sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func Int8sConcat(i []int8, a ...[]int8) []int8 {
-	totalLen := len(i)
-	for _, v := range a {
+func Int8sConcat(i ...[]int8) []int8 {
+	var totalLen int
+	for _, v := range i {
 		totalLen += len(v)
 	}
 	ret := make([]int8, totalLen)
-	n := copy(ret, i)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range i {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
