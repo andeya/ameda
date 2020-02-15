@@ -308,9 +308,9 @@ func Int32sPush(i *[]int32, element ...int32) int {
 	return len(*i)
 }
 
-// Int32sPushOnce adds one or more new elements that do not exist in the current slice at the end
+// Int32sPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func Int32sPushOnce(i *[]int32, element ...int32) int {
+func Int32sPushDistinct(i *[]int32, element ...int32) int {
 	a := *i
 L:
 	for _, v := range element {
@@ -465,9 +465,9 @@ func Int32sUnshift(i *[]int32, element ...int32) int {
 	return len(*i)
 }
 
-// Int32sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Int32sUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func Int32sUnshiftOnce(i *[]int32, element ...int32) int {
+func Int32sUnshiftDistinct(i *[]int32, element ...int32) int {
 	a := *i
 	if len(element) == 0 {
 		return len(a)

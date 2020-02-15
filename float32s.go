@@ -320,9 +320,9 @@ func Float32sPush(f *[]float32, element ...float32) int {
 	return len(*f)
 }
 
-// Float32sPushOnce adds one or more new elements that do not exist in the current slice at the end
+// Float32sPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func Float32sPushOnce(f *[]float32, element ...float32) int {
+func Float32sPushDistinct(f *[]float32, element ...float32) int {
 	a := *f
 L:
 	for _, v := range element {
@@ -479,9 +479,9 @@ func Float32sUnshift(f *[]float32, element ...float32) int {
 	return len(*f)
 }
 
-// Float32sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Float32sUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func Float32sUnshiftOnce(f *[]float32, element ...float32) int {
+func Float32sUnshiftDistinct(f *[]float32, element ...float32) int {
 	a := *f
 	if len(element) == 0 {
 		return len(a)

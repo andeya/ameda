@@ -108,9 +108,9 @@ func TestIntsPop(t *testing.T) {
 	assert.Equal(t, 0, last)
 }
 
-func TestIntsPushOnce(t *testing.T) {
+func TestIntsPushDistinct(t *testing.T) {
 	slice := []int{1, 2, 3, 4}
-	n := IntsPushOnce(&slice, 1, 5, 6, 1, 5, 6)
+	n := IntsPushDistinct(&slice, 1, 5, 6, 1, 5, 6)
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, []int{1, 2, 3, 4, 5, 6}, slice)
 }
@@ -208,9 +208,9 @@ func TestIntsUnshift(t *testing.T) {
 	assert.Equal(t, []int{1, 2, 0, 1, 2, 3, 4}, slice)
 }
 
-func TestIntsUnshiftOnce(t *testing.T) {
+func TestIntsUnshiftDistinct(t *testing.T) {
 	slice := []int{1, 2, 3, 4}
-	n := IntsUnshiftOnce(&slice, -1, 0, -1, 0, 1, 1)
+	n := IntsUnshiftDistinct(&slice, -1, 0, -1, 0, 1, 1)
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, []int{-1, 0, 1, 2, 3, 4}, slice)
 }

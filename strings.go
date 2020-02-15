@@ -340,9 +340,9 @@ func StringsPush(s *[]string, element ...string) int {
 	return len(*s)
 }
 
-// StringsPushOnce adds one or more new elements that do not exist in the current slice at the end
+// StringsPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func StringsPushOnce(s *[]string, element ...string) int {
+func StringsPushDistinct(s *[]string, element ...string) int {
 	a := *s
 L:
 	for _, v := range element {
@@ -493,9 +493,9 @@ func StringsUnshift(s *[]string, element ...string) int {
 	return len(*s)
 }
 
-// StringsUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// StringsUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func StringsUnshiftOnce(s *[]string, element ...string) int {
+func StringsUnshiftDistinct(s *[]string, element ...string) int {
 	a := *s
 	if len(element) == 0 {
 		return len(a)

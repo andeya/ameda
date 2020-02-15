@@ -269,9 +269,9 @@ func BoolsPush(b *[]bool, element ...bool) int {
 	return len(*b)
 }
 
-// BoolsPushOnce adds one or more new elements that do not exist in the current slice at the end
+// BoolsPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func BoolsPushOnce(b *[]bool, element ...bool) int {
+func BoolsPushDistinct(b *[]bool, element ...bool) int {
 	a := *b
 L:
 	for _, v := range element {
@@ -428,9 +428,9 @@ func BoolsUnshift(b *[]bool, element ...bool) int {
 	return len(*b)
 }
 
-// BoolsUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// BoolsUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func BoolsUnshiftOnce(b *[]bool, element ...bool) int {
+func BoolsUnshiftDistinct(b *[]bool, element ...bool) int {
 	a := *b
 	if len(element) == 0 {
 		return len(a)

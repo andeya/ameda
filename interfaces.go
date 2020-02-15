@@ -332,9 +332,9 @@ func InterfacesPush(i *[]interface{}, element ...interface{}) int {
 	return len(*i)
 }
 
-// InterfacesPushOnce adds one or more new elements that do not exist in the current slice at the end
+// InterfacesPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func InterfacesPushOnce(i *[]interface{}, element ...interface{}) int {
+func InterfacesPushDistinct(i *[]interface{}, element ...interface{}) int {
 	a := *i
 L:
 	for _, v := range element {
@@ -491,9 +491,9 @@ func InterfacesUnshift(i *[]interface{}, element ...interface{}) int {
 	return len(*i)
 }
 
-// InterfacesUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// InterfacesUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func InterfacesUnshiftOnce(i *[]interface{}, element ...interface{}) int {
+func InterfacesUnshiftDistinct(i *[]interface{}, element ...interface{}) int {
 	a := *i
 	if len(element) == 0 {
 		return len(a)

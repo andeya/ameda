@@ -312,9 +312,9 @@ func IntsPush(i *[]int, element ...int) int {
 	return len(*i)
 }
 
-// IntsPushOnce adds one or more new elements that do not exist in the current slice at the end
+// IntsPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func IntsPushOnce(i *[]int, element ...int) int {
+func IntsPushDistinct(i *[]int, element ...int) int {
 	a := *i
 L:
 	for _, v := range element {
@@ -465,9 +465,9 @@ func IntsUnshift(i *[]int, element ...int) int {
 	return len(*i)
 }
 
-// IntsUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// IntsUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func IntsUnshiftOnce(i *[]int, element ...int) int {
+func IntsUnshiftDistinct(i *[]int, element ...int) int {
 	a := *i
 	if len(element) == 0 {
 		return len(a)

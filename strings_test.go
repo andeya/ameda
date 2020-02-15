@@ -118,9 +118,9 @@ func TestStringsPop(t *testing.T) {
 	assert.Equal(t, "", last)
 }
 
-func TestStringsPushOnce(t *testing.T) {
+func TestStringsPushDistinct(t *testing.T) {
 	slice := []string{"1", "2", "3", "4"}
-	n := StringsPushOnce(&slice, "1", "5", "6", "1", "5", "6")
+	n := StringsPushDistinct(&slice, "1", "5", "6", "1", "5", "6")
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, []string{"1", "2", "3", "4", "5", "6"}, slice)
 }
@@ -219,9 +219,9 @@ func TestStringsUnshift(t *testing.T) {
 	assert.Equal(t, []string{"a", "b", "0", "1", "2", "3", "4"}, slice)
 }
 
-func TestStringsUnshiftOnce(t *testing.T) {
+func TestStringsUnshiftDistinct(t *testing.T) {
 	slice := []string{"1", "2", "3", "4"}
-	n := StringsUnshiftOnce(&slice, "-1", "0", "-1", "0", "1", "1")
+	n := StringsUnshiftDistinct(&slice, "-1", "0", "-1", "0", "1", "1")
 	assert.Equal(t, len(slice), n)
 	assert.Equal(t, []string{"-1", "0", "1", "2", "3", "4"}, slice)
 }

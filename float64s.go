@@ -324,9 +324,9 @@ func Float64sPush(f *[]float64, element ...float64) int {
 	return len(*f)
 }
 
-// Float64sPushOnce adds one or more new elements that do not exist in the current slice at the end
+// Float64sPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func Float64sPushOnce(f *[]float64, element ...float64) int {
+func Float64sPushDistinct(f *[]float64, element ...float64) int {
 	a := *f
 L:
 	for _, v := range element {
@@ -483,9 +483,9 @@ func Float64sUnshift(f *[]float64, element ...float64) int {
 	return len(*f)
 }
 
-// Float64sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Float64sUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func Float64sUnshiftOnce(f *[]float64, element ...float64) int {
+func Float64sUnshiftDistinct(f *[]float64, element ...float64) int {
 	a := *f
 	if len(element) == 0 {
 		return len(a)

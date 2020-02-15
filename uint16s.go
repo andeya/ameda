@@ -292,9 +292,9 @@ func Uint16sPush(u *[]uint16, element ...uint16) int {
 	return len(*u)
 }
 
-// Uint16sPushOnce adds one or more new elements that do not exist in the current slice at the end
+// Uint16sPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func Uint16sPushOnce(u *[]uint16, element ...uint16) int {
+func Uint16sPushDistinct(u *[]uint16, element ...uint16) int {
 	a := *u
 L:
 	for _, v := range element {
@@ -451,9 +451,9 @@ func Uint16sUnshift(u *[]uint16, element ...uint16) int {
 	return len(*u)
 }
 
-// Uint16sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Uint16sUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func Uint16sUnshiftOnce(u *[]uint16, element ...uint16) int {
+func Uint16sUnshiftDistinct(u *[]uint16, element ...uint16) int {
 	a := *u
 	if len(element) == 0 {
 		return len(a)

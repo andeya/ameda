@@ -312,9 +312,9 @@ func Uint64sPush(u *[]uint64, element ...uint64) int {
 	return len(*u)
 }
 
-// Uint64sPushOnce adds one or more new elements that do not exist in the current slice at the end
+// Uint64sPushDistinct adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func Uint64sPushOnce(u *[]uint64, element ...uint64) int {
+func Uint64sPushDistinct(u *[]uint64, element ...uint64) int {
 	a := *u
 L:
 	for _, v := range element {
@@ -471,9 +471,9 @@ func Uint64sUnshift(u *[]uint64, element ...uint64) int {
 	return len(*u)
 }
 
-// Uint64sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Uint64sUnshiftDistinct adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func Uint64sUnshiftOnce(u *[]uint64, element ...uint64) int {
+func Uint64sUnshiftDistinct(u *[]uint64, element ...uint64) int {
 	a := *u
 	if len(element) == 0 {
 		return len(a)
