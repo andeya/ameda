@@ -1,16 +1,11 @@
 package ameda
 
-import (
-	"sort"
-)
-
-// Int16Slice int16 slice object
-type Int16Slice []int16
-
-// NewInt16Slice creates an Int16Slice object.
-func NewInt16Slice(a []int16) *Int16Slice {
-	i := Int16Slice(a)
-	return &i
+// OneInt16 try to return the first element, otherwise return zero value.
+func OneInt16(i []int16) int16 {
+	if len(i) > 0 {
+		return i[0]
+	}
+	return 0
 }
 
 // Int16sCopy creates a copy of the int16 slice.
@@ -18,11 +13,6 @@ func Int16sCopy(i []int16) []int16 {
 	b := make([]int16, len(i))
 	copy(b, i)
 	return b
-}
-
-// Copy creates a copy of the int16 slice.
-func (i Int16Slice) Copy() []int16 {
-	return Int16sCopy(i)
 }
 
 // Int16sToInterfaces converts int16 slice to interface slice.
@@ -34,11 +24,6 @@ func Int16sToInterfaces(i []int16) []interface{} {
 	return r
 }
 
-// Interfaces converts int16 slice to interface slice.
-func (i Int16Slice) Interfaces() []interface{} {
-	return Int16sToInterfaces(i)
-}
-
 // Int16sToStrings converts int16 slice to string slice.
 func Int16sToStrings(i []int16) []string {
 	r := make([]string, len(i))
@@ -46,11 +31,6 @@ func Int16sToStrings(i []int16) []string {
 		r[k] = Int16ToString(v)
 	}
 	return r
-}
-
-// Strings converts int16 slice to string slice.
-func (i Int16Slice) Strings() []string {
-	return Int16sToStrings(i)
 }
 
 // Int16sToBools converts int16 slice to bool slice.
@@ -64,13 +44,6 @@ func Int16sToBools(i []int16) []bool {
 	return r
 }
 
-// Bools converts int16 slice to bool slice.
-// NOTE:
-//  0 is false, everything else is true
-func (i Int16Slice) Bools() []bool {
-	return Int16sToBools(i)
-}
-
 // Int16sToFloat32s converts int16 slice to float32 slice.
 func Int16sToFloat32s(i []int16) []float32 {
 	r := make([]float32, len(i))
@@ -78,11 +51,6 @@ func Int16sToFloat32s(i []int16) []float32 {
 		r[k] = Int16ToFloat32(v)
 	}
 	return r
-}
-
-// Float32s converts int16 slice to float32 slice.
-func (i Int16Slice) Float32s() []float32 {
-	return Int16sToFloat32s(i)
 }
 
 // Int16sToFloat64s converts int16 slice to float64 slice.
@@ -94,11 +62,6 @@ func Int16sToFloat64s(i []int16) []float64 {
 	return r
 }
 
-// Float64s converts int16 slice to float64 slice.
-func (i Int16Slice) Float64s() []float64 {
-	return Int16sToFloat64s(i)
-}
-
 // Int16sToInts converts int16 slice to int slice.
 func Int16sToInts(i []int16) []int {
 	r := make([]int, len(i))
@@ -106,11 +69,6 @@ func Int16sToInts(i []int16) []int {
 		r[k] = Int16ToInt(v)
 	}
 	return r
-}
-
-// Ints converts int16 slice to int slice.
-func (i Int16Slice) Ints() []int {
-	return Int16sToInts(i)
 }
 
 // Int16sToInt8s converts int16 slice to int8 slice.
@@ -126,16 +84,6 @@ func Int16sToInt8s(i []int16) ([]int8, error) {
 	return r, nil
 }
 
-// Int8s converts int16 slice to int8 slice.
-func (i Int16Slice) Int8s() ([]int8, error) {
-	return Int16sToInt8s(i)
-}
-
-// Int16s converts to []int16.
-func (i Int16Slice) Int16s() []int16 {
-	return []int16(i)
-}
-
 // Int16sToInt32s converts int16 slice to int32 slice.
 func Int16sToInt32s(i []int16) []int32 {
 	r := make([]int32, len(i))
@@ -145,11 +93,6 @@ func Int16sToInt32s(i []int16) []int32 {
 	return r
 }
 
-// Int32s converts int16 slice to int32 slice.
-func (i Int16Slice) Int32s() []int32 {
-	return Int16sToInt32s(i)
-}
-
 // Int16sToInt64s converts int16 slice to int64 slice.
 func Int16sToInt64s(i []int16) []int64 {
 	r := make([]int64, len(i))
@@ -157,11 +100,6 @@ func Int16sToInt64s(i []int16) []int64 {
 		r[k] = Int16ToInt64(v)
 	}
 	return r
-}
-
-// Int64s converts int16 slice to int64 slice.
-func (i Int16Slice) Int64s() []int64 {
-	return Int16sToInt64s(i)
 }
 
 // Int16sToUints converts int16 slice to uint slice.
@@ -177,11 +115,6 @@ func Int16sToUints(i []int16) ([]uint, error) {
 	return r, nil
 }
 
-// Uints converts int16 slice to uint slice.
-func (i Int16Slice) Uints() ([]uint, error) {
-	return Int16sToUints(i)
-}
-
 // Int16sToUint8s converts int16 slice to uint8 slice.
 func Int16sToUint8s(i []int16) ([]uint8, error) {
 	var err error
@@ -193,11 +126,6 @@ func Int16sToUint8s(i []int16) ([]uint8, error) {
 		}
 	}
 	return r, nil
-}
-
-// Uint8s converts int16 slice to uint8 slice.
-func (i Int16Slice) Uint8s() ([]uint8, error) {
-	return Int16sToUint8s(i)
 }
 
 // Int16sToUint16s converts int16 slice to uint16 slice.
@@ -213,11 +141,6 @@ func Int16sToUint16s(i []int16) ([]uint16, error) {
 	return r, nil
 }
 
-// Uint16s converts int16 slice to uint16 slice.
-func (i Int16Slice) Uint16s() ([]uint16, error) {
-	return Int16sToUint16s(i)
-}
-
 // Int16sToUint32s converts int16 slice to uint32 slice.
 func Int16sToUint32s(i []int16) ([]uint32, error) {
 	var err error
@@ -229,11 +152,6 @@ func Int16sToUint32s(i []int16) ([]uint32, error) {
 		}
 	}
 	return r, nil
-}
-
-// Uint32s converts int16 slice to uint32 slice.
-func (i Int16Slice) Uint32s() ([]uint32, error) {
-	return Int16sToUint32s(i)
 }
 
 // Int16sToUint64s converts int16 slice to uint64 slice.
@@ -249,14 +167,9 @@ func Int16sToUint64s(i []int16) ([]uint64, error) {
 	return r, nil
 }
 
-// Uint64s converts int16 slice to uint64 slice.
-func (i Int16Slice) Uint64s() ([]uint64, error) {
-	return Int16sToUint64s(i)
-}
-
-// Concat is used to merge two or more slices.
+// Int16sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (i Int16Slice) Concat(a ...[]int16) []int16 {
+func Int16sConcat(i []int16, a ...[]int16) []int16 {
 	totalLen := len(i)
 	for _, v := range a {
 		totalLen += len(v)
@@ -271,7 +184,7 @@ func (i Int16Slice) Concat(a ...[]int16) []int16 {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// Int16sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -280,21 +193,21 @@ func (i Int16Slice) Concat(a ...[]int16) []int16 {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (i Int16Slice) CopyWithin(target, start int, end ...int) {
+func Int16sCopyWithin(i []int16, target, start int, end ...int) {
 	target = fixIndex(len(i), target, true)
 	if target == len(i) {
 		return
 	}
-	sub := i.Slice(start, end...)
+	sub := Int16sSlice(i, start, end...)
 	for k, v := range sub {
 		i[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// Int16sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (i Int16Slice) Every(fn func(curr Int16Slice, k int, v int16) bool) bool {
+func Int16sEvery(i []int16, fn func(i []int16, k int, v int16) bool) bool {
 	for k, v := range i {
 		if !fn(i, k, v) {
 			return false
@@ -303,7 +216,7 @@ func (i Int16Slice) Every(fn func(curr Int16Slice, k int, v int16) bool) bool {
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// Int16sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -312,7 +225,7 @@ func (i Int16Slice) Every(fn func(curr Int16Slice, k int, v int16) bool) bool {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (i Int16Slice) Fill(value int16, start int, end ...int) {
+func Int16sFill(i []int16, value int16, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(i), start, end...)
 	if !ok {
 		return
@@ -322,8 +235,8 @@ func (i Int16Slice) Fill(value int16, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (i Int16Slice) Filter(fn func(curr Int16Slice, k int, v int16) bool) []int16 {
+// Int16sFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func Int16sFilter(i []int16, fn func(i []int16, k int, v int16) bool) []int16 {
 	ret := make([]int16, 0)
 	for k, v := range i {
 		if fn(i, k, v) {
@@ -333,10 +246,10 @@ func (i Int16Slice) Filter(fn func(curr Int16Slice, k int, v int16) bool) []int1
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// Int16sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (i Int16Slice) Find(fn func(curr Int16Slice, k int, v int16) bool) (k int, v int16) {
+func Int16sFind(i []int16, fn func(i []int16, k int, v int16) bool) (k int, v int16) {
 	for k, v := range i {
 		if fn(i, k, v) {
 			return k, v
@@ -345,17 +258,17 @@ func (i Int16Slice) Find(fn func(curr Int16Slice, k int, v int16) bool) (k int, 
 	return -1, 0
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// Int16sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i Int16Slice) Includes(valueToFind int16, fromIndex ...int) bool {
-	return i.IndexOf(valueToFind, fromIndex...) > -1
+func Int16sIncludes(i []int16, valueToFind int16, fromIndex ...int) bool {
+	return Int16sIndexOf(i, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// Int16sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i Int16Slice) IndexOf(searchElement int16, fromIndex ...int) int {
+func Int16sIndexOf(i []int16, searchElement int16, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k, v := range i[idx:] {
 		if searchElement == v {
@@ -365,10 +278,10 @@ func (i Int16Slice) IndexOf(searchElement int16, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// Int16sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i Int16Slice) LastIndexOf(searchElement int16, fromIndex ...int) int {
+func Int16sLastIndexOf(i []int16, searchElement int16, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k := len(i) - 1; k >= idx; k-- {
 		if searchElement == i[k] {
@@ -378,9 +291,9 @@ func (i Int16Slice) LastIndexOf(searchElement int16, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// Int16sMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (i Int16Slice) Map(fn func(curr Int16Slice, k int, v int16) int16) []int16 {
+func Int16sMap(i []int16, fn func(i []int16, k int, v int16) int16) []int16 {
 	ret := make([]int16, len(i))
 	for k, v := range i {
 		ret[k] = fn(i, k, v)
@@ -388,9 +301,9 @@ func (i Int16Slice) Map(fn func(curr Int16Slice, k int, v int16) int16) []int16 
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// Int16sPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (i *Int16Slice) Pop() (int16, bool) {
+func Int16sPop(i *[]int16) (int16, bool) {
 	a := *i
 	if len(a) == 0 {
 		return 0, false
@@ -402,15 +315,15 @@ func (i *Int16Slice) Pop() (int16, bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (i *Int16Slice) Push(element ...int16) int {
+// Int16sPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func Int16sPush(i *[]int16, element ...int16) int {
 	*i = append(*i, element...)
 	return len(*i)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// Int16sPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (i *Int16Slice) PushOnce(element ...int16) int {
+func Int16sPushOnce(i *[]int16, element ...int16) int {
 	a := *i
 L:
 	for _, v := range element {
@@ -425,7 +338,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// Int16sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -434,8 +347,8 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (i Int16Slice) Reduce(
-	fn func(curr Int16Slice, k int, v, accumulator int16) int16, initialValue ...int16,
+func Int16sReduce(i []int16,
+	fn func(i []int16, k int, v, accumulator int16) int16, initialValue ...int16,
 ) int16 {
 	if len(i) == 0 {
 		return 0
@@ -453,7 +366,7 @@ func (i Int16Slice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// Int16sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -462,8 +375,8 @@ func (i Int16Slice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (i Int16Slice) ReduceRight(
-	fn func(curr Int16Slice, k int, v, accumulator int16) int16, initialValue ...int16,
+func Int16sReduceRight(i []int16,
+	fn func(i []int16, k int, v, accumulator int16) int16, initialValue ...int16,
 ) int16 {
 	if len(i) == 0 {
 		return 0
@@ -481,8 +394,8 @@ func (i Int16Slice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (i Int16Slice) Reverse() {
+// Int16sReverse reverses an slice in place.
+func Int16sReverse(i []int16) {
 	first := 0
 	last := len(i) - 1
 	for first < last {
@@ -492,9 +405,9 @@ func (i Int16Slice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// Int16sShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (i *Int16Slice) Shift() (int16, bool) {
+func Int16sShift(i *[]int16) (int16, bool) {
 	a := *i
 	if len(a) == 0 {
 		return 0, false
@@ -505,21 +418,21 @@ func (i *Int16Slice) Shift() (int16, bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// Int16sSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (i Int16Slice) Slice(begin int, end ...int) []int16 {
+func Int16sSlice(i []int16, begin int, end ...int) []int16 {
 	fixedStart, fixedEnd, ok := fixRange(len(i), begin, end...)
 	if !ok {
 		return []int16{}
 	}
-	return i[fixedStart:fixedEnd].Copy()
+	return Int16sCopy(i[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// Int16sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (i Int16Slice) Some(fn func(curr Int16Slice, k int, v int16) bool) bool {
+func Int16sSome(i []int16, fn func(i []int16, k int, v int16) bool) bool {
 	for k, v := range i {
 		if fn(i, k, v) {
 			return true
@@ -528,30 +441,9 @@ func (i Int16Slice) Some(fn func(curr Int16Slice, k int, v int16) bool) bool {
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (i Int16Slice) Len() int {
-	return len(i)
-}
-
-// Less reports whether the element with
-// index m should sort before the element with index n.
-func (i Int16Slice) Less(m, n int) bool {
-	return i[m] < i[n]
-}
-
-// Swap swaps the elements with indexes m and n.
-func (i Int16Slice) Swap(m, n int) {
-	i[m], i[n] = i[n], i[m]
-}
-
-// Sort sorts the elements of an slice in place and returns the sorted slice.
-func (i Int16Slice) Sort() {
-	sort.Sort(i)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// Int16sSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (i *Int16Slice) Splice(start, deleteCount int, items ...int16) {
+func Int16sSplice(i *[]int16, start, deleteCount int, items ...int16) {
 	a := *i
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -566,7 +458,7 @@ func (i *Int16Slice) Splice(start, deleteCount int, items ...int16) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := Int16sCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -580,15 +472,15 @@ func (i *Int16Slice) Splice(start, deleteCount int, items ...int16) {
 	*i = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (i *Int16Slice) Unshift(element ...int16) int {
+// Int16sUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func Int16sUnshift(i *[]int16, element ...int16) int {
 	*i = append(element, *i...)
 	return len(*i)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Int16sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (i *Int16Slice) UnshiftOnce(element ...int16) int {
+func Int16sUnshiftOnce(i *[]int16, element ...int16) int {
 	a := *i
 	if len(element) == 0 {
 		return len(a)
@@ -613,9 +505,9 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// Int16sDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
-func (i *Int16Slice) Distinct() int {
+func Int16sDistinct(i *[]int16) int {
 	a := (*i)[:0]
 	m := make(map[int16]bool, len(a))
 	for _, v := range *i {
@@ -630,9 +522,9 @@ func (i *Int16Slice) Distinct() int {
 	return n
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// Int16sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func (i *Int16Slice) RemoveOne(element ...int16) int {
+func Int16sRemoveFirst(i *[]int16, element ...int16) int {
 	a := *i
 	m := make(map[int16]bool, len(element))
 	for _, v := range element {
@@ -652,9 +544,9 @@ func (i *Int16Slice) RemoveOne(element ...int16) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// Int16sRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (i *Int16Slice) RemoveEvery(element ...int16) int {
+func Int16sRemoveEvery(i *[]int16, element ...int16) int {
 	a := *i
 	m := make(map[int16]bool, len(element))
 	for _, v := range element {
