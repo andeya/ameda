@@ -1,12 +1,11 @@
 package ameda
 
-// InterfaceSlice interface slice object
-type InterfaceSlice []interface{}
-
-// NewInterfaceSlice creates an InterfaceSlice object.
-func NewInterfaceSlice(a []interface{}) *InterfaceSlice {
-	i := InterfaceSlice(a)
-	return &i
+// OneInterface try to return the first element, otherwise return zero value.
+func OneInterface(i []interface{}) interface{} {
+	if len(i) > 0 {
+		return i[0]
+	}
+	return 0
 }
 
 // InterfacesCopy creates a copy of the interface slice.
@@ -16,16 +15,6 @@ func InterfacesCopy(i []interface{}) []interface{} {
 	return b
 }
 
-// Copy creates a copy of the interface slice.
-func (i InterfaceSlice) Copy() []interface{} {
-	return InterfacesCopy(i)
-}
-
-// Interfaces converts interface slice to interface slice.
-func (i InterfaceSlice) Interfaces() []interface{} {
-	return []interface{}(i)
-}
-
 // InterfacesToStrings converts interface slice to string slice.
 func InterfacesToStrings(i []interface{}) []string {
 	r := make([]string, len(i))
@@ -33,11 +22,6 @@ func InterfacesToStrings(i []interface{}) []string {
 		r[k] = InterfaceToString(v)
 	}
 	return r
-}
-
-// Strings converts interface slice to string slice.
-func (i InterfaceSlice) Strings() []string {
-	return InterfacesToStrings(i)
 }
 
 // InterfacesToBools converts interface slice to bool slice.
@@ -55,13 +39,6 @@ func InterfacesToBools(i []interface{}) ([]bool, error) {
 	return r, nil
 }
 
-// Bools converts interface slice to bool slice.
-// NOTE:
-//  0 is false, other numbers are true
-func (i InterfaceSlice) Bools() ([]bool, error) {
-	return InterfacesToBools(i)
-}
-
 // InterfacesToFloat32s converts interface slice to float32 slice.
 func InterfacesToFloat32s(i []interface{}) ([]float32, error) {
 	var err error
@@ -73,11 +50,6 @@ func InterfacesToFloat32s(i []interface{}) ([]float32, error) {
 		}
 	}
 	return r, nil
-}
-
-// Float32s converts interface slice to float32 slice.
-func (i InterfaceSlice) Float32s() ([]float32, error) {
-	return InterfacesToFloat32s(i)
 }
 
 // InterfacesToFloat64s converts interface slice to float64 slice.
@@ -93,11 +65,6 @@ func InterfacesToFloat64s(i []interface{}) ([]float64, error) {
 	return r, nil
 }
 
-// Float64s converts interface slice to float64 slice.
-func (i InterfaceSlice) Float64s() ([]float64, error) {
-	return InterfacesToFloat64s(i)
-}
-
 // InterfacesToInts converts interface slice to int slice.
 func InterfacesToInts(i []interface{}) ([]int, error) {
 	var err error
@@ -109,11 +76,6 @@ func InterfacesToInts(i []interface{}) ([]int, error) {
 		}
 	}
 	return r, nil
-}
-
-// Ints converts interface slice to int slice.
-func (i InterfaceSlice) Ints() ([]int, error) {
-	return InterfacesToInts(i)
 }
 
 // InterfacesToInt8s converts interface slice to int8 slice.
@@ -129,11 +91,6 @@ func InterfacesToInt8s(i []interface{}) ([]int8, error) {
 	return r, nil
 }
 
-// Int8s converts interface slice to int8 slice.
-func (i InterfaceSlice) Int8s() ([]int8, error) {
-	return InterfacesToInt8s(i)
-}
-
 // InterfacesToInt16s converts interface slice to int16 slice.
 func InterfacesToInt16s(i []interface{}) ([]int16, error) {
 	var err error
@@ -145,11 +102,6 @@ func InterfacesToInt16s(i []interface{}) ([]int16, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int16s converts interface slice to int16 slice.
-func (i InterfaceSlice) Int16s() ([]int16, error) {
-	return InterfacesToInt16s(i)
 }
 
 // InterfacesToInt32s converts interface slice to int32 slice.
@@ -165,11 +117,6 @@ func InterfacesToInt32s(i []interface{}) ([]int32, error) {
 	return r, nil
 }
 
-// Int32s converts interface slice to int32 slice.
-func (i InterfaceSlice) Int32s() ([]int32, error) {
-	return InterfacesToInt32s(i)
-}
-
 // InterfacesToInt64s converts interface slice to int64 slice.
 func InterfacesToInt64s(i []interface{}) ([]int64, error) {
 	var err error
@@ -181,11 +128,6 @@ func InterfacesToInt64s(i []interface{}) ([]int64, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int64s converts to []int64.
-func (i InterfaceSlice) Int64s() ([]int64, error) {
-	return InterfacesToInt64s(i)
 }
 
 // InterfacesToUints converts interface slice to uint slice.
@@ -201,11 +143,6 @@ func InterfacesToUints(i []interface{}) ([]uint, error) {
 	return r, nil
 }
 
-// Uints converts interface slice to uint slice.
-func (i InterfaceSlice) Uints() ([]uint, error) {
-	return InterfacesToUints(i)
-}
-
 // InterfacesToUint8s converts interface slice to uint8 slice.
 func InterfacesToUint8s(i []interface{}) ([]uint8, error) {
 	var err error
@@ -217,11 +154,6 @@ func InterfacesToUint8s(i []interface{}) ([]uint8, error) {
 		}
 	}
 	return r, nil
-}
-
-// Uint8s converts interface slice to uint8 slice.
-func (i InterfaceSlice) Uint8s() ([]uint8, error) {
-	return InterfacesToUint8s(i)
 }
 
 // InterfacesToUint16s converts interface slice to uint16 slice.
@@ -237,11 +169,6 @@ func InterfacesToUint16s(i []interface{}) ([]uint16, error) {
 	return r, nil
 }
 
-// Uint16s converts interface slice to uint16 slice.
-func (i InterfaceSlice) Uint16s() ([]uint16, error) {
-	return InterfacesToUint16s(i)
-}
-
 // InterfacesToUint32s converts interface slice to uint32 slice.
 func InterfacesToUint32s(i []interface{}) ([]uint32, error) {
 	var err error
@@ -253,11 +180,6 @@ func InterfacesToUint32s(i []interface{}) ([]uint32, error) {
 		}
 	}
 	return r, nil
-}
-
-// Uint32s converts interface slice to uint32 slice.
-func (i InterfaceSlice) Uint32s() ([]uint32, error) {
-	return InterfacesToUint32s(i)
 }
 
 // InterfacesToUint64s converts interface slice to uint64 slice.
@@ -273,14 +195,9 @@ func InterfacesToUint64s(i []interface{}) ([]uint64, error) {
 	return r, nil
 }
 
-// Uint64s converts interface slice to uint64 slice.
-func (i InterfaceSlice) Uint64s() ([]uint64, error) {
-	return InterfacesToUint64s(i)
-}
-
-// Concat is used to merge two or more slices.
+// InterfacesConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (i InterfaceSlice) Concat(a ...[]interface{}) []interface{} {
+func InterfacesConcat(i []interface{}, a ...[]interface{}) []interface{} {
 	totalLen := len(i)
 	for _, v := range a {
 		totalLen += len(v)
@@ -295,7 +212,7 @@ func (i InterfaceSlice) Concat(a ...[]interface{}) []interface{} {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// InterfacesCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -304,21 +221,21 @@ func (i InterfaceSlice) Concat(a ...[]interface{}) []interface{} {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (i InterfaceSlice) CopyWithin(target, start int, end ...int) {
+func InterfacesCopyWithin(i []interface{}, target, start int, end ...int) {
 	target = fixIndex(len(i), target, true)
 	if target == len(i) {
 		return
 	}
-	sub := i.Slice(start, end...)
+	sub := InterfacesSlice(i, start, end...)
 	for k, v := range sub {
 		i[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// InterfacesEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (i InterfaceSlice) Every(fn func(curr InterfaceSlice, k int, v interface{}) bool) bool {
+func InterfacesEvery(i []interface{}, fn func(i []interface{}, k int, v interface{}) bool) bool {
 	for k, v := range i {
 		if !fn(i, k, v) {
 			return false
@@ -327,7 +244,7 @@ func (i InterfaceSlice) Every(fn func(curr InterfaceSlice, k int, v interface{})
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// InterfacesFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -336,7 +253,7 @@ func (i InterfaceSlice) Every(fn func(curr InterfaceSlice, k int, v interface{})
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (i InterfaceSlice) Fill(value []interface{}, start int, end ...int) {
+func InterfacesFill(i []interface{}, value []interface{}, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(i), start, end...)
 	if !ok {
 		return
@@ -346,8 +263,8 @@ func (i InterfaceSlice) Fill(value []interface{}, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (i InterfaceSlice) Filter(fn func(curr InterfaceSlice, k int, v interface{}) bool) []interface{} {
+// InterfacesFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func InterfacesFilter(i []interface{}, fn func(i []interface{}, k int, v interface{}) bool) []interface{} {
 	ret := make([]interface{}, 0)
 	for k, v := range i {
 		if fn(i, k, v) {
@@ -357,10 +274,10 @@ func (i InterfaceSlice) Filter(fn func(curr InterfaceSlice, k int, v interface{}
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// InterfacesFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (i InterfaceSlice) Find(fn func(curr InterfaceSlice, k int, v interface{}) bool) (k int, v interface{}) {
+func InterfacesFind(i []interface{}, fn func(i []interface{}, k int, v interface{}) bool) (k int, v interface{}) {
 	for k, v := range i {
 		if fn(i, k, v) {
 			return k, v
@@ -369,17 +286,17 @@ func (i InterfaceSlice) Find(fn func(curr InterfaceSlice, k int, v interface{}) 
 	return -1, 0
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// InterfacesIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i InterfaceSlice) Includes(valueToFind int64, fromIndex ...int) bool {
-	return i.IndexOf(valueToFind, fromIndex...) > -1
+func InterfacesIncludes(i []interface{}, valueToFind int64, fromIndex ...int) bool {
+	return InterfacesIndexOf(i, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// InterfacesIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i InterfaceSlice) IndexOf(searchElement int64, fromIndex ...int) int {
+func InterfacesIndexOf(i []interface{}, searchElement int64, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k, v := range i[idx:] {
 		if searchElement == v {
@@ -389,10 +306,10 @@ func (i InterfaceSlice) IndexOf(searchElement int64, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// InterfacesLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (i InterfaceSlice) LastIndexOf(searchElement int64, fromIndex ...int) int {
+func InterfacesLastIndexOf(i []interface{}, searchElement int64, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k := len(i) - 1; k >= idx; k-- {
 		if searchElement == i[k] {
@@ -402,9 +319,9 @@ func (i InterfaceSlice) LastIndexOf(searchElement int64, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// InterfacesMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (i InterfaceSlice) Map(fn func(curr InterfaceSlice, k int, v interface{}) int64) []int64 {
+func InterfacesMap(i []interface{}, fn func(i []interface{}, k int, v interface{}) int64) []int64 {
 	ret := make([]int64, len(i))
 	for k, v := range i {
 		ret[k] = fn(i, k, v)
@@ -412,9 +329,9 @@ func (i InterfaceSlice) Map(fn func(curr InterfaceSlice, k int, v interface{}) i
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// InterfacesPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (i *InterfaceSlice) Pop() (interface{}, bool) {
+func InterfacesPop(i *[]interface{}) (interface{}, bool) {
 	a := *i
 	if len(a) == 0 {
 		return 0, false
@@ -426,15 +343,15 @@ func (i *InterfaceSlice) Pop() (interface{}, bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (i *InterfaceSlice) Push(element ...interface{}) int {
+// InterfacesPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func InterfacesPush(i *[]interface{}, element ...interface{}) int {
 	*i = append(*i, element...)
 	return len(*i)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// InterfacesPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (i *InterfaceSlice) PushOnce(element ...interface{}) int {
+func InterfacesPushOnce(i *[]interface{}, element ...interface{}) int {
 	a := *i
 L:
 	for _, v := range element {
@@ -449,7 +366,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// InterfacesReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -458,8 +375,9 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (i InterfaceSlice) Reduce(
-	fn func(curr InterfaceSlice, k int, v, accumulator interface{}) interface{}, initialValue ...interface{},
+func InterfacesReduce(
+	i []interface{},
+	fn func(i []interface{}, k int, v, accumulator interface{}) interface{}, initialValue ...interface{},
 ) interface{} {
 	if len(i) == 0 {
 		return 0
@@ -477,7 +395,7 @@ func (i InterfaceSlice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// InterfacesReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -486,8 +404,9 @@ func (i InterfaceSlice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (i InterfaceSlice) ReduceRight(
-	fn func(curr InterfaceSlice, k int, v, accumulator interface{}) interface{}, initialValue ...interface{},
+func InterfacesReduceRight(
+	i []interface{},
+	fn func(i []interface{}, k int, v, accumulator interface{}) interface{}, initialValue ...interface{},
 ) interface{} {
 	if len(i) == 0 {
 		return 0
@@ -505,8 +424,8 @@ func (i InterfaceSlice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (i InterfaceSlice) Reverse() {
+// InterfacesReverse reverses an slice in place.
+func InterfacesReverse(i []interface{}) {
 	first := 0
 	last := len(i) - 1
 	for first < last {
@@ -516,9 +435,9 @@ func (i InterfaceSlice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// InterfacesShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (i *InterfaceSlice) Shift() (interface{}, bool) {
+func InterfacesShift(i *[]interface{}) (interface{}, bool) {
 	a := *i
 	if len(a) == 0 {
 		return 0, false
@@ -529,21 +448,21 @@ func (i *InterfaceSlice) Shift() (interface{}, bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// InterfacesSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (i InterfaceSlice) Slice(begin int, end ...int) []interface{} {
+func InterfacesSlice(i []interface{}, begin int, end ...int) []interface{} {
 	fixedStart, fixedEnd, ok := fixRange(len(i), begin, end...)
 	if !ok {
 		return []interface{}{}
 	}
-	return i[fixedStart:fixedEnd].Copy()
+	return InterfacesCopy(i[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// InterfacesSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (i InterfaceSlice) Some(fn func(curr InterfaceSlice, k int, v interface{}) bool) bool {
+func InterfacesSome(i []interface{}, fn func(i []interface{}, k int, v interface{}) bool) bool {
 	for k, v := range i {
 		if fn(i, k, v) {
 			return true
@@ -552,14 +471,9 @@ func (i InterfaceSlice) Some(fn func(curr InterfaceSlice, k int, v interface{}) 
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (i InterfaceSlice) Len() int {
-	return len(i)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// InterfacesSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (i *InterfaceSlice) Splice(start, deleteCount int, items ...interface{}) {
+func InterfacesSplice(i *[]interface{}, start, deleteCount int, items ...interface{}) {
 	a := *i
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -574,7 +488,7 @@ func (i *InterfaceSlice) Splice(start, deleteCount int, items ...interface{}) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := InterfacesCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -588,15 +502,15 @@ func (i *InterfaceSlice) Splice(start, deleteCount int, items ...interface{}) {
 	*i = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (i *InterfaceSlice) Unshift(element ...interface{}) int {
+// InterfacesUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func InterfacesUnshift(i *[]interface{}, element ...interface{}) int {
 	*i = append(element, *i...)
 	return len(*i)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// InterfacesUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (i *InterfaceSlice) UnshiftOnce(element ...interface{}) int {
+func InterfacesUnshiftOnce(i *[]interface{}, element ...interface{}) int {
 	a := *i
 	if len(element) == 0 {
 		return len(a)
@@ -621,9 +535,9 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// InterfacesDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
-func (i *InterfaceSlice) Distinct() int {
+func InterfacesDistinct(i *[]interface{}) int {
 	a := (*i)[:0]
 	m := make(map[interface{}]bool, len(a))
 	for _, v := range *i {
@@ -638,9 +552,9 @@ func (i *InterfaceSlice) Distinct() int {
 	return n
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// InterfacesRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func (i *InterfaceSlice) RemoveOne(element ...interface{}) int {
+func InterfacesRemoveFirst(i *[]interface{}, element ...interface{}) int {
 	a := *i
 	m := make(map[interface{}]bool, len(element))
 	for _, v := range element {
@@ -660,9 +574,9 @@ func (i *InterfaceSlice) RemoveOne(element ...interface{}) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// InterfacesRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (i *InterfaceSlice) RemoveEvery(element ...interface{}) int {
+func InterfacesRemoveEvery(i *[]interface{}, element ...interface{}) int {
 	a := *i
 	m := make(map[interface{}]bool, len(element))
 	for _, v := range element {
