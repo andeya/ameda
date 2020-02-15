@@ -1,16 +1,11 @@
 package ameda
 
-import (
-	"sort"
-)
-
-// Uint32Slice uint32 slice object
-type Uint32Slice []uint32
-
-// NewUint32Slice creates an Uint32Slice object.
-func NewUint32Slice(a []uint32) *Uint32Slice {
-	u := Uint32Slice(a)
-	return &u
+// OneUint32 try to return the first element, otherwise return zero value.
+func OneUint32(u []uint32) uint32 {
+	if len(u) > 0 {
+		return u[0]
+	}
+	return 0
 }
 
 // Uint32sCopy creates a copy of the uint32 slice.
@@ -18,11 +13,6 @@ func Uint32sCopy(u []uint32) []uint32 {
 	b := make([]uint32, len(u))
 	copy(b, u)
 	return b
-}
-
-// Copy creates a copy of the uint32 slice.
-func (u Uint32Slice) Copy() []uint32 {
-	return Uint32sCopy(u)
 }
 
 // Uint32sToInterfaces converts uint32 slice to interface slice.
@@ -34,11 +24,6 @@ func Uint32sToInterfaces(u []uint32) []interface{} {
 	return r
 }
 
-// Interfaces converts uint32 slice to interface slice.
-func (u Uint32Slice) Interfaces() []interface{} {
-	return Uint32sToInterfaces(u)
-}
-
 // Uint32sToStrings converts uint32 slice to string slice.
 func Uint32sToStrings(u []uint32) []string {
 	r := make([]string, len(u))
@@ -46,11 +31,6 @@ func Uint32sToStrings(u []uint32) []string {
 		r[k] = Uint32ToString(v)
 	}
 	return r
-}
-
-// Strings converts uint32 slice to string slice.
-func (u Uint32Slice) Strings() []string {
-	return Uint32sToStrings(u)
 }
 
 // Uint32sToBools converts uint32 slice to bool slice.
@@ -64,13 +44,6 @@ func Uint32sToBools(u []uint32) []bool {
 	return r
 }
 
-// Bools converts uint32 slice to bool slice.
-// NOTE:
-//  0 is false, everything else is true
-func (u Uint32Slice) Bools() []bool {
-	return Uint32sToBools(u)
-}
-
 // Uint32sToFloat32s converts uint32 slice to float32 slice.
 func Uint32sToFloat32s(u []uint32) []float32 {
 	r := make([]float32, len(u))
@@ -78,11 +51,6 @@ func Uint32sToFloat32s(u []uint32) []float32 {
 		r[k] = Uint32ToFloat32(v)
 	}
 	return r
-}
-
-// Float32s converts uint32 slice to float32 slice.
-func (u Uint32Slice) Float32s() []float32 {
-	return Uint32sToFloat32s(u)
 }
 
 // Uint32sToFloat64s converts uint32 slice to float64 slice.
@@ -94,11 +62,6 @@ func Uint32sToFloat64s(u []uint32) []float64 {
 	return r
 }
 
-// Float64s converts uint32 slice to float64 slice.
-func (u Uint32Slice) Float64s() []float64 {
-	return Uint32sToFloat64s(u)
-}
-
 // Uint32sToInts converts uint32 slice to int slice.
 func Uint32sToInts(u []uint32) []int {
 	r := make([]int, len(u))
@@ -106,11 +69,6 @@ func Uint32sToInts(u []uint32) []int {
 		r[k] = Uint32ToInt(v)
 	}
 	return r
-}
-
-// Ints converts uint32 slice to int slice.
-func (u Uint32Slice) Ints() []int {
-	return Uint32sToInts(u)
 }
 
 // Uint32sToInt8s converts uint32 slice to int8 slice.
@@ -126,11 +84,6 @@ func Uint32sToInt8s(u []uint32) ([]int8, error) {
 	return r, nil
 }
 
-// Int8s converts uint32 slice to int8 slice.
-func (u Uint32Slice) Int8s() ([]int8, error) {
-	return Uint32sToInt8s(u)
-}
-
 // Uint32sToInt16s converts uint32 slice to int16 slice.
 func Uint32sToInt16s(u []uint32) ([]int16, error) {
 	var err error
@@ -142,11 +95,6 @@ func Uint32sToInt16s(u []uint32) ([]int16, error) {
 		}
 	}
 	return r, nil
-}
-
-// Int16s converts uint32 slice to int16 slice.
-func (u Uint32Slice) Int16s() ([]int16, error) {
-	return Uint32sToInt16s(u)
 }
 
 // Uint32sToInt32s converts uint32 slice to int32 slice.
@@ -162,11 +110,6 @@ func Uint32sToInt32s(u []uint32) ([]int32, error) {
 	return r, nil
 }
 
-// Int32s converts uint32 slice to int32 slice.
-func (u Uint32Slice) Int32s() ([]int32, error) {
-	return Uint32sToInt32s(u)
-}
-
 // Uint32sToInt64s converts uint32 slice to int64 slice.
 func Uint32sToInt64s(u []uint32) []int64 {
 	r := make([]int64, len(u))
@@ -176,11 +119,6 @@ func Uint32sToInt64s(u []uint32) []int64 {
 	return r
 }
 
-// Int64s converts uint32 slice to int64 slice.
-func (u Uint32Slice) Int64s() []int64 {
-	return Uint32sToInt64s(u)
-}
-
 // Uint32sToUints converts uint32 slice to uint slice.
 func Uint32sToUints(u []uint32) []uint {
 	r := make([]uint, len(u))
@@ -188,11 +126,6 @@ func Uint32sToUints(u []uint32) []uint {
 		r[k] = Uint32ToUint(v)
 	}
 	return r
-}
-
-// Uints converts uint32 slice to uint slice.
-func (u Uint32Slice) Uints() []uint {
-	return Uint32sToUints(u)
 }
 
 // Uint32sToUint8s converts uint32 slice to uint8 slice.
@@ -208,11 +141,6 @@ func Uint32sToUint8s(u []uint32) ([]uint8, error) {
 	return r, nil
 }
 
-// Uint8s converts uint32 slice to uint8 slice.
-func (u Uint32Slice) Uint8s() ([]uint8, error) {
-	return Uint32sToUint8s(u)
-}
-
 // Uint32sToUint16s converts uint32 slice to uint16 slice.
 func Uint32sToUint16s(u []uint32) ([]uint16, error) {
 	var err error
@@ -226,24 +154,6 @@ func Uint32sToUint16s(u []uint32) ([]uint16, error) {
 	return r, nil
 }
 
-// Uint16s converts uint32 slice to uint16 slice.
-func (u Uint32Slice) Uint16s() ([]uint16, error) {
-	var err error
-	r := make([]uint16, len(u))
-	for k, v := range u {
-		r[k], err = Uint32ToUint16(v)
-		if err != nil {
-			return r, err
-		}
-	}
-	return r, nil
-}
-
-// Uint32s converts to []uint32.
-func (u Uint32Slice) Uint32s() []uint32 {
-	return []uint32(u)
-}
-
 // Uint32sToUint64s converts uint32 slice to uint64 slice.
 func Uint32sToUint64s(u []uint32) []uint64 {
 	r := make([]uint64, len(u))
@@ -253,14 +163,9 @@ func Uint32sToUint64s(u []uint32) []uint64 {
 	return r
 }
 
-// Uint64s converts uint32 slice to uint64 slice.
-func (u Uint32Slice) Uint64s() []uint64 {
-	return Uint32sToUint64s(u)
-}
-
-// Concat is used to merge two or more slices.
+// Uint32sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func (u Uint32Slice) Concat(a ...[]uint32) []uint32 {
+func Uint32sConcat(u []uint32, a ...[]uint32) []uint32 {
 	totalLen := len(u)
 	for _, v := range a {
 		totalLen += len(v)
@@ -275,7 +180,7 @@ func (u Uint32Slice) Concat(a ...[]uint32) []uint32 {
 	return ret
 }
 
-// CopyWithin copies part of an slice to another location in the current slice.
+// Uint32sCopyWithin copies part of an slice to another location in the current slice.
 // @target
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -284,21 +189,21 @@ func (u Uint32Slice) Concat(a ...[]uint32) []uint32 {
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u Uint32Slice) CopyWithin(target, start int, end ...int) {
+func Uint32sCopyWithin(u []uint32, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
 		return
 	}
-	sub := u.Slice(start, end...)
+	sub := Uint32sSlice(u, start, end...)
 	for k, v := range sub {
 		u[target+k] = v
 	}
 }
 
-// Every tests whether all elements in the slice pass the test implemented by the provided function.
+// Uint32sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice will return true for any condition!
-func (u Uint32Slice) Every(fn func(curr Uint32Slice, k int, v uint32) bool) bool {
+func Uint32sEvery(u []uint32, fn func(u []uint32, k int, v uint32) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
 			return false
@@ -307,7 +212,7 @@ func (u Uint32Slice) Every(fn func(curr Uint32Slice, k int, v uint32) bool) bool
 	return true
 }
 
-// Fill changes all elements in the current slice to a value, from a start index to an end index.
+// Uint32sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
 //  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
 // @start
@@ -316,7 +221,7 @@ func (u Uint32Slice) Every(fn func(curr Uint32Slice, k int, v uint32) bool) bool
 //  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
 //  If negative, end will be counted from the end.
 //  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
-func (u Uint32Slice) Fill(value uint32, start int, end ...int) {
+func Uint32sFill(u []uint32, value uint32, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
 		return
@@ -326,8 +231,8 @@ func (u Uint32Slice) Fill(value uint32, start int, end ...int) {
 	}
 }
 
-// Filter creates a new slice with all elements that pass the test implemented by the provided function.
-func (u Uint32Slice) Filter(fn func(curr Uint32Slice, k int, v uint32) bool) []uint32 {
+// Uint32sFilter creates a new slice with all elements that pass the test implemented by the provided function.
+func Uint32sFilter(u []uint32, fn func(u []uint32, k int, v uint32) bool) []uint32 {
 	ret := make([]uint32, 0)
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -337,10 +242,10 @@ func (u Uint32Slice) Filter(fn func(curr Uint32Slice, k int, v uint32) bool) []u
 	return ret
 }
 
-// Find returns the key-value of the first element in the provided slice that satisfies the provided testing function.
+// Uint32sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
 //  If not found, k = -1
-func (u Uint32Slice) Find(fn func(curr Uint32Slice, k int, v uint32) bool) (k int, v uint32) {
+func Uint32sFind(u []uint32, fn func(u []uint32, k int, v uint32) bool) (k int, v uint32) {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return k, v
@@ -349,17 +254,17 @@ func (u Uint32Slice) Find(fn func(curr Uint32Slice, k int, v uint32) bool) (k in
 	return -1, 0
 }
 
-// Includes determines whether an slice includes a certain value among its entries.
+// Uint32sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint32Slice) Includes(valueToFind uint32, fromIndex ...int) bool {
-	return u.IndexOf(valueToFind, fromIndex...) > -1
+func Uint32sIncludes(u []uint32, valueToFind uint32, fromIndex ...int) bool {
+	return Uint32sIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
-// IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
+// Uint32sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint32Slice) IndexOf(searchElement uint32, fromIndex ...int) int {
+func Uint32sIndexOf(u []uint32, searchElement uint32, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
 		if searchElement == v {
@@ -369,10 +274,10 @@ func (u Uint32Slice) IndexOf(searchElement uint32, fromIndex ...int) int {
 	return -1
 }
 
-// LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
+// Uint32sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
 //  The index to start the search at. Defaults to 0.
-func (u Uint32Slice) LastIndexOf(searchElement uint32, fromIndex ...int) int {
+func Uint32sLastIndexOf(u []uint32, searchElement uint32, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
 		if searchElement == u[k] {
@@ -382,9 +287,9 @@ func (u Uint32Slice) LastIndexOf(searchElement uint32, fromIndex ...int) int {
 	return -1
 }
 
-// Map creates a new slice populated with the results of calling a provided function
+// Uint32sMap creates a new slice populated with the results of calling a provided function
 // on every element in the calling slice.
-func (u Uint32Slice) Map(fn func(curr Uint32Slice, k int, v uint32) uint32) []uint32 {
+func Uint32sMap(u []uint32, fn func(u []uint32, k int, v uint32) uint32) []uint32 {
 	ret := make([]uint32, len(u))
 	for k, v := range u {
 		ret[k] = fn(u, k, v)
@@ -392,9 +297,9 @@ func (u Uint32Slice) Map(fn func(curr Uint32Slice, k int, v uint32) uint32) []ui
 	return ret
 }
 
-// Pop removes the last element from an slice and returns that element.
+// Uint32sPop removes the last element from an slice and returns that element.
 // This method changes the length of the slice.
-func (u *Uint32Slice) Pop() (uint32, bool) {
+func Uint32sPop(u *[]uint32) (uint32, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -406,15 +311,15 @@ func (u *Uint32Slice) Pop() (uint32, bool) {
 	return last, true
 }
 
-// Push adds one or more elements to the end of an slice and returns the new length of the slice.
-func (u *Uint32Slice) Push(element ...uint32) int {
+// Uint32sPush adds one or more elements to the end of an slice and returns the new length of the slice.
+func Uint32sPush(u *[]uint32, element ...uint32) int {
 	*u = append(*u, element...)
 	return len(*u)
 }
 
-// PushOnce adds one or more new elements that do not exist in the current slice at the end
+// Uint32sPushOnce adds one or more new elements that do not exist in the current slice at the end
 // and returns the new length of the slice.
-func (u *Uint32Slice) PushOnce(element ...uint32) int {
+func Uint32sPushOnce(u *[]uint32, element ...uint32) int {
 	a := *u
 L:
 	for _, v := range element {
@@ -429,7 +334,7 @@ L:
 	return len(a)
 }
 
-// Reduce executes a reducer function (that you provide) on each element of the slice,
+// Uint32sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -438,8 +343,9 @@ L:
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u Uint32Slice) Reduce(
-	fn func(curr Uint32Slice, k int, v, accumulator uint32) uint32, initialValue ...uint32,
+func Uint32sReduce(
+	u []uint32,
+	fn func(u []uint32, k int, v, accumulator uint32) uint32, initialValue ...uint32,
 ) uint32 {
 	if len(u) == 0 {
 		return 0
@@ -457,7 +363,7 @@ func (u Uint32Slice) Reduce(
 	return acc
 }
 
-// ReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
+// Uint32sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
 //  The accumulator accumulates callback's return values.
@@ -466,8 +372,9 @@ func (u Uint32Slice) Reduce(
 // @initialValue
 //  A value to use as the first argument to the first call of the callback.
 //  If no initialValue is supplied, the first element in the slice will be used and skipped.
-func (u Uint32Slice) ReduceRight(
-	fn func(curr Uint32Slice, k int, v, accumulator uint32) uint32, initialValue ...uint32,
+func Uint32sReduceRight(
+	u []uint32,
+	fn func(u []uint32, k int, v, accumulator uint32) uint32, initialValue ...uint32,
 ) uint32 {
 	if len(u) == 0 {
 		return 0
@@ -485,8 +392,8 @@ func (u Uint32Slice) ReduceRight(
 	return acc
 }
 
-// Reverse reverses an slice in place.
-func (u Uint32Slice) Reverse() {
+// Uint32sReverse reverses an slice in place.
+func Uint32sReverse(u []uint32) {
 	first := 0
 	last := len(u) - 1
 	for first < last {
@@ -496,9 +403,9 @@ func (u Uint32Slice) Reverse() {
 	}
 }
 
-// Shift removes the first element from an slice and returns that removed element.
+// Uint32sShift removes the first element from an slice and returns that removed element.
 // This method changes the length of the slice.
-func (u *Uint32Slice) Shift() (uint32, bool) {
+func Uint32sShift(u *[]uint32) (uint32, bool) {
 	a := *u
 	if len(a) == 0 {
 		return 0, false
@@ -509,21 +416,21 @@ func (u *Uint32Slice) Shift() (uint32, bool) {
 	return first, true
 }
 
-// Slice returns a copy of a portion of an slice into a new slice object selected
+// Uint32sSlice returns a copy of a portion of an slice into a new slice object selected
 // from begin to end (end not included) where begin and end represent the index of items in that slice.
 // The original slice will not be modified.
-func (u Uint32Slice) Slice(begin int, end ...int) []uint32 {
+func Uint32sSlice(u []uint32, begin int, end ...int) []uint32 {
 	fixedStart, fixedEnd, ok := fixRange(len(u), begin, end...)
 	if !ok {
 		return []uint32{}
 	}
-	return u[fixedStart:fixedEnd].Copy()
+	return Uint32sCopy(u[fixedStart:fixedEnd])
 }
 
-// Some tests whether at least one element in the slice passes the test implemented by the provided function.
+// Uint32sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
 //  Calling this method on an empty slice returns false for any condition!
-func (u Uint32Slice) Some(fn func(curr Uint32Slice, k int, v uint32) bool) bool {
+func Uint32sSome(u []uint32, fn func(u []uint32, k int, v uint32) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {
 			return true
@@ -532,30 +439,9 @@ func (u Uint32Slice) Some(fn func(curr Uint32Slice, k int, v uint32) bool) bool 
 	return false
 }
 
-// Len is the number of elements in the collection.
-func (u Uint32Slice) Len() int {
-	return len(u)
-}
-
-// Less reports whether the element with
-// index m should sort before the element with index n.
-func (u Uint32Slice) Less(m, n int) bool {
-	return u[m] < u[n]
-}
-
-// Swap swaps the elements with indexes m and n.
-func (u Uint32Slice) Swap(m, n int) {
-	u[m], u[n] = u[n], u[m]
-}
-
-// Sort sorts the elements of an slice in place and returns the sorted slice.
-func (u Uint32Slice) Sort() {
-	sort.Sort(u)
-}
-
-// Splice changes the contents of an slice by removing or replacing
+// Uint32sSplice changes the contents of an slice by removing or replacing
 // existing elements and/or adding new elements in place.
-func (u *Uint32Slice) Splice(start, deleteCount int, items ...uint32) {
+func Uint32sSplice(u *[]uint32, start, deleteCount int, items ...uint32) {
 	a := *u
 	if deleteCount < 0 {
 		deleteCount = 0
@@ -570,7 +456,7 @@ func (u *Uint32Slice) Splice(start, deleteCount int, items ...uint32) {
 			start++
 		} else {
 			// insert
-			lastSlice := a[start:].Copy()
+			lastSlice := Uint32sCopy(a[start:])
 			items = items[k:]
 			a = append(a[:start], items...)
 			a = append(a[:start+len(items)], lastSlice...)
@@ -584,15 +470,15 @@ func (u *Uint32Slice) Splice(start, deleteCount int, items ...uint32) {
 	*u = a[:len(a):len(a)]
 }
 
-// Unshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
-func (u *Uint32Slice) Unshift(element ...uint32) int {
+// Uint32sUnshift adds one or more elements to the beginning of an slice and returns the new length of the slice.
+func Uint32sUnshift(u *[]uint32, element ...uint32) int {
 	*u = append(element, *u...)
 	return len(*u)
 }
 
-// UnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
+// Uint32sUnshiftOnce adds one or more new elements that do not exist in the current slice to the beginning
 // and returns the new length of the slice.
-func (u *Uint32Slice) UnshiftOnce(element ...uint32) int {
+func Uint32sUnshiftOnce(u *[]uint32, element ...uint32) int {
 	a := *u
 	if len(element) == 0 {
 		return len(a)
@@ -617,9 +503,9 @@ L:
 	return len(r)
 }
 
-// Distinct creates an new slice in place set that removes the same elements
+// Uint32sDistinct creates a new slice in place set that removes the same elements
 // and returns the new length of the slice.
-func (u *Uint32Slice) Distinct() int {
+func Uint32sDistinct(u *[]uint32) int {
 	a := (*u)[:0]
 	m := make(map[uint32]bool, len(a))
 	for _, v := range *u {
@@ -634,9 +520,9 @@ func (u *Uint32Slice) Distinct() int {
 	return n
 }
 
-// RemoveOne removes the first matched elements from the slice,
+// Uint32sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint32Slice) RemoveOne(element ...uint32) int {
+func Uint32sRemoveFirst(u *[]uint32, element ...uint32) int {
 	a := *u
 	m := make(map[uint32]bool, len(element))
 	for _, v := range element {
@@ -656,9 +542,9 @@ func (u *Uint32Slice) RemoveOne(element ...uint32) int {
 	return n
 }
 
-// RemoveEvery removes all the elements from the slice,
+// Uint32sRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func (u *Uint32Slice) RemoveEvery(element ...uint32) int {
+func Uint32sRemoveEvery(u *[]uint32, element ...uint32) int {
 	a := *u
 	m := make(map[uint32]bool, len(element))
 	for _, v := range element {
