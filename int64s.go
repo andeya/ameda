@@ -181,15 +181,14 @@ func Int64sToUint64s(i []int64) ([]uint64, error) {
 
 // Int64sConcat is used to merge two or more slices.
 // This method does not change the existing slices, but instead returns a new slice.
-func Int64sConcat(i []int64, a ...[]int64) []int64 {
-	totalLen := len(i)
-	for _, v := range a {
+func Int64sConcat(i ...[]int64) []int64 {
+	var totalLen int
+	for _, v := range i {
 		totalLen += len(v)
 	}
 	ret := make([]int64, totalLen)
-	n := copy(ret, i)
-	dst := ret[n:]
-	for _, v := range a {
+	dst := ret
+	for _, v := range i {
 		n := copy(dst, v)
 		dst = dst[n:]
 	}
