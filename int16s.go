@@ -304,21 +304,18 @@ func Int16sPush(i *[]int16, element ...int16) int {
 	return len(*i)
 }
 
-// Int16sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Int16sPushDistinct(i *[]int16, element ...int16) int {
-	a := *i
+// Int16sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Int16sPushDistinct(i []int16, element ...int16) []int16 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range i {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		i = append(i, v)
 	}
-	*i = a
-	return len(a)
+	return i
 }
 
 // Int16sReduce executes a reducer function (that you provide) on each element of the slice,

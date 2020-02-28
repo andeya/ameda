@@ -110,8 +110,7 @@ func TestIntsPop(t *testing.T) {
 
 func TestIntsPushDistinct(t *testing.T) {
 	slice := []int{1, 2, 3, 4}
-	n := IntsPushDistinct(&slice, 1, 5, 6, 1, 5, 6)
-	assert.Equal(t, len(slice), n)
+	slice = IntsPushDistinct(slice, 1, 5, 6, 1, 5, 6)
 	assert.Equal(t, []int{1, 2, 3, 4, 5, 6}, slice)
 }
 

@@ -305,21 +305,18 @@ func Int8sPush(i *[]int8, element ...int8) int {
 	return len(*i)
 }
 
-// Int8sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Int8sPushDistinct(i *[]int8, element ...int8) int {
-	a := *i
+// Int8sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Int8sPushDistinct(i []int8, element ...int8) []int8 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range i {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		i = append(i, v)
 	}
-	*i = a
-	return len(a)
+	return i
 }
 
 // Int8sReduce executes a reducer function (that you provide) on each element of the slice,

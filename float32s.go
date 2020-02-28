@@ -320,21 +320,18 @@ func Float32sPush(f *[]float32, element ...float32) int {
 	return len(*f)
 }
 
-// Float32sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Float32sPushDistinct(f *[]float32, element ...float32) int {
-	a := *f
+// Float32sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Float32sPushDistinct(f []float32, element ...float32) []float32 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range f {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		f = append(f, v)
 	}
-	*f = a
-	return len(a)
+	return f
 }
 
 // Float32sReduce executes a reducer function (that you provide) on each element of the slice,

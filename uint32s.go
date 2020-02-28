@@ -300,21 +300,18 @@ func Uint32sPush(u *[]uint32, element ...uint32) int {
 	return len(*u)
 }
 
-// Uint32sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Uint32sPushDistinct(u *[]uint32, element ...uint32) int {
-	a := *u
+// Uint32sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Uint32sPushDistinct(u []uint32, element ...uint32) []uint32 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range u {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		u = append(u, v)
 	}
-	*u = a
-	return len(a)
+	return u
 }
 
 // Uint32sReduce executes a reducer function (that you provide) on each element of the slice,

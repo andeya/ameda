@@ -269,21 +269,18 @@ func BoolsPush(b *[]bool, element ...bool) int {
 	return len(*b)
 }
 
-// BoolsPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func BoolsPushDistinct(b *[]bool, element ...bool) int {
-	a := *b
+// BoolsPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func BoolsPushDistinct(b []bool, element ...bool) []bool {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range b {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		b = append(b, v)
 	}
-	*b = a
-	return len(a)
+	return b
 }
 
 // BoolsReduce executes a reducer function (that you provide) on each element of the slice,

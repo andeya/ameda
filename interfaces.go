@@ -332,21 +332,18 @@ func InterfacesPush(i *[]interface{}, element ...interface{}) int {
 	return len(*i)
 }
 
-// InterfacesPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func InterfacesPushDistinct(i *[]interface{}, element ...interface{}) int {
-	a := *i
+// InterfacesPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func InterfacesPushDistinct(i []interface{}, element ...interface{}) []interface{} {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range i {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		i = append(i, v)
 	}
-	*i = a
-	return len(a)
+	return i
 }
 
 // InterfacesReduce executes a reducer function (that you provide) on each element of the slice,

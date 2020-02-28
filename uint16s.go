@@ -292,21 +292,18 @@ func Uint16sPush(u *[]uint16, element ...uint16) int {
 	return len(*u)
 }
 
-// Uint16sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Uint16sPushDistinct(u *[]uint16, element ...uint16) int {
-	a := *u
+// Uint16sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Uint16sPushDistinct(u []uint16, element ...uint16) []uint16 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range u {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		u = append(u, v)
 	}
-	*u = a
-	return len(a)
+	return u
 }
 
 // Uint16sReduce executes a reducer function (that you provide) on each element of the slice,

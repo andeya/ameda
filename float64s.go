@@ -324,21 +324,18 @@ func Float64sPush(f *[]float64, element ...float64) int {
 	return len(*f)
 }
 
-// Float64sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Float64sPushDistinct(f *[]float64, element ...float64) int {
-	a := *f
+// Float64sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Float64sPushDistinct(f []float64, element ...float64) []float64 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range f {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		f = append(f, v)
 	}
-	*f = a
-	return len(a)
+	return f
 }
 
 // Float64sReduce executes a reducer function (that you provide) on each element of the slice,

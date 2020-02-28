@@ -312,21 +312,18 @@ func UintsPush(u *[]uint, element ...uint) int {
 	return len(*u)
 }
 
-// UintsPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func UintsPushDistinct(u *[]uint, element ...uint) int {
-	a := *u
+// UintsPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func UintsPushDistinct(u []uint, element ...uint) []uint {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range u {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		u = append(u, v)
 	}
-	*u = a
-	return len(a)
+	return u
 }
 
 // UintsReduce executes a reducer function (that you provide) on each element of the slice,

@@ -312,21 +312,18 @@ func IntsPush(i *[]int, element ...int) int {
 	return len(*i)
 }
 
-// IntsPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func IntsPushDistinct(i *[]int, element ...int) int {
-	a := *i
+// IntsPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func IntsPushDistinct(i []int, element ...int) []int {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range i {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		i = append(i, v)
 	}
-	*i = a
-	return len(a)
+	return i
 }
 
 // IntsReduce executes a reducer function (that you provide) on each element of the slice,

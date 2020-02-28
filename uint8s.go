@@ -284,21 +284,18 @@ func Uint8sPush(u *[]uint8, element ...uint8) int {
 	return len(*u)
 }
 
-// Uint8sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Uint8sPushDistinct(u *[]uint8, element ...uint8) int {
-	a := *u
+// Uint8sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Uint8sPushDistinct(u []uint8, element ...uint8) []uint8 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range u {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		u = append(u, v)
 	}
-	*u = a
-	return len(a)
+	return u
 }
 
 // Uint8sReduce executes a reducer function (that you provide) on each element of the slice,

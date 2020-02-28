@@ -312,21 +312,18 @@ func Uint64sPush(u *[]uint64, element ...uint64) int {
 	return len(*u)
 }
 
-// Uint64sPushDistinct adds one or more new elements that do not exist in the current slice at the end
-// and returns the new length of the slice.
-func Uint64sPushDistinct(u *[]uint64, element ...uint64) int {
-	a := *u
+// Uint64sPushDistinct adds one or more new elements that do not exist in the current slice at the end.
+func Uint64sPushDistinct(u []uint64, element ...uint64) []uint64 {
 L:
 	for _, v := range element {
-		for _, vv := range a {
+		for _, vv := range u {
 			if vv == v {
 				continue L
 			}
 		}
-		a = append(a, v)
+		u = append(u, v)
 	}
-	*u = a
-	return len(a)
+	return u
 }
 
 // Uint64sReduce executes a reducer function (that you provide) on each element of the slice,

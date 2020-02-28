@@ -120,8 +120,7 @@ func TestStringsPop(t *testing.T) {
 
 func TestStringsPushDistinct(t *testing.T) {
 	slice := []string{"1", "2", "3", "4"}
-	n := StringsPushDistinct(&slice, "1", "5", "6", "1", "5", "6")
-	assert.Equal(t, len(slice), n)
+	slice = StringsPushDistinct(slice, "1", "5", "6", "1", "5", "6")
 	assert.Equal(t, []string{"1", "2", "3", "4", "5", "6"}, slice)
 }
 
