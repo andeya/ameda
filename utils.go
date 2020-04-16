@@ -7,12 +7,17 @@ import (
 	"strconv"
 )
 
+const is64BitPlatform bool = strconv.IntSize == 64
+
 var (
 	errNegativeValue = errors.New("contains negative value")
 	errOverflowValue = errors.New("contains overflow value")
 )
 
-const is64BitPlatform bool = strconv.IntSize == 64
+var (
+	maxUint32 = uint32(math.MaxUint32)
+	maxInt64  = int64(math.MaxInt64)
+)
 
 func isEmptyAsZero(emptyAsZero []bool) bool {
 	return len(emptyAsZero) > 0 && emptyAsZero[0]

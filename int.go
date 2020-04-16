@@ -171,7 +171,7 @@ func IntToUint32(v int) (uint32, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
-	if is64BitPlatform && v > int(math.MaxUint32) {
+	if is64BitPlatform && v > int(maxUint32) {
 		return 0, errOverflowValue
 	}
 	return uint32(v), nil
