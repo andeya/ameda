@@ -7,61 +7,33 @@ import (
 )
 
 // ParseUint is like ParseInt but for unsigned numbers.
+// NOTE:
+//  Compatible with standard package strconv.
 func ParseUint(s string, base int, bitSize int) (uint64, error) {
+	// Ignore letter case
+	if base <= 36 {
+		return strconv.ParseUint(s, base, bitSize)
+	}
+
 	const fnParseUint = "ParseUint"
+
+	if base > 62 {
+		return 0, baseError(fnParseUint, s, base)
+	}
 
 	if s == "" || !underscoreOK(s) {
 		return 0, syntaxError(fnParseUint, s)
 	}
 
-	base0 := base == 0
-
-	s0 := s
-	switch {
-	case 2 <= base && base <= 62:
-		// valid base; nothing to do
-
-	case base == 0:
-		// Look for octal, hex prefix.
-		base = 10
-		if s[0] == '0' {
-			switch {
-			case len(s) >= 3 && lower(s[1]) == 'b':
-				base = 2
-				s = s[2:]
-			case len(s) >= 3 && lower(s[1]) == 'o':
-				base = 8
-				s = s[2:]
-			case len(s) >= 3 && lower(s[1]) == 'x':
-				base = 16
-				s = s[2:]
-			default:
-				base = 8
-				s = s[1:]
-			}
-		}
-
-	default:
-		return 0, baseError(fnParseUint, s0, base)
-	}
-
 	if bitSize == 0 {
 		bitSize = int(strconv.IntSize)
 	} else if bitSize < 0 || bitSize > 64 {
-		return 0, bitSizeError(fnParseUint, s0, bitSize)
+		return 0, bitSizeError(fnParseUint, s, bitSize)
 	}
 
 	// Cutoff is the smallest number such that cutoff*base > maxUint64.
 	// Use compile-time constants for common cases.
-	var cutoff uint64
-	switch base {
-	case 10:
-		cutoff = math.MaxUint64/10 + 1
-	case 16:
-		cutoff = math.MaxUint64/16 + 1
-	default:
-		cutoff = math.MaxUint64/uint64(base) + 1
-	}
+	cutoff := math.MaxUint64/uint64(base) + 1
 
 	maxVal := uint64(1)<<uint(bitSize) - 1
 
@@ -69,37 +41,30 @@ func ParseUint(s string, base int, bitSize int) (uint64, error) {
 	for _, c := range []byte(s) {
 		var d byte
 		switch {
-		case c == '_' && base0:
-			// underscoreOK already called
-			continue
 		case '0' <= c && c <= '9':
 			d = c - '0'
 		case 'a' <= c && c <= 'z':
 			d = c - 'a' + 10
 		case 'A' <= c && c <= 'Z':
-			if base0 {
-				d = c - 'A' + 10
-			} else {
-				d = c - 'A' + 10 + 26
-			}
+			d = c - 'A' + 10 + 26
 		default:
-			return 0, syntaxError(fnParseUint, s0)
+			return 0, syntaxError(fnParseUint, s)
 		}
 
 		if d >= byte(base) {
-			return 0, syntaxError(fnParseUint, s0)
+			return 0, syntaxError(fnParseUint, s)
 		}
 
 		if n >= cutoff {
 			// n*base overflows
-			return maxVal, rangeError(fnParseUint, s0)
+			return maxVal, rangeError(fnParseUint, s)
 		}
 		n *= uint64(base)
 
 		n1 := n + uint64(d)
 		if n1 < n || n1 > maxVal {
 			// n+v overflows
-			return maxVal, rangeError(fnParseUint, s0)
+			return maxVal, rangeError(fnParseUint, s)
 		}
 		n = n1
 	}
@@ -128,7 +93,14 @@ func ParseUint(s string, base int, bitSize int) (uint64, error) {
 // signed integer of the given size, err.Err = ErrRange and the
 // returned value is the maximum magnitude integer of the
 // appropriate bitSize and sign.
+// NOTE:
+//  Compatible with standard package strconv.
 func ParseInt(s string, base int, bitSize int) (i int64, err error) {
+	// Ignore letter case
+	if base <= 36 {
+		return strconv.ParseInt(s, base, bitSize)
+	}
+
 	const fnParseInt = "ParseInt"
 
 	if s == "" {
