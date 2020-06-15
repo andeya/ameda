@@ -95,7 +95,7 @@ func IntToInt16Ptr(v int) (*int16, error) {
 
 // IntToInt32 converts int to int32.
 func IntToInt32(v int) (int32, error) {
-	if is64BitPlatform && (v > math.MaxInt32 || v < math.MinInt32) {
+	if host64bit && (v > math.MaxInt32 || v < math.MinInt32) {
 		return 0, errOverflowValue
 	}
 	return int32(v), nil
@@ -171,7 +171,7 @@ func IntToUint32(v int) (uint32, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
-	if is64BitPlatform && v > int(maxUint32) {
+	if host64bit && v > int(maxUint32) {
 		return 0, errOverflowValue
 	}
 	return uint32(v), nil

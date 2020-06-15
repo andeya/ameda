@@ -56,7 +56,7 @@ func Float32ToFloat64Ptr(v float32) *float64 {
 
 // Float32ToInt converts float32 to int.
 func Float32ToInt(v float32) (int, error) {
-	if is64BitPlatform {
+	if host64bit {
 		if v > math.MaxInt64 || v < math.MinInt64 {
 			return 0, errOverflowValue
 		}
@@ -130,7 +130,7 @@ func Float32ToUint(v float32) (uint, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
-	if is64BitPlatform {
+	if host64bit {
 		if v > math.MaxUint64 {
 			return 0, errOverflowValue
 		}
