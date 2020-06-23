@@ -110,15 +110,32 @@ func ReferenceType(t reflect.Type, ptrDepth int) reflect.Type {
 	for ; ptrDepth > 0; ptrDepth-- {
 		t = reflect.PtrTo(t)
 	}
+	switch {
+	case ptrDepth > 0:
+		for ; ptrDepth > 0; ptrDepth-- {
+			t = reflect.PtrTo(t)
+		}
+	case ptrDepth < 0:
+		for ; ptrDepth < 0 && t.Kind() == reflect.Ptr; ptrDepth++ {
+			t = t.Elem()
+		}
+	}
 	return t
 }
 
 // ReferenceValue convert T to *T, the ptrDepth is the count of '*'.
 func ReferenceValue(v reflect.Value, ptrDepth int) reflect.Value {
-	for ; ptrDepth > 0; ptrDepth-- {
-		vv := reflect.New(v.Type())
-		vv.Elem().Set(v)
-		v = vv
+	switch {
+	case ptrDepth > 0:
+		for ; ptrDepth > 0; ptrDepth-- {
+			vv := reflect.New(v.Type())
+			vv.Elem().Set(v)
+			v = vv
+		}
+	case ptrDepth < 0:
+		for ; ptrDepth < 0 && v.Kind() == reflect.Ptr; ptrDepth++ {
+			v = v.Elem()
+		}
 	}
 	return v
 }
