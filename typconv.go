@@ -107,9 +107,6 @@ func ReferenceSlice(v reflect.Value, ptrDepth int) reflect.Value {
 
 // ReferenceType convert T to *T, the ptrDepth is the count of '*'.
 func ReferenceType(t reflect.Type, ptrDepth int) reflect.Type {
-	for ; ptrDepth > 0; ptrDepth-- {
-		t = reflect.PtrTo(t)
-	}
 	switch {
 	case ptrDepth > 0:
 		for ; ptrDepth > 0; ptrDepth-- {
