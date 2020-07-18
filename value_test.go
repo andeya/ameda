@@ -182,7 +182,7 @@ func TestValueFrom(t *testing.T) {
 	}
 	x := &X{A: 12345, B: "test"}
 	v := reflect.ValueOf(&x)
-	u := ValueFrom(v).Elem()
+	u := ValueFrom2(&v).Elem()
 	v = v.Elem()
 	if u.RuntimeTypeID() != RuntimeTypeID(v.Type()) {
 		t.FailNow()

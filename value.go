@@ -28,6 +28,12 @@ func ValueFrom(v reflect.Value) Value {
 	return newT(unsafe.Pointer(&v))
 }
 
+// ValueFrom2 gets go underlying type data from *reflect.Value.
+func ValueFrom2(v *reflect.Value) Value {
+	checkValueUsable()
+	return newT(unsafe.Pointer(v))
+}
+
 func newT(iPtr unsafe.Pointer) Value {
 	typPtr := *(*uintptr)(iPtr)
 	return Value{
