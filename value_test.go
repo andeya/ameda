@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 	"unsafe"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRuntimeTypeID(t *testing.T) {
@@ -33,6 +35,17 @@ func TestRuntimeTypeID(t *testing.T) {
 		t.FailNow()
 	}
 	t.Log(e1, e2, e3, i, RuntimeTypeID(reflect.TypeOf(t0)), ValueOf(t0.String).RuntimeTypeID())
+}
+
+func TestRuntimeTypeIDOf(t *testing.T) {
+	type T1 struct {
+		_ int
+	}
+	tid := RuntimeTypeIDOf(new(T1))
+	t.Log(tid)
+	assert.Equal(t, RuntimeTypeID(reflect.TypeOf(new(T1))), tid)
+	tid2 := RuntimeTypeIDOf(T1{})
+	assert.Equal(t, tid, tid2)
 }
 
 func TestKind(t *testing.T) {

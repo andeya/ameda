@@ -44,6 +44,17 @@ func newT(iPtr unsafe.Pointer) Value {
 	}
 }
 
+// RuntimeTypeIDOf returns the underlying type ID in current runtime from interface object.
+// NOTE:
+//  *A and A returns the same runtime type ID;
+//  It is 10 times performance of t.String().
+func RuntimeTypeIDOf(i interface{}) int32 {
+	checkValueUsable()
+	iPtr := unsafe.Pointer(&i)
+	typPtr := *(*uintptr)(iPtr)
+	return *(*int32)(unsafe.Pointer(typPtr + rtypeStrOffset))
+}
+
 // RuntimeTypeID returns the underlying type ID in current runtime from reflect.Type.
 // NOTE:
 //  *A and A returns the same runtime type ID;
