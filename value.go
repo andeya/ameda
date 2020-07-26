@@ -168,15 +168,27 @@ func pointerElem(p unsafe.Pointer) unsafe.Pointer {
 var errValueUsable error
 
 func init() {
-	goVersion := strings.TrimPrefix(runtime.Version(), "go")
+	_, errValueUsable = checkGoVersion(runtime.Version())
+}
+
+func checkGoVersion(goVer string) (string, error) {
+	var rs []rune
+	for _, r := range strings.TrimPrefix(goVer, "go") {
+		if r >= '0' && r <= '9' || r == '.' {
+			rs = append(rs, r)
+		} else {
+			break
+		}
+	}
+	goVersion := strings.TrimRight(string(rs), ".")
 	a, err := StringsToInts(strings.Split(goVersion, "."))
 	if err != nil {
-		errValueUsable = err
-		return
+		return goVersion, err
 	}
 	if a[0] != 1 || a[1] < 9 {
-		errValueUsable = fmt.Errorf("required go>=1.9, but current version is go" + goVersion)
+		return goVersion, fmt.Errorf("required 1.9≤go<2.0, but current version is go" + goVersion)
 	}
+	return goVersion, nil
 }
 
 func checkValueUsable() {

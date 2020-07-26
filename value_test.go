@@ -2,12 +2,35 @@ package ameda
 
 import (
 	"reflect"
+	"runtime"
 	"testing"
 	"time"
 	"unsafe"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestCheckGoVersion(t *testing.T) {
+	var goVer string
+	goVer, errValueUsable = checkGoVersion(runtime.Version())
+	assert.NoError(t, errValueUsable)
+	t.Logf("raw=%s, pure=%s", runtime.Version(), goVer)
+
+	goVer, errValueUsable = checkGoVersion("go1.15")
+	assert.NoError(t, errValueUsable)
+	assert.Equal(t, "1.15", goVer)
+	t.Logf("raw=%s, pure=%s", "go1.15", goVer)
+
+	goVer, errValueUsable = checkGoVersion("go1.15rc1")
+	assert.Equal(t, "1.15", goVer)
+	assert.NoError(t, errValueUsable)
+	t.Logf("raw=%s, pure=%s", "go1.15rc1", goVer)
+
+	goVer, errValueUsable = checkGoVersion("go2.15rc1")
+	assert.Equal(t, "2.15", goVer)
+	assert.EqualError(t, errValueUsable, "required 1.9≤go<2.0, but current version is go2.15")
+	t.Logf("raw=%s, pure=%s", "go2.15rc1", goVer)
+}
 
 func TestRuntimeTypeID(t *testing.T) {
 	type (
