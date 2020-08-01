@@ -1,6 +1,7 @@
 package ameda
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 
@@ -24,4 +25,23 @@ func TestInitPointer(t *testing.T) {
 	done := InitPointer(v)
 	assert.True(t, done)
 	assert.Equal(t, T{}, ****i)
+}
+
+func TestInitValue(t *testing.T) {
+	type P2 struct {
+		X string
+		Y uint8
+		Z **bool
+	}
+	type P struct {
+		A  string
+		B  int
+		P2 P2
+		Ps []P2
+		Pm map[string]P
+	}
+	v := InitValue(reflect.TypeOf(map[string]P{}), 5)
+	b, err := json.MarshalIndent(v.Interface(), "", "  ")
+	assert.NoError(t, err)
+	t.Logf("%s", b)
 }

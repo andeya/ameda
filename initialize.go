@@ -1,6 +1,8 @@
 package ameda
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // InitPointer initializes nil pointer with zero value.
 func InitPointer(v reflect.Value) (done bool) {
@@ -190,4 +192,66 @@ func InitFloat64(p *float64, def float64) (done bool) {
 		*p = def
 	}
 	return true
+}
+
+func InitValue(t reflect.Type, maxNestingDeep int) reflect.Value {
+	if maxNestingDeep <= 0 {
+		maxNestingDeep = 10
+	}
+	t = DereferenceType(t)
+	v := reflect.New(t)
+	v = initValue(v, 1, maxNestingDeep)
+	return v
+}
+
+func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
+	InitPointer(v)
+	if curDeep >= maxDeep {
+		return v
+	}
+	var numPtr int
+	for v.Kind() == reflect.Ptr {
+		v = v.Elem()
+		numPtr++
+	}
+	switch v.Kind() {
+	case reflect.Struct:
+		curDeep++
+		fieldNum := v.Type().NumField()
+		for i := 0; i < fieldNum; i++ {
+			e := v.Field(i)
+			InitPointer(e)
+			e.Set(initValue(e, curDeep, maxDeep))
+		}
+	case reflect.Slice:
+		if v.Len() == 0 {
+			e := reflect.New(v.Type().Elem())
+			InitPointer(e)
+			e = e.Elem()
+			e = initValue(e, curDeep, maxDeep)
+			v.Set(reflect.Append(v, e))
+		}
+	case reflect.Array:
+		if v.Len() > 0 {
+			e := reflect.New(v.Type().Elem())
+			InitPointer(e)
+			e = e.Elem()
+			e = initValue(e, curDeep, maxDeep)
+			v.Index(0).Set(reflect.Append(v, e))
+		}
+	case reflect.Map:
+		if v.Len() == 0 {
+			v.Set(reflect.MakeMap(v.Type()))
+			k := reflect.New(v.Type().Key())
+			InitPointer(k)
+			k = k.Elem()
+			e := reflect.New(v.Type().Elem())
+			InitPointer(e)
+			e = e.Elem()
+			e = initValue(e, curDeep, maxDeep)
+			v.SetMapIndex(k, e)
+		}
+	default:
+	}
+	return ReferenceValue(v, numPtr)
 }
