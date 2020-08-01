@@ -194,7 +194,7 @@ func InitFloat64(p *float64, def float64) (done bool) {
 	return true
 }
 
-func InitValue(t reflect.Type, maxNestingDeep int) reflect.Value {
+func InitSampleValue(t reflect.Type, maxNestingDeep int) reflect.Value {
 	if maxNestingDeep <= 0 {
 		maxNestingDeep = 10
 	}

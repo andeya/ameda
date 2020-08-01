@@ -27,7 +27,7 @@ func TestInitPointer(t *testing.T) {
 	assert.Equal(t, T{}, ****i)
 }
 
-func TestInitValue(t *testing.T) {
+func TestInitSampleValue(t *testing.T) {
 	type P2 struct {
 		X string
 		Y uint8
@@ -40,7 +40,7 @@ func TestInitValue(t *testing.T) {
 		Ps []P2
 		Pm map[string]P
 	}
-	v := InitValue(reflect.TypeOf(map[string]P{}), 5)
+	v := InitSampleValue(reflect.TypeOf(map[string]P{}), 5)
 	b, err := json.MarshalIndent(v.Interface(), "", "  ")
 	assert.NoError(t, err)
 	t.Logf("%s", b)
