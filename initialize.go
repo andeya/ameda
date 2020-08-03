@@ -1,7 +1,6 @@
 package ameda
 
 import (
-	"math"
 	"reflect"
 )
 
@@ -255,29 +254,37 @@ func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
 			v.SetMapIndex(k, e)
 		}
 	case reflect.Int:
-		v.SetInt(int64(MaxInt()))
+		if Host32bit {
+			v.SetInt(-32)
+		} else {
+			v.SetInt(-64)
+		}
 	case reflect.Int8:
-		v.SetInt(math.MaxInt8)
+		v.SetInt(-8)
 	case reflect.Int16:
-		v.SetInt(math.MaxInt16)
+		v.SetInt(-16)
 	case reflect.Int32:
-		v.SetInt(math.MaxInt32)
+		v.SetInt(-32)
 	case reflect.Int64:
-		v.SetInt(math.MaxInt64)
-	case reflect.Uint:
-		v.SetUint(uint64(MaxUint()))
+		v.SetInt(-64)
+	case reflect.Uint, reflect.Uintptr:
+		if Host32bit {
+			v.SetUint(32)
+		} else {
+			v.SetUint(64)
+		}
 	case reflect.Uint8:
-		v.SetUint(math.MaxUint8)
+		v.SetUint(8)
 	case reflect.Uint16:
-		v.SetUint(math.MaxUint16)
+		v.SetUint(16)
 	case reflect.Uint32:
-		v.SetUint(math.MaxUint32)
+		v.SetUint(32)
 	case reflect.Uint64:
-		v.SetUint(math.MaxUint64)
-	case reflect.Uintptr:
-		v.SetUint(uint64(MaxUint()))
-	case reflect.Float32, reflect.Float64:
-		v.SetFloat(0.1)
+		v.SetUint(64)
+	case reflect.Float32:
+		v.SetFloat(0.32)
+	case reflect.Float64:
+		v.SetFloat(0.64)
 	case reflect.Bool:
 		v.SetBool(true)
 	case reflect.String:
