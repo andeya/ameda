@@ -5,6 +5,14 @@ import (
 	"strconv"
 )
 
+// MaxUint returns max uint number for current os.
+func MaxUint() uint {
+	if Host32bit {
+		return math.MaxUint32
+	}
+	return math.MaxUint64
+}
+
 // UintToInterface converts uint to interface.
 func UintToInterface(v uint) interface{} {
 	return v
@@ -62,7 +70,7 @@ func UintToFloat64Ptr(v uint) *float64 {
 
 // UintToInt converts uint to int.
 func UintToInt(v uint) (int, error) {
-	if host64bit {
+	if Host64bit {
 		if v > uint(maxInt64) {
 			return 0, errOverflowValue
 		}
@@ -124,7 +132,7 @@ func UintToInt32Ptr(v uint) (*int32, error) {
 
 // UintToInt64 converts uint to int64.
 func UintToInt64(v uint) (int64, error) {
-	if host64bit && v > uint(maxInt64) {
+	if Host64bit && v > uint(maxInt64) {
 		return 0, errOverflowValue
 	}
 	return int64(v), nil
@@ -171,7 +179,7 @@ func UintToUint16Ptr(v uint) (*uint16, error) {
 
 // UintToUint32 converts uint to uint32.
 func UintToUint32(v uint) (uint32, error) {
-	if host64bit && v > math.MaxUint32 {
+	if Host64bit && v > math.MaxUint32 {
 		return 0, errOverflowValue
 	}
 	return uint32(v), nil

@@ -129,7 +129,7 @@ func Uint64ToInt64Ptr(v uint64) (*int64, error) {
 
 // Uint64ToUint converts uint64 to uint.
 func Uint64ToUint(v uint64) (uint, error) {
-	if !host64bit && v > math.MaxUint32 {
+	if !Host64bit && v > math.MaxUint32 {
 		return 0, errOverflowValue
 	}
 	return uint(v), nil

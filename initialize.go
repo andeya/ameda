@@ -1,6 +1,7 @@
 package ameda
 
 import (
+	"math"
 	"reflect"
 )
 
@@ -194,6 +195,7 @@ func InitFloat64(p *float64, def float64) (done bool) {
 	return true
 }
 
+// InitSampleValue initialize the given type with some non-zero value( "?", $max_number, 0.1, true)
 func InitSampleValue(t reflect.Type, maxNestingDeep int) reflect.Value {
 	if maxNestingDeep <= 0 {
 		maxNestingDeep = 10
@@ -245,12 +247,41 @@ func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
 			k := reflect.New(v.Type().Key())
 			InitPointer(k)
 			k = k.Elem()
+			k = initValue(k, curDeep, maxDeep)
 			e := reflect.New(v.Type().Elem())
 			InitPointer(e)
 			e = e.Elem()
 			e = initValue(e, curDeep, maxDeep)
 			v.SetMapIndex(k, e)
 		}
+	case reflect.Int:
+		v.SetInt(int64(MaxInt()))
+	case reflect.Int8:
+		v.SetInt(math.MaxInt8)
+	case reflect.Int16:
+		v.SetInt(math.MaxInt16)
+	case reflect.Int32:
+		v.SetInt(math.MaxInt32)
+	case reflect.Int64:
+		v.SetInt(math.MaxInt64)
+	case reflect.Uint:
+		v.SetUint(uint64(MaxUint()))
+	case reflect.Uint8:
+		v.SetUint(math.MaxUint8)
+	case reflect.Uint16:
+		v.SetUint(math.MaxUint16)
+	case reflect.Uint32:
+		v.SetUint(math.MaxUint32)
+	case reflect.Uint64:
+		v.SetUint(math.MaxUint64)
+	case reflect.Uintptr:
+		v.SetUint(uint64(MaxUint()))
+	case reflect.Float32, reflect.Float64:
+		v.SetFloat(0.1)
+	case reflect.Bool:
+		v.SetBool(true)
+	case reflect.String:
+		v.SetString("?")
 	default:
 	}
 	return ReferenceValue(v, numPtr)

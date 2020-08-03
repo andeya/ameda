@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	host64bit = strconv.IntSize == 64
-	host32bit = ^uint(0)>>32 == 0
+	Host64bit = strconv.IntSize == 64
+	Host32bit = ^uint(0)>>32 == 0
 )
 
 var (

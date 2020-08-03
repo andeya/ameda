@@ -28,6 +28,9 @@ func TestInitPointer(t *testing.T) {
 }
 
 func TestInitSampleValue(t *testing.T) {
+	type P3 struct {
+		M string
+	}
 	type P2 struct {
 		X string
 		Y uint8
@@ -36,8 +39,10 @@ func TestInitSampleValue(t *testing.T) {
 	type P struct {
 		A  string
 		B  int
-		P2 P2
+		Po P2
 		Ps []P2
+		P2
+		P3
 		Pm map[string]P
 	}
 	v := InitSampleValue(reflect.TypeOf(map[string]P{}), 5)

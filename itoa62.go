@@ -110,7 +110,7 @@ func formatBits(dst []byte, u uint64, base int, neg, append_ bool) (d []byte, s 
 		// common case: use constants for / because
 		// the compiler can optimize it into a multiply+shift
 
-		if host32bit {
+		if Host32bit {
 			// convert the lower digits using 32bit operations
 			for u >= 1e9 {
 				// Avoid using r = a%b in addition to q = a/b
