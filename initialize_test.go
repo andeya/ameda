@@ -32,7 +32,7 @@ func TestInitSampleValue(t *testing.T) {
 		M string
 	}
 	type P2 struct {
-		X string
+		X float32
 		Y uint8
 		Z **bool
 	}
