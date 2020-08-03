@@ -282,9 +282,9 @@ func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
 	case reflect.Uint64:
 		v.SetUint(64)
 	case reflect.Float32:
-		v.SetFloat(0.32)
+		v.SetFloat(-0.32)
 	case reflect.Float64:
-		v.SetFloat(0.64)
+		v.SetFloat(-0.64)
 	case reflect.Bool:
 		v.SetBool(true)
 	case reflect.String:
