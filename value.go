@@ -34,6 +34,7 @@ func ValueFrom2(v *reflect.Value) Value {
 	return newT(unsafe.Pointer(v))
 }
 
+//go:nocheckptr
 func newT(iPtr unsafe.Pointer) Value {
 	typPtr := *(*uintptr)(iPtr)
 	return Value{
@@ -48,6 +49,7 @@ func newT(iPtr unsafe.Pointer) Value {
 // NOTE:
 //  *A and A returns the same runtime type ID;
 //  It is 10 times performance of t.String().
+//go:nocheckptr
 func RuntimeTypeIDOf(i interface{}) int32 {
 	checkValueUsable()
 	iPtr := unsafe.Pointer(&i)
@@ -59,6 +61,7 @@ func RuntimeTypeIDOf(i interface{}) int32 {
 // NOTE:
 //  *A and A returns the same runtime type ID;
 //  It is 10 times performance of t.String().
+//go:nocheckptr
 func RuntimeTypeID(t reflect.Type) int32 {
 	checkValueUsable()
 	typPtr := uintptrElem(uintptr(unsafe.Pointer(&t)) + ptrOffset)
@@ -69,6 +72,7 @@ func RuntimeTypeID(t reflect.Type) int32 {
 // NOTE:
 //  *A and A gets the same runtime type ID;
 //  It is 10 times performance of reflect.TypeOf(i).String().
+//go:nocheckptr
 func (v Value) RuntimeTypeID() int32 {
 	return *(*int32)(unsafe.Pointer(v.typPtr + rtypeStrOffset))
 }
@@ -80,6 +84,7 @@ func (v Value) Kind() reflect.Kind {
 
 // Elem returns the Value that the interface i contains
 // or that the pointer i points to.
+//go:nocheckptr
 func (v Value) Elem() Value {
 	k := v.kind
 	switch k {
@@ -102,6 +107,7 @@ func (v Value) Elem() Value {
 
 // UnderlyingElem returns the underlying Value that the interface i contains
 // or that the pointer i points to.
+//go:nocheckptr
 func (v Value) UnderlyingElem() Value {
 	for v.kind == reflect.Ptr || v.kind == reflect.Interface {
 		v = v.Elem()
@@ -112,6 +118,7 @@ func (v Value) UnderlyingElem() Value {
 // Pointer gets the pointer of i.
 // NOTE:
 //  *T and T, gets diffrent pointer
+//go:nocheckptr
 func (v Value) Pointer() uintptr {
 	switch v.Kind() {
 	case reflect.Invalid:
@@ -124,6 +131,7 @@ func (v Value) Pointer() uintptr {
 }
 
 // IsNil reports whether its argument i is nil.
+//go:nocheckptr
 func (v Value) IsNil() bool {
 	return unsafe.Pointer(v.Pointer()) == nil
 }
@@ -136,10 +144,12 @@ func (v Value) IsNil() bool {
 // of the outermost function.
 //
 // NOTE: Its kind must be a reflect.Func, otherwise it returns nil
+//go:nocheckptr
 func (v Value) FuncForPC() *runtime.Func {
 	return runtime.FuncForPC(*(*uintptr)(v.ptr))
 }
 
+//go:nocheckptr
 func typeUnderlying(k reflect.Kind, typPtr uintptr) (reflect.Kind, uintptr, bool) {
 	typPtr2 := uintptrElem(typPtr + elemOffset)
 	k2 := kind(typPtr2)
@@ -149,6 +159,7 @@ func typeUnderlying(k reflect.Kind, typPtr uintptr) (reflect.Kind, uintptr, bool
 	return k2, typPtr2, true
 }
 
+//go:nocheckptr
 func kind(typPtr uintptr) reflect.Kind {
 	if unsafe.Pointer(typPtr) == nil {
 		return reflect.Invalid
@@ -157,10 +168,12 @@ func kind(typPtr uintptr) reflect.Kind {
 	return reflect.Kind(k & kindMask)
 }
 
+//go:nocheckptr
 func uintptrElem(ptr uintptr) uintptr {
 	return *(*uintptr)(unsafe.Pointer(ptr))
 }
 
+//go:nocheckptr
 func pointerElem(p unsafe.Pointer) unsafe.Pointer {
 	return *(*unsafe.Pointer)(p)
 }
