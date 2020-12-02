@@ -11,6 +11,7 @@ import (
 )
 
 func TestCheckGoVersion(t *testing.T) {
+	defer func() { errValueUsable = nil }()
 	var goVer string
 	goVer, errValueUsable = checkGoVersion(runtime.Version())
 	assert.NoError(t, errValueUsable)
