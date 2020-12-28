@@ -47,7 +47,7 @@ func newT(iPtr unsafe.Pointer) Value {
 
 // RuntimeTypeIDOf returns the underlying type ID in current runtime from interface object.
 // NOTE:
-//  *A and A returns the same runtime type ID;
+//  *A and A returns the different runtime type ID;
 //  It is 10 times performance of t.String().
 //go:nocheckptr
 func RuntimeTypeIDOf(i interface{}) uintptr {
@@ -59,7 +59,7 @@ func RuntimeTypeIDOf(i interface{}) uintptr {
 
 // RuntimeTypeID returns the underlying type ID in current runtime from reflect.Type.
 // NOTE:
-//  *A and A returns the same runtime type ID;
+//  *A and A returns the different runtime type ID;
 //  It is 10 times performance of t.String().
 //go:nocheckptr
 func RuntimeTypeID(t reflect.Type) uintptr {
@@ -70,7 +70,7 @@ func RuntimeTypeID(t reflect.Type) uintptr {
 
 // RuntimeTypeID gets the underlying type ID in current runtime.
 // NOTE:
-//  *A and A gets the same runtime type ID;
+//  *A and A gets the different runtime type ID;
 //  It is 10 times performance of reflect.TypeOf(i).String().
 //go:nocheckptr
 func (v Value) RuntimeTypeID() uintptr {
