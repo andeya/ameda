@@ -50,11 +50,11 @@ func newT(iPtr unsafe.Pointer) Value {
 //  *A and A returns the same runtime type ID;
 //  It is 10 times performance of t.String().
 //go:nocheckptr
-func RuntimeTypeIDOf(i interface{}) int32 {
+func RuntimeTypeIDOf(i interface{}) uintptr {
 	checkValueUsable()
 	iPtr := unsafe.Pointer(&i)
 	typPtr := *(*uintptr)(iPtr)
-	return *(*int32)(unsafe.Pointer(typPtr + rtypeStrOffset))
+	return typPtr
 }
 
 // RuntimeTypeID returns the underlying type ID in current runtime from reflect.Type.
@@ -62,10 +62,10 @@ func RuntimeTypeIDOf(i interface{}) int32 {
 //  *A and A returns the same runtime type ID;
 //  It is 10 times performance of t.String().
 //go:nocheckptr
-func RuntimeTypeID(t reflect.Type) int32 {
+func RuntimeTypeID(t reflect.Type) uintptr {
 	checkValueUsable()
 	typPtr := uintptrElem(uintptr(unsafe.Pointer(&t)) + ptrOffset)
-	return *(*int32)(unsafe.Pointer(typPtr + rtypeStrOffset))
+	return typPtr
 }
 
 // RuntimeTypeID gets the underlying type ID in current runtime.
@@ -73,8 +73,8 @@ func RuntimeTypeID(t reflect.Type) int32 {
 //  *A and A gets the same runtime type ID;
 //  It is 10 times performance of reflect.TypeOf(i).String().
 //go:nocheckptr
-func (v Value) RuntimeTypeID() int32 {
-	return *(*int32)(unsafe.Pointer(v.typPtr + rtypeStrOffset))
+func (v Value) RuntimeTypeID() uintptr {
+	return v.typPtr
 }
 
 // Kind gets the reflect.Kind fastly.
@@ -215,17 +215,11 @@ var (
 	ptrOffset = func() uintptr {
 		return unsafe.Offsetof(e.word)
 	}()
-	rtypeStrOffset = func() uintptr {
-		return unsafe.Offsetof(e.typ.str)
-	}()
 	kindOffset = func() uintptr {
 		return unsafe.Offsetof(e.typ.kind)
 	}()
 	elemOffset = func() uintptr {
 		return unsafe.Offsetof(new(ptrType).elem)
-	}()
-	sliceLenOffset = func() uintptr {
-		return unsafe.Offsetof(new(reflect.SliceHeader).Len)
 	}()
 	sliceDataOffset = func() uintptr {
 		return unsafe.Offsetof(new(reflect.SliceHeader).Data)

@@ -8,6 +8,8 @@ import (
 	"unsafe"
 
 	"github.com/stretchr/testify/assert"
+
+	time2 "github.com/henrylee2cn/ameda/test/time"
 )
 
 func TestCheckGoVersion(t *testing.T) {
@@ -34,31 +36,38 @@ func TestCheckGoVersion(t *testing.T) {
 }
 
 func TestRuntimeTypeID(t *testing.T) {
-	type (
-		GoTime = time.Time
-		Time   time.Time
-		I2     interface {
-			String() string
-		}
-		I1 interface {
-			UnixNano() int64
-			I2
-		}
+	arrayEqual(t,
+		RuntimeTypeIDOf(time.Time{}), RuntimeTypeID(reflect.TypeOf(time.Now())), ValueOf(time.Now()).RuntimeTypeID(), ValueFrom(reflect.ValueOf(time.Now())).RuntimeTypeID(),
 	)
-	t0 := new(time.Time)
-	t1 := ValueOf(t0).RuntimeTypeID()
-	t2 := ValueOf(new(GoTime)).RuntimeTypeID()
-	t3 := ValueOf(new(Time)).RuntimeTypeID()
-	t.Log(t1, t2, t3)
-	e0 := time.Time{}
-	e1 := ValueOf(e0).RuntimeTypeID()
-	e2 := ValueOf(GoTime{}).RuntimeTypeID()
-	e3 := ValueOf(Time{}).RuntimeTypeID()
-	i := ValueOf(I2(I1(&GoTime{}))).RuntimeTypeID()
-	if t1 != t2 || t1 != e1 || t1 != e2 || t1 != i || t3 != e3 {
-		t.FailNow()
+	arrayEqual(t,
+		RuntimeTypeIDOf(&time.Time{}), RuntimeTypeID(reflect.TypeOf(&time.Time{})), ValueOf(&time.Time{}).RuntimeTypeID(), ValueFrom(reflect.ValueOf(&time.Time{})).RuntimeTypeID(),
+	)
+	arrayEqual(t,
+		RuntimeTypeIDOf(time2.Time{}), RuntimeTypeID(reflect.TypeOf(time2.Time{S: 2})), ValueOf(time2.Time{S: 3}).RuntimeTypeID(), ValueFrom(reflect.ValueOf(time2.Time{S: 4})).RuntimeTypeID(),
+	)
+	arrayEqual(t,
+		RuntimeTypeIDOf(&time2.Time{}), RuntimeTypeID(reflect.TypeOf(&time2.Time{S: 2})), ValueOf(&time2.Time{S: 3}).RuntimeTypeID(), ValueFrom(reflect.ValueOf(&time2.Time{S: 4})).RuntimeTypeID(),
+	)
+	arrayNotEqual(t, RuntimeTypeIDOf(time.Time{}), RuntimeTypeIDOf(&time.Time{}), RuntimeTypeIDOf(time2.Time{}), RuntimeTypeIDOf(&time2.Time{}))
+}
+
+func arrayEqual(t assert.TestingT, expected interface{}, actual ...interface{}) {
+	if len(actual) == 0 {
+		actual = append(actual, nil)
 	}
-	t.Log(e1, e2, e3, i, RuntimeTypeID(reflect.TypeOf(t0)), ValueOf(t0.String).RuntimeTypeID())
+	for i, a := range actual {
+		assert.Equal(t, expected, a, i)
+	}
+}
+func arrayNotEqual(t assert.TestingT, values ...interface{}) {
+	if len(values) <= 1 {
+		return
+	}
+	for i, a := range values {
+		for ii, aa := range values[i+1:] {
+			assert.NotEqual(t, a, aa, []int{i, ii})
+		}
+	}
 }
 
 func TestRuntimeTypeIDOf(t *testing.T) {
@@ -69,7 +78,7 @@ func TestRuntimeTypeIDOf(t *testing.T) {
 	t.Log(tid)
 	assert.Equal(t, RuntimeTypeID(reflect.TypeOf(new(T1))), tid)
 	tid2 := RuntimeTypeIDOf(T1{})
-	assert.Equal(t, tid, tid2)
+	assert.NotEqual(t, tid, tid2)
 }
 
 func TestKind(t *testing.T) {
