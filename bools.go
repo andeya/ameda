@@ -454,30 +454,45 @@ L:
 
 // BoolsRemoveFirst removes the first matched element from the slice,
 // and returns the new length of the slice.
-func BoolsRemoveFirst(b *[]bool, element bool) int {
-	a := *b
-	for k, v := range a {
-		if v == element {
-			a = append(a[:k], a[k+1:]...)
-			break
+func BoolsRemoveFirst(p *[]bool, elements ...bool) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
+			continue
+		}
+		m[element] = struct{}{}
+		for k, v := range a {
+			if v == element {
+				a = append(a[:k], a[k+1:]...)
+				break
+			}
 		}
 	}
 	n := len(a)
-	*b = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 
 // BoolsRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func BoolsRemoveEvery(b *[]bool, element bool) int {
-	a := *b
-	for k, v := range a {
-		if v == element {
-			a = append(a[:k], a[k+1:]...)
+func BoolsRemoveEvery(p *[]bool, elements ...bool) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
+			continue
+		}
+		m[element] = struct{}{}
+		for i := 0; i < len(a); i++ {
+			if a[i] == element {
+				a = append(a[:i], a[i+1:]...)
+				i--
+			}
 		}
 	}
 	n := len(a)
-	*b = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 

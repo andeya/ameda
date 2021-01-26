@@ -467,44 +467,45 @@ L:
 
 // Uint8sRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func Uint8sRemoveFirst(u *[]uint8, element ...uint8) int {
-	a := *u
-	m := make(map[uint8]bool, len(element))
-	for _, v := range element {
-		if m[v] {
+func Uint8sRemoveFirst(p *[]uint8, elements ...uint8) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
 			continue
 		}
-		m[v] = true
-		for kk, vv := range a {
-			if vv == v {
-				a = append(a[:kk], a[kk+1:]...)
+		m[element] = struct{}{}
+		for k, v := range a {
+			if v == element {
+				a = append(a[:k], a[k+1:]...)
 				break
 			}
 		}
 	}
 	n := len(a)
-	*u = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 
 // Uint8sRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func Uint8sRemoveEvery(u *[]uint8, element ...uint8) int {
-	a := *u
-	m := make(map[uint8]bool, len(element))
-	for _, v := range element {
-		if m[v] {
+func Uint8sRemoveEvery(p *[]uint8, elements ...uint8) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
 			continue
 		}
-		m[v] = true
-		for kk, vv := range a {
-			if vv == v {
-				a = append(a[:kk], a[kk+1:]...)
+		m[element] = struct{}{}
+		for i := 0; i < len(a); i++ {
+			if a[i] == element {
+				a = append(a[:i], a[i+1:]...)
+				i--
 			}
 		}
 	}
 	n := len(a)
-	*u = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 

@@ -519,44 +519,45 @@ L:
 
 // StringsRemoveFirst removes the first matched elements from the slice,
 // and returns the new length of the slice.
-func StringsRemoveFirst(s *[]string, element ...string) int {
-	a := *s
-	m := make(map[string]bool, len(element))
-	for _, v := range element {
-		if m[v] {
+func StringsRemoveFirst(p *[]string, elements ...string) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
 			continue
 		}
-		m[v] = true
-		for i, vv := range a {
-			if vv == v {
-				a = append(a[:i], a[i+1:]...)
+		m[element] = struct{}{}
+		for k, v := range a {
+			if v == element {
+				a = append(a[:k], a[k+1:]...)
 				break
 			}
 		}
 	}
 	n := len(a)
-	*s = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 
 // StringsRemoveEvery removes all the elements from the slice,
 // and returns the new length of the slice.
-func StringsRemoveEvery(s *[]string, element ...string) int {
-	a := *s
-	m := make(map[string]bool, len(element))
-	for _, v := range element {
-		if m[v] {
+func StringsRemoveEvery(p *[]string, elements ...string) int {
+	a := *p
+	m := make(map[interface{}]struct{}, len(elements))
+	for _, element := range elements {
+		if _, ok := m[element]; ok {
 			continue
 		}
-		m[v] = true
-		for i, vv := range a {
-			if vv == v {
+		m[element] = struct{}{}
+		for i := 0; i < len(a); i++ {
+			if a[i] == element {
 				a = append(a[:i], a[i+1:]...)
+				i--
 			}
 		}
 	}
 	n := len(a)
-	*s = a[:n:n]
+	*p = a[:n:n]
 	return n
 }
 
