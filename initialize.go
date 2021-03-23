@@ -199,10 +199,14 @@ func InitSampleValue(t reflect.Type, maxNestingDeep int) reflect.Value {
 	if maxNestingDeep <= 0 {
 		maxNestingDeep = 10
 	}
-	t = DereferenceType(t)
+	ptrDepth := 0
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		ptrDepth++
+	}
 	v := reflect.New(t)
 	v = initValue(v, 1, maxNestingDeep)
-	return v
+	return ReferenceValue(v, ptrDepth-1)
 }
 
 func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
