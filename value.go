@@ -101,13 +101,11 @@ func (v Value) Elem() Value {
 	case reflect.Interface:
 		return newT(v.ptr)
 	case reflect.Ptr:
-		var has bool
-		v.flag, v.typPtr, has = typeUnderlying(v.flag, v.typPtr)
-		if !has {
-			return v
-		}
-		if v.Kind() == reflect.Ptr {
+		flag2, typPtr2, has := typeUnderlying(v.flag, v.typPtr)
+		if has {
 			v.ptr = pointerElem(v.ptr)
+			v.typPtr = typPtr2
+			v.flag = flag2
 		}
 		return v
 	}
@@ -164,6 +162,9 @@ func typeUnderlying(flagVal flag, typPtr uintptr) (flag, uintptr, bool) {
 	if flagVal2 == 0 {
 		return flagVal, typPtr, false
 	}
+	tt := (*ptrType)(unsafe.Pointer(typPtr2))
+	flagVal2 = flagVal2&flagRO | flagIndir | flagAddr
+	flagVal2 |= flag(tt.kind) & flagKindMask
 	return flagVal2, typPtr2, true
 }
 
@@ -236,9 +237,15 @@ var (
 // NOTE: The following definitions must be consistent with those in the standard package!!!
 
 const (
-	flagKindWidth      = 5 // there are 27 kinds
-	flagKindMask  flag = 1<<flagKindWidth - 1
-	flagAddr      flag = 1 << 8
+	flagKindWidth        = 5 // there are 27 kinds
+	flagKindMask    flag = 1<<flagKindWidth - 1
+	flagStickyRO    flag = 1 << 5
+	flagEmbedRO     flag = 1 << 6
+	flagIndir       flag = 1 << 7
+	flagAddr        flag = 1 << 8
+	flagMethod      flag = 1 << 9
+	flagMethodShift      = 10
+	flagRO          flag = flagStickyRO | flagEmbedRO
 )
 
 type (

@@ -113,6 +113,21 @@ func TestKind(t *testing.T) {
 	if ValueOf(nil).Kind() != reflect.Invalid {
 		t.FailNow()
 	}
+	if ValueOf(nil).CanAddr() {
+		t.FailNow()
+	}
+	if ValueOf(x).CanAddr() {
+		t.FailNow()
+	}
+	if ValueOf(&x).CanAddr() {
+		t.FailNow()
+	}
+	if !assert.True(t, ValueOf(&x).Elem().Elem().CanAddr()) {
+		t.FailNow()
+	}
+	if !assert.True(t, ValueFrom(reflect.ValueOf(&x)).Elem().CanAddr()) {
+		t.FailNow()
+	}
 }
 
 func TestPointer(t *testing.T) {
