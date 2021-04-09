@@ -110,6 +110,9 @@ func TestKind(t *testing.T) {
 	if ValueOf(t.Name).Kind() != reflect.Func {
 		t.FailNow()
 	}
+	if ValueOf(nil).Kind() != reflect.Invalid {
+		t.FailNow()
+	}
 }
 
 func TestPointer(t *testing.T) {

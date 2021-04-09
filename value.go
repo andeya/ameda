@@ -10,8 +10,8 @@ import (
 
 // Value go underlying type data
 type Value struct {
+	flag
 	typPtr uintptr
-	kind   reflect.Kind
 	ptr    unsafe.Pointer
 	_iPtr  unsafe.Pointer // avoid being GC
 }
@@ -39,7 +39,7 @@ func newT(iPtr unsafe.Pointer) Value {
 	typPtr := *(*uintptr)(iPtr)
 	return Value{
 		typPtr: typPtr,
-		kind:   kind(typPtr),
+		flag:   getFlag(typPtr),
 		ptr:    pointerElem(unsafe.Pointer(uintptr(iPtr) + ptrOffset)),
 		_iPtr:  iPtr,
 	}
@@ -79,14 +79,22 @@ func (v Value) RuntimeTypeID() uintptr {
 
 // Kind gets the reflect.Kind fastly.
 func (v Value) Kind() reflect.Kind {
-	return v.kind
+	return reflect.Kind(v.flag & flagKindMask)
+}
+
+// CanAddr reports whether the value's address can be obtained with Addr.
+// Such values are called addressable. A value is addressable if it is
+// an element of a slice, an element of an addressable array,
+// a field of an addressable struct, or the result of dereferencing a pointer.
+func (v Value) CanAddr() bool {
+	return v.flag&flagAddr != 0
 }
 
 // Elem returns the Value that the interface i contains
 // or that the pointer i points to.
 //go:nocheckptr
 func (v Value) Elem() Value {
-	k := v.kind
+	k := v.Kind()
 	switch k {
 	default:
 		return v
@@ -94,11 +102,11 @@ func (v Value) Elem() Value {
 		return newT(v.ptr)
 	case reflect.Ptr:
 		var has bool
-		v.kind, v.typPtr, has = typeUnderlying(k, v.typPtr)
+		v.flag, v.typPtr, has = typeUnderlying(v.flag, v.typPtr)
 		if !has {
 			return v
 		}
-		if v.kind == reflect.Ptr {
+		if v.Kind() == reflect.Ptr {
 			v.ptr = pointerElem(v.ptr)
 		}
 		return v
@@ -109,7 +117,7 @@ func (v Value) Elem() Value {
 // or that the pointer i points to.
 //go:nocheckptr
 func (v Value) UnderlyingElem() Value {
-	for v.kind == reflect.Ptr || v.kind == reflect.Interface {
+	for kind := v.Kind(); kind == reflect.Ptr || kind == reflect.Interface; kind = v.Kind() {
 		v = v.Elem()
 	}
 	return v
@@ -150,22 +158,21 @@ func (v Value) FuncForPC() *runtime.Func {
 }
 
 //go:nocheckptr
-func typeUnderlying(k reflect.Kind, typPtr uintptr) (reflect.Kind, uintptr, bool) {
+func typeUnderlying(flagVal flag, typPtr uintptr) (flag, uintptr, bool) {
 	typPtr2 := uintptrElem(typPtr + elemOffset)
-	k2 := kind(typPtr2)
-	if k2 == reflect.Invalid {
-		return k, typPtr, false
+	flagVal2 := getFlag(typPtr2)
+	if flagVal2 == 0 {
+		return flagVal, typPtr, false
 	}
-	return k2, typPtr2, true
+	return flagVal2, typPtr2, true
 }
 
 //go:nocheckptr
-func kind(typPtr uintptr) reflect.Kind {
+func getFlag(typPtr uintptr) flag {
 	if unsafe.Pointer(typPtr) == nil {
-		return reflect.Invalid
+		return 0
 	}
-	k := *(*uint8)(unsafe.Pointer(typPtr + kindOffset))
-	return reflect.Kind(k & kindMask)
+	return *(*flag)(unsafe.Pointer(typPtr + kindOffset))
 }
 
 //go:nocheckptr
@@ -229,7 +236,9 @@ var (
 // NOTE: The following definitions must be consistent with those in the standard package!!!
 
 const (
-	kindMask = (1 << 5) - 1
+	flagKindWidth      = 5 // there are 27 kinds
+	flagKindMask  flag = 1<<flagKindWidth - 1
+	flagAddr      flag = 1 << 8
 )
 
 type (
