@@ -103,9 +103,11 @@ func (v Value) Elem() Value {
 	case reflect.Ptr:
 		flag2, typPtr2, has := typeUnderlying(v.flag, v.typPtr)
 		if has {
-			v.ptr = pointerElem(v.ptr)
 			v.typPtr = typPtr2
 			v.flag = flag2
+			if v.Kind() == reflect.Ptr {
+				v.ptr = pointerElem(v.ptr)
+			}
 		}
 		return v
 	}
@@ -158,12 +160,11 @@ func (v Value) FuncForPC() *runtime.Func {
 //go:nocheckptr
 func typeUnderlying(flagVal flag, typPtr uintptr) (flag, uintptr, bool) {
 	typPtr2 := uintptrElem(typPtr + elemOffset)
-	flagVal2 := getFlag(typPtr2)
-	if flagVal2 == 0 {
+	if unsafe.Pointer(typPtr2) == nil {
 		return flagVal, typPtr, false
 	}
 	tt := (*ptrType)(unsafe.Pointer(typPtr2))
-	flagVal2 = flagVal2&flagRO | flagIndir | flagAddr
+	flagVal2 := flagVal&flagRO | flagIndir | flagAddr
 	flagVal2 |= flag(tt.kind) & flagKindMask
 	return flagVal2, typPtr2, true
 }

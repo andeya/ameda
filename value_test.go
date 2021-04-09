@@ -175,8 +175,6 @@ func TestElem(t *testing.T) {
 	type I interface{}
 	var i I
 	u := ValueFrom(reflect.ValueOf(i))
-	u.Elem()
-
 	type X struct {
 		A int16
 		B string
@@ -184,32 +182,29 @@ func TestElem(t *testing.T) {
 	x := &X{A: 12345, B: "test"}
 	xx := &x
 	var elemPtr uintptr
-	for i, v := range []interface{}{&xx, xx, x, *x} {
-		if i == 0 {
-			elemPtr = ValueOf(v).UnderlyingElem().Pointer()
-		} else {
-			elemPtr = ValueOf(v).Elem().Pointer()
-		}
+	for _, v := range []interface{}{&xx, xx, x, *x} {
+		val := ValueOf(v).UnderlyingElem()
+		elemPtr = val.Pointer()
 		a := *(*int16)(unsafe.Pointer(elemPtr))
-		if a != x.A {
+		if !assert.Equal(t, x.A, a) {
 			t.FailNow()
 		}
 		b := *(*string)(unsafe.Pointer(elemPtr + unsafe.Offsetof(x.B)))
-		if b != x.B {
+		if !assert.Equal(t, x.B, b) {
 			t.FailNow()
 		}
 	}
 
 	var y *X
 	u = ValueOf(&y)
-	if u.IsNil() {
+	if !assert.False(t, u.IsNil()) {
 		t.FailNow()
 	}
 	u = u.UnderlyingElem()
-	if u.Kind() != reflect.Struct {
+	if !assert.Equal(t, reflect.Struct, u.Kind()) {
 		t.FailNow()
 	}
-	if !u.IsNil() {
+	if !assert.True(t, u.IsNil()) {
 		t.FailNow()
 	}
 }
