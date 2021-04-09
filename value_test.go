@@ -122,12 +122,9 @@ func TestKind(t *testing.T) {
 	if ValueOf(&x).CanAddr() {
 		t.FailNow()
 	}
-	if !assert.True(t, ValueOf(&x).Elem().Elem().CanAddr()) {
-		t.FailNow()
-	}
-	if !assert.True(t, ValueFrom(reflect.ValueOf(&x)).Elem().CanAddr()) {
-		t.FailNow()
-	}
+	assert.True(t, ValueOf(&x).Elem().Elem().CanAddr())
+	assert.True(t, ValueFrom(reflect.ValueOf(&x)).Elem().CanAddr())
+	assert.True(t, ValueFrom(reflect.ValueOf(&x).Elem()).CanAddr())
 }
 
 func TestPointer(t *testing.T) {

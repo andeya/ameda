@@ -24,14 +24,17 @@ func ValueOf(i interface{}) Value {
 
 // ValueFrom gets go underlying type data from reflect.Value.
 func ValueFrom(v reflect.Value) Value {
-	checkValueUsable()
-	return newT(unsafe.Pointer(&v))
+	return ValueFrom2(&v)
 }
 
 // ValueFrom2 gets go underlying type data from *reflect.Value.
 func ValueFrom2(v *reflect.Value) Value {
 	checkValueUsable()
-	return newT(unsafe.Pointer(v))
+	vv := newT(unsafe.Pointer(v))
+	if v.CanAddr() {
+		vv.flag |= flagAddr
+	}
+	return vv
 }
 
 //go:nocheckptr
@@ -190,7 +193,9 @@ func pointerElem(p unsafe.Pointer) unsafe.Pointer {
 var errValueUsable error
 
 func init() {
-	_, errValueUsable = checkGoVersion(runtime.Version())
+	if errValueUsable == nil {
+		_, errValueUsable = checkGoVersion(runtime.Version())
+	}
 }
 
 func checkGoVersion(goVer string) (string, error) {
@@ -233,6 +238,15 @@ var (
 	sliceDataOffset = func() uintptr {
 		return unsafe.Offsetof(new(reflect.SliceHeader).Data)
 	}()
+	// valueFlagOffset = func() uintptr {
+	// 	t := reflect.TypeOf(reflect.Value{})
+	// 	s, ok := t.FieldByName("flag")
+	// 	if !ok {
+	// 		errValueUsable = errors.New("not found reflect.Value.flag field")
+	// 		return 0
+	// 	}
+	// 	return s.Offset
+	// }()
 )
 
 // NOTE: The following definitions must be consistent with those in the standard package!!!
