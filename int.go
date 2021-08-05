@@ -7,10 +7,7 @@ import (
 
 // MaxInt returns max int number for current os.
 func MaxInt() int {
-	if Host32bit {
-		return math.MaxInt32
-	}
-	return math.MaxInt64
+	return MaxInteger
 }
 
 // IntToInterface converts int to interface.
