@@ -7,10 +7,7 @@ import (
 
 // MaxUint returns max uint number for current os.
 func MaxUint() uint {
-	if Host32bit {
-		return math.MaxUint32
-	}
-	return math.MaxUint64
+	return MaxUnsignedInt
 }
 
 // UintToInterface converts uint to interface.

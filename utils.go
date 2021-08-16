@@ -8,8 +8,12 @@ import (
 )
 
 const (
-	Host64bit = strconv.IntSize == 64
-	Host32bit = ^uint(0)>>32 == 0
+	Host64bit      = strconv.IntSize == 64
+	Host32bit      = ^uint(0)>>32 == 0
+	MaxUnsignedInt = ^uint(0)
+	MinUnsignedInt = 0
+	MaxInteger     = int(MaxUnsignedInt >> 1)
+	MinInteger     = -MaxInteger - 1
 )
 
 var (
