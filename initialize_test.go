@@ -40,7 +40,7 @@ func TestInitSampleValue(t *testing.T) {
 		A  string
 		B  int
 		Po P2
-		Ps []P2
+		ps []P2
 		P2
 		P3
 		Pm map[string]P

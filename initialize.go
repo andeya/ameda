@@ -219,81 +219,90 @@ func initValue(v reflect.Value, curDeep int, maxDeep int) reflect.Value {
 		v = v.Elem()
 		numPtr++
 	}
-	switch v.Kind() {
-	case reflect.Struct:
-		curDeep++
-		fieldNum := v.Type().NumField()
-		for i := 0; i < fieldNum; i++ {
-			e := v.Field(i)
-			InitPointer(e)
-			e.Set(initValue(e, curDeep, maxDeep))
-		}
-	case reflect.Slice:
-		if v.Len() == 0 {
-			e := reflect.New(v.Type().Elem())
-			InitPointer(e)
-			e = e.Elem()
-			e = initValue(e, curDeep, maxDeep)
-			v.Set(reflect.Append(v, e))
-		}
-	case reflect.Array:
-		if v.Len() > 0 {
-			e := reflect.New(v.Type().Elem())
-			InitPointer(e)
-			e = e.Elem()
-			e = initValue(e, curDeep, maxDeep)
-			v.Index(0).Set(reflect.Append(v, e))
-		}
-	case reflect.Map:
-		if v.Len() == 0 {
-			v.Set(reflect.MakeMap(v.Type()))
-			k := reflect.New(v.Type().Key())
-			InitPointer(k)
-			k = k.Elem()
-			k = initValue(k, curDeep, maxDeep)
-			e := reflect.New(v.Type().Elem())
-			InitPointer(e)
-			e = e.Elem()
-			e = initValue(e, curDeep, maxDeep)
-			v.SetMapIndex(k, e)
-		}
-	case reflect.Int:
-		if Host32bit {
+	if v.CanSet() {
+		switch v.Kind() {
+		case reflect.Struct:
+			curDeep++
+			fieldNum := v.Type().NumField()
+			for i := 0; i < fieldNum; i++ {
+				e := v.Field(i)
+				InitPointer(e)
+				if e.CanSet() {
+					e.Set(initValue(e, curDeep, maxDeep))
+				}
+			}
+		case reflect.Slice:
+			if v.Len() == 0 {
+				e := reflect.New(v.Type().Elem())
+				InitPointer(e)
+				e = e.Elem()
+				e = initValue(e, curDeep, maxDeep)
+				if v.CanSet() {
+					v.Set(reflect.Append(v, e))
+				}
+			}
+		case reflect.Array:
+			if v.Len() > 0 {
+				e := reflect.New(v.Type().Elem())
+				InitPointer(e)
+				e = e.Elem()
+				e = initValue(e, curDeep, maxDeep)
+				vv := v.Index(0)
+				if vv.CanSet() {
+					vv.Set(reflect.Append(v, e))
+				}
+			}
+		case reflect.Map:
+			if v.Len() == 0 {
+				v.Set(reflect.MakeMap(v.Type()))
+				k := reflect.New(v.Type().Key())
+				InitPointer(k)
+				k = k.Elem()
+				k = initValue(k, curDeep, maxDeep)
+				e := reflect.New(v.Type().Elem())
+				InitPointer(e)
+				e = e.Elem()
+				e = initValue(e, curDeep, maxDeep)
+				v.SetMapIndex(k, e)
+			}
+		case reflect.Int:
+			if Host32bit {
+				v.SetInt(-32)
+			} else {
+				v.SetInt(-64)
+			}
+		case reflect.Int8:
+			v.SetInt(-8)
+		case reflect.Int16:
+			v.SetInt(-16)
+		case reflect.Int32:
 			v.SetInt(-32)
-		} else {
+		case reflect.Int64:
 			v.SetInt(-64)
-		}
-	case reflect.Int8:
-		v.SetInt(-8)
-	case reflect.Int16:
-		v.SetInt(-16)
-	case reflect.Int32:
-		v.SetInt(-32)
-	case reflect.Int64:
-		v.SetInt(-64)
-	case reflect.Uint, reflect.Uintptr:
-		if Host32bit {
+		case reflect.Uint, reflect.Uintptr:
+			if Host32bit {
+				v.SetUint(32)
+			} else {
+				v.SetUint(64)
+			}
+		case reflect.Uint8:
+			v.SetUint(8)
+		case reflect.Uint16:
+			v.SetUint(16)
+		case reflect.Uint32:
 			v.SetUint(32)
-		} else {
+		case reflect.Uint64:
 			v.SetUint(64)
+		case reflect.Float32:
+			v.SetFloat(-0.32)
+		case reflect.Float64:
+			v.SetFloat(-0.64)
+		case reflect.Bool:
+			v.SetBool(true)
+		case reflect.String:
+			v.SetString("?")
+		default:
 		}
-	case reflect.Uint8:
-		v.SetUint(8)
-	case reflect.Uint16:
-		v.SetUint(16)
-	case reflect.Uint32:
-		v.SetUint(32)
-	case reflect.Uint64:
-		v.SetUint(64)
-	case reflect.Float32:
-		v.SetFloat(-0.32)
-	case reflect.Float64:
-		v.SetFloat(-0.64)
-	case reflect.Bool:
-		v.SetBool(true)
-	case reflect.String:
-		v.SetString("?")
-	default:
 	}
 	return ReferenceValue(v, numPtr)
 }
