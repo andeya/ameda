@@ -13,9 +13,9 @@ func TestDigitToDigitPtr(t *testing.T) {
 	assert.Equal(t, int16(8888), *r)
 }
 
-func TestToString(t *testing.T) {
-	s := ToStringPtr(1)
-	t.Log(*s)
+func TestToStringPtr(t *testing.T) {
+	s := ToString[string](true)
+	t.Logf("%T, %v", s, s)
 }
 
 func TestBoolToDigitPtr(t *testing.T) {
@@ -28,9 +28,4 @@ func TestToBool(t *testing.T) {
 	assert.False(t, ToBool(""))
 	assert.True(t, ToBool(1.1))
 	assert.False(t, ToBool(0.0))
-}
-
-func TestToStringPtr(t *testing.T) {
-	s := ToStringPtr[string](true)
-	t.Logf("%d, %v", s, *s)
 }

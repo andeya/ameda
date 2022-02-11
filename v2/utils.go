@@ -17,10 +17,6 @@ var (
 	errOverflowValue = errors.New("contains overflow value")
 )
 
-func isEmptyAsZero(emptyAsZero []bool) bool {
-	return len(emptyAsZero) > 0 && emptyAsZero[0]
-}
-
 func getFromIndex(length int, fromIndex ...int) int {
 	if len(fromIndex) > 0 {
 		return fixIndex(length, fromIndex[0], true)

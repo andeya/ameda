@@ -11,6 +11,12 @@ type Digit interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~float32 | ~float64
 }
 
+// Zero return zero value.
+func Zero[T any]() T {
+	var z = new(T)
+	return *z
+}
+
 // ToPtr converts D to *D.
 func ToPtr[T any](v T) *T {
 	return &v
@@ -46,12 +52,6 @@ func ToString[T ~string](v interface{}) T {
 	default:
 		return T(fmt.Sprint(v))
 	}
-}
-
-// ToStringPtr converts any to *string.
-func ToStringPtr[T ~string](v interface{}) *T {
-	r := ToString[T](v)
-	return &r
 }
 
 // ToStrings converts []T to []D.

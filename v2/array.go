@@ -1,11 +1,5 @@
 package ameda
 
-// Zero return zero value.
-func Zero[T any]() T {
-	var z = new(T)
-	return *z
-}
-
 // VecOne try to return the first element, otherwise return zero value.
 func VecOne[T any](s []T) T {
 	if len(s) > 0 {
