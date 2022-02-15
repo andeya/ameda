@@ -159,3 +159,7 @@ func (iter *baseIterator[T]) Collect() []T {
 	}
 	return c
 }
+
+func (iter *baseIterator[T]) Partition(f func(T) bool) ([]T, []T) {
+	return nil, nil
+}

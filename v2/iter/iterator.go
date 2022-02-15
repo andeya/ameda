@@ -698,6 +698,27 @@ type (
 		Fuse() *Fuse[T]
 		// Collect transforms a next into a collection.
 		Collect() []T
+		// Partition consumes a next, creating two collections from it.
+		//
+		// The predicate passed to `Partition()` can return `true`, or `false`.
+		// `Partition()` returns a pair, all of the elements for which it returned
+		// `true`, and all of the elements for which it returned `false`.
+		//
+		// See also [`IsPartitioned()`] and [`PartitionInPlace()`].
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// var even, odd = FromVec(a).Partition(func(n T) bool { return n % 2 == 0});
+		//
+		// assert.Equal(t, even, []int{2});
+		// assert.Equal(t, odd, []int{1, 3});
+		//
+		Partition(f func(T) bool) ([]T, []T)
 	}
 	Next[T comparable] interface {
 		// Next advances the next and returns the next value.
@@ -845,58 +866,6 @@ type (
 	}
 )
 
-// Partition consumes a next, creating two collections from it.
-//
-// The predicate passed to `Partition()` can return `true`, or `false`.
-// `Partition()` returns a pair, all of the elements for which it returned
-// `true`, and all of the elements for which it returned `false`.
-//
-// See also [`IsPartitioned()`] and [`PartitionInPlace()`].
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// var (even, odd): (Vec<i32>, Vec<i32>) = a
-//     .iter()
-//     .Partition(|&n| n % 2 == 0);
-//
-// assert.Equal(t, even, vec![2]);
-// assert.Equal(t, odd, vec![1, 3]);
-//
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn partition<B, F>(self, f: F)  (B, B)
-// where
-// Self: Sized,
-// B: Default + Extend[T],
-// F: FnMut(&Self::T)  bool,
-// {
-// #[inline]
-// fn extend<'a, T, B: Extend<T>>(
-// mut f: impl FnMut(&T)  bool + 'a,
-// left: &'a mut B,
-// right: &'a mut B,
-// )  impl FnMut((), T) + 'a {
-// move |(), x| {
-// if f(&x) {
-// left.extend_one(x);
-// } else {
-// right.extend_one(x);
-// }
-// }
-// }
-//
-// var left: B = Default::default()
-// var right: B = Default::default()
-//
-// self.Fold(((), extend(f, &mut left, &mut right))
-//
-// (left, right)
-// }
-//
 // Reorders the elements of this next *in-place* according to the given predicate,
 // such that all those that return `true` precede all those that return `false`.
 // Returns the number of `true` elements found.
