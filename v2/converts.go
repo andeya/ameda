@@ -13,8 +13,8 @@ type Digit interface {
 
 // Zero return zero value.
 func Zero[T any]() T {
-	var z = new(T)
-	return *z
+	var z T
+	return z
 }
 
 // ToPtr converts D to *D.
