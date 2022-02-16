@@ -6,11 +6,11 @@ import (
 	"github.com/henrylee2cn/ameda/v2/ops"
 )
 
-type chanNext[T comparable] struct {
+type chanNext[T any] struct {
 	c <-chan T
 }
 
-func FromChan[T comparable](c <-chan T) Iterator[T] {
+func FromChan[T any](c <-chan T) Iterator[T] {
 	return New[T](&chanNext[T]{c: c})
 }
 

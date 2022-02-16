@@ -1,9 +1,9 @@
 package iter
 
-type Peekable[T comparable] struct {
+type Peekable[T any] struct {
 	iter Iterator[T]
 }
 
-func newPeekable[T comparable](iter Iterator[T]) *Peekable[T] {
+func newPeekable[T any](iter Iterator[T]) *Peekable[T] {
 	return &Peekable[T]{iter: iter}
 }

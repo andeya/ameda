@@ -7,16 +7,16 @@ import (
 	"github.com/henrylee2cn/ameda/v2/result"
 )
 
-type Option[T comparable] struct {
+type Option[T any] struct {
 	some   T
 	isNone bool
 }
 
-func Some[T comparable](some T) Option[T] {
+func Some[T any](some T) Option[T] {
 	return Option[T]{some: some, isNone: false}
 }
 
-func None[T comparable]() Option[T] {
+func None[T any]() Option[T] {
 	return Option[T]{isNone: true}
 }
 

@@ -2,12 +2,16 @@ package iter
 
 import "github.com/henrylee2cn/ameda/v2/ops"
 
-type vecNext[T comparable] struct {
+func FromChars[T ~string](s T) Iterator[rune] {
+	return FromVec[rune]([]rune(s))
+}
+
+type vecNext[T any] struct {
 	nextIndex int
 	vec       []T
 }
 
-func FromVec[T comparable](vec []T) Iterator[T] {
+func FromVec[T any](vec []T) Iterator[T] {
 	var next = vecNext[T]{
 		nextIndex: 0,
 		vec:       vec,

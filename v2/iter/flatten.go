@@ -1,9 +1,9 @@
 package iter
 
-type Flatten[T comparable, B comparable] struct {
+type Flatten[T any, B any] struct {
 	iter Iterator[T]
 }
 
-func newFlatten[T comparable, B comparable](iter Iterator[T]) *Flatten[T, B] {
+func newFlatten[T any, B any](iter Iterator[T]) *Flatten[T, B] {
 	return &Flatten[T, B]{iter: iter}
 }

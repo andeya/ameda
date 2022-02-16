@@ -6,14 +6,14 @@ import (
 )
 
 type (
-	Iterator[T comparable] interface {
+	Iterator[T any] interface {
 		Next[T]
 		SizeHint
 		// Count consumes the next, counting the number of iterations and returning it.
 		//
 		// This method will call [`Next`] repeatedly until [`ops.None[T]()`] is encountered,
 		// returning the number of times it saw [`ops.Some`]. Note that [`Next`] has to be
-		// called at least once even if the next does not have comparable elements.
+		// called at least once even if the next does not have any elements.
 		//
 		// # Overflow Behavior
 		//
@@ -404,7 +404,7 @@ type (
 		//
 		// Note that the underlying next is still advanced when [`peek`] is called
 		// for the first time: In order to retrieve the
-		// next element, [`Next`] is called on the underlying next, hence comparable
+		// next element, [`Next`] is called on the underlying next, hence any
 		// side effects (i.e. anything other than fetching the next value) of
 		// the [`Next`] method will occur.
 		//
@@ -719,8 +719,289 @@ type (
 		// assert.Equal(t, odd, []int{1, 3});
 		//
 		Partition(f func(T) bool) ([]T, []T)
+
+		// PartitionInPlace reorders the elements of this next *in-place* according to the given predicate,
+		// such that all those that return `true` precede all those that return `false`.
+		// Returns the number of `true` elements found.
+		//
+		// The relative order of partitioned items is not maintained.
+		//
+		// # Current implementation
+		//
+		// Current algorithms tries finding the first element for which the predicate evaluates
+		// to false, and the last element for which it evaluates to true and repeatedly swaps them.
+		//
+		// Time complexity: *O*(*n*)
+		//
+		// See also [`IsPartitioned()`] and [`Partition()`].
+		//
+		// # Examples
+		//
+		// var a = []int{1, 2, 3, 4, 5, 6, 7};
+		//
+		// // Partition in-place between evens and odds
+		// var i = FromVec(a).PartitionInPlace(func(n T)bool{ return n % 2 == 0 });
+		//
+		// assert.Equal(t, i, 3);
+		// assert.True(t, FromVec(a[:i]).All(func(n T)bool{ return n % 2 == 0 })); // evens
+		// assert.True(t, FromVec(a[i:]).All(func(n T)bool{ return n % 2 == 1 })); // odds
+		//
+		// PartitionInPlace(f func(T) bool) int
+
+		// IsPartitioned checks if the elements of this next are partitioned according to the given predicate,
+		// such that all those that return `true` precede all those that return `false`.
+		//
+		// See also [`Partition()`] and [`PartitionInPlace()`].
+		//
+		// # Examples
+		//
+		// assert.True(t, FromChars("baseIterator").IsPartitioned(unicode.IsUpper));
+		// assert.True(t, !FromChars("IntoIterator").IsPartitioned(unicode.IsUpper));
+		//
+		IsPartitioned(predicate func(T) bool) bool
+		// TryFold a next method that applies a function as long as it returns
+		// successfully, producing a single, final value.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// // the checked sum of all of the elements of the array
+		// var sum = FromVec(a).TryFold(0, func(acc any, x T) { return result.Ok(acc.(int)+x) });
+		//
+		// assert.Equal(t, sum, result.Ok(6));
+		//
+		TryFold(init any, f func(any, T) result.Result[any]) result.Result[any]
+		// TryForEach a next method that applies a fallible function to each item in the
+		// next, stopping at the first error and returning that error.
+		//
+		// This can also be thought of as the fallible form of [`ForEach()`]
+		// or as the stateless version of [`TryFold()`].
+		//
+		// # Examples
+		//
+		//
+		// var data = []string{"no_tea.txt", "stale_bread.json", "torrential_rain.png"};
+		//
+		// var res = FromVec(data).TryForEach(func(x T) {println(x); return nil});
+		// assert.True(t, res.IsOk());
+		//
+		TryForEach(f func(T) error) error
+		// Fold folds every element into an accumulator by applying an operation,
+		// returning the final result.
+		//
+		// `Fold()` takes two arguments: an initial value, and a closure with two
+		// arguments: an 'accumulator', and an element. The closure returns the value that
+		// the accumulator should have for the next iteration.
+		//
+		// The initial value is the value the accumulator will have on the first
+		// call.
+		//
+		// After applying this closure to every element of the next, `Fold()`
+		// returns the accumulator.
+		//
+		// This operation is sometimes called 'reduce' or 'inject'.
+		//
+		// Folding is useful whenever you have a collection of something, and want
+		// to produce a single value from it.
+		//
+		// Note: `Fold()`, and similar methods that traverse the entire next,
+		// might not terminate for infinite iterators, even on interfaces for which a
+		// result is determinable in finite time.
+		//
+		// Note: [`Reduce()`] can be used to use the first element as the initial
+		// value, if the accumulator type and item type is the same.
+		//
+		// Note: `Fold()` combines elements in a *left-associative* fashion. For associative
+		// operators like `+`, the order the elements are combined in is not important, but for non-associative
+		// operators like `-` the order will affect the final result.
+		//
+		// # Note to Implementors
+		//
+		// Several of the other (forward) methods have default implementations in
+		// terms of this one, so try to implement this explicitly if it can
+		// do something better than the default `for` loop implementation.
+		//
+		// In particular, try to have this call `Fold()` on the internal parts
+		// from which this next is composed.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// // the sum of all of the elements of the array
+		// var sum = FromVec(a).Fold((0, func(acc any, x T) any { return acc.(int) + x });
+		//
+		// assert.Equal(t, sum, 6);
+		//
+		//
+		// Let's walk through each step of the iteration here:
+		//
+		// | element | acc | x | result |
+		// |---------|-----|---|--------|
+		// |         | 0   |   |        |
+		// | 1       | 0   | 1 | 1      |
+		// | 2       | 1   | 2 | 3      |
+		// | 3       | 3   | 3 | 6      |
+		//
+		// And so, our final result, `6`.
+		//
+		Fold(init any, f func(any, T) any) any
+		// Reduces reduces the elements to a single one, by repeatedly applying a reducing
+		// operation.
+		//
+		// If the next is empty, returns [`ops.None[T]()`]; otherwise, returns the
+		// result of the reduction.
+		//
+		// The reducing function is a closure with two arguments: an 'accumulator', and an element.
+		// For iterators with at least one element, this is the same as [`Fold()`]
+		// with the first element of the next as the initial accumulator value, folding
+		// every subsequent element into it.
+		//
+		// # Example
+		//
+		// Find the maximum value:
+		//
+		//
+		// func findMax[T any](iter: Iterator[T])  ops.Option[T] {
+		//     iter.Reduce(func(accum T, item T) T {
+		//         if accum >= item { accum } else { item }
+		//     })
+		// }
+		// var a = []int{10, 20, 5, -23, 0};
+		// var b = []int{};
+		//
+		// assert.Equal(t, findMax(FromVec(a)), ops.Some(20));
+		// assert.Equal(t, findMax(FromVec(b)), ops.None[int]());
+		//
+		Reduce(f func(accum T, item T) T) ops.Option[T]
+		// All tests if every element of the next matches a predicate.
+		//
+		// `All()` takes a closure that returns `true` or `false`. It applies
+		// this closure to each element of the next, and if they all return
+		// `true`, then so does `All()`. If any of them return `false`, it
+		// returns `false`.
+		//
+		// `All()` is short-circuiting; in other words, it will stop processing
+		// as soon as it finds a `false`, given that no matter what else happens,
+		// the result will also be `false`.
+		//
+		// An empty next returns `true`.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// assert.True(t, FromVec(a).All(func(x T) bool { return x > 0}));
+		//
+		// assert.True(t, !FromVec(a).All(func(x T) bool { return x > 2}));
+		//
+		//
+		// Stopping at the first `false`:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// var iter = FromVec(a);
+		//
+		// assert.True(t, !iter.All(func(x T) bool { return x != 2}));
+		//
+		// // we can still use `iter`, as there are more elements.
+		// assert.Equal(t, iter.Next(), ops.Some(3));
+		//
+		All(predicate func(T) bool) bool
+		// Any tests if any element of the next matches a predicate.
+		//
+		// `Any()` takes a closure that returns `true` or `false`. It applies
+		// this closure to each element of the next, and if any of them return
+		// `true`, then so does `Any()`. If they all return `false`, it
+		// returns `false`.
+		//
+		// `Any()` is short-circuiting; in other words, it will stop processing
+		// as soon as it finds a `true`, given that no matter what else happens,
+		// the result will also be `true`.
+		//
+		// An empty next returns `false`.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// assert.True(t, FromVec(a).Any(func(x T) bool{return x>0}));
+		//
+		// assert.True(t, !FromVec(a).Any(func(x T) bool{return x>5}));
+		//
+		//
+		// Stopping at the first `true`:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// var iter = FromVec(a);
+		//
+		// assert.True(t, iter.Any(func(x T) bool { return x != 2}));
+		//
+		// // we can still use `iter`, as there are more elements.
+		// assert.Equal(t, iter.Next(), ops.Some(2));
+		//
+		Any(predicate func(T) bool) bool
+		// Find searches for an element of a next that satisfies a predicate.
+		//
+		// `Find()` takes a closure that returns `true` or `false`. It applies
+		// this closure to each element of the next, and if any of them return
+		// `true`, then `Find()` returns [`ops.Some(element)`]. If they all return
+		// `false`, it returns [`ops.None[T]()`].
+		//
+		// `Find()` is short-circuiting; in other words, it will stop processing
+		// as soon as the closure returns `true`.
+		//
+		// Because `Find()` takes a reference, and many iterators iterate over
+		// references, this leads to a possibly confusing situation where the
+		// argument is a double reference. You can see this effect in the
+		// examples below, with `&&x`.
+		//
+		// [`ops.Some(element)`]: Some
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// assert.Equal(t, FromVec(a).Find(func(x T) bool{return x==2}), ops.Some(2));
+		//
+		// assert.Equal(t, FromVec(a).Find(func(x T) bool{return x==5}), ops.None[int]());
+		//
+		//
+		// Stopping at the first `true`:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// var iter = FromVec(a);
+		//
+		// assert.Equal(t, iter.Find(func(x T) bool{return x==2}), ops.Some(2));
+		//
+		// // we can still use `iter`, as there are more elements.
+		// assert.Equal(t, iter.Next(), ops.Some(3));
+		//
+		//
+		// Note that `iter.Find(f)` is equivalent to `iter.Filter(f).Next()`.
+		Find(predicate func(T) bool) ops.Option[T]
 	}
-	Next[T comparable] interface {
+	Next[T any] interface {
 		// Next advances the next and returns the next value.
 		//
 		// Returns [`ops.None[T]()`] when iteration is finished. Individual next
@@ -776,7 +1057,7 @@ type (
 		// That said, the implementation should provide a correct estimation,
 		// because otherwise it would be a violation of the interface's protocol.
 		//
-		// The default implementation returns <code>(0, [ops.None[int]()])</code> which is correct for comparable
+		// The default implementation returns <code>(0, [ops.None[int]()])</code> which is correct for any
 		// next.
 		//
 		// # Examples
@@ -818,7 +1099,7 @@ type (
 		//
 		SizeHint() (int, ops.Option[int])
 	}
-	Nth[T comparable] interface {
+	Nth[T any] interface {
 		// Nth returns the `n`th element of the next.
 		//
 		// Like most indexing operations, the count starts from zero, so `Nth(0)`
@@ -859,588 +1140,15 @@ type (
 		// assert.Equal(t, FromVec(a).Nth(10), ops.None[int]());
 		Nth(n int) ops.Option[T]
 	}
-	IntoIterator[T comparable] interface {
+	IntoIterator[T any] interface {
 		IntoIter() Iterator[T]
 	}
-	FusedIterator[T comparable] interface {
+	FusedIterator[T any] interface {
+	}
+	DoubleEndedIterator[T any] interface {
 	}
 )
 
-// Reorders the elements of this next *in-place* according to the given predicate,
-// such that all those that return `true` precede all those that return `false`.
-// Returns the number of `true` elements found.
-//
-// The relative order of partitioned items is not maintained.
-//
-// # Current implementation
-//
-// Current algorithms tries finding the first element for which the predicate evaluates
-// to false, and the last element for which it evaluates to true and repeatedly swaps them.
-//
-// Time complexity: *O*(*n*)
-//
-// See also [`IsPartitioned()`] and [`Partition()`].
-//
-// [`IsPartitioned()`]: baseIterator::IsPartitioned
-// [`Partition()`]: baseIterator::partition
-//
-// # Examples
-//
-//
-// #![feature(iter_PartitionInPlace)]
-//
-// var a = [1, 2, 3, 4, 5, 6, 7];
-//
-// // Partition in-place between evens and odds
-// var i = a.iter_mut().PartitionInPlace(|&n| n % 2 == 0);
-//
-// assert.Equal(t, i, 3);
-// assert!(a[..i].iter().all(|&n| n % 2 == 0)); // evens
-// assert!(a[i..].iter().all(|&n| n % 2 == 1)); // odds
-//
-// #[unstable(feature = "iter_PartitionInPlace", reason = "new API", issue = "62543")]
-// fn PartitionInPlace<'a, T: 'a, P>(mut self, ref mut predicate: P)  usize
-// where
-// Self: Sized + DoubleEndedIterator<T = &'a mut T>,
-// P: FnMut(&T)  bool,
-// {
-// / FIXME: should we worry about the count overflowing? The only way to have more than
-// / `math.MaxInt` mutable references is with ZSTs, which aren't useful to partition...
-//
-// / These closure "factory" functions exist to avoid genericity in `Self`.
-//
-// #[inline]
-// fn is_false<'a, T>(
-// predicate: &'a mut impl FnMut(&T)  bool,
-// true_count: &'a mut usize,
-// )  impl FnMut( && mut T)  bool + 'a {
-// move |x| {
-// var p = predicate(&**x);
-// *true_count += p as usize;
-// !p
-// }
-// }
-//
-// #[inline]
-// fn is_true<T>(predicate: &mut impl FnMut(&T)  bool)  impl FnMut( && mut T)  bool + '_ {
-// move |x| predicate(&**x)
-// }
-//
-// / Repeatedly find the first `false` and swap it with the last `true`.
-// var true_count = 0
-// while var Some(head) = self.find(is_false(predicate, &mut true_count)) {
-// if var Some(tail) = self.rfind(is_true(predicate)) {
-// crate::mem::swap(head, tail);
-// true_count += 1;
-// } else {
-// break;
-// }
-// }
-// true_count
-// }
-//
-// Checks if the elements of this next are partitioned according to the given predicate,
-// such that all those that return `true` precede all those that return `false`.
-//
-// See also [`Partition()`] and [`PartitionInPlace()`].
-//
-// [`Partition()`]: baseIterator::partition
-// [`PartitionInPlace()`]: baseIterator::PartitionInPlace
-//
-// # Examples
-//
-//
-// #![feature(iter_IsPartitioned)]
-//
-// assert!("baseIterator".chars().IsPartitioned(char::is_uppercase));
-// assert!(!"IntoIterator".chars().IsPartitioned(char::is_uppercase));
-//
-// #[unstable(feature = "iter_IsPartitioned", reason = "new API", issue = "62544")]
-// fn IsPartitioned<P>(mut self, mut predicate: P)  bool
-// where
-// Self: Sized,
-// P: FnMut(Self::T)  bool,
-// {
-// / Either all items test `true`, or the first clause stops at `false`
-// / and we check that there are no more `true` items after that.
-// self.all(&mut predicate) || !self.comparable(predicate)
-// }
-//
-// An next method that applies a function as long as it returns
-// successfully, producing a single, final value.
-//
-// `try_fold()` takes two arguments: an initial value, and a closure with
-// two arguments: an 'accumulator', and an element. The closure either
-// returns successfully, with the value that the accumulator should have
-// for the next iteration, or it returns failure, with an error value that
-// is propagated back to the caller immediately (short-circuiting).
-//
-// The initial value is the value the accumulator will have on the first
-// call. If applying the closure succeeded against every element of the
-// next, `try_fold()` returns the final accumulator as success.
-//
-// Folding is useful whenever you have a collection of something, and want
-// to produce a single value from it.
-//
-// # Note to Implementors
-//
-// Several of the other (forward) methods have default implementations in
-// terms of this one, so try to implement this explicitly if it can
-// do something better than the default `for` loop implementation.
-//
-// In particular, try to have this call `try_fold()` on the internal parts
-// from which this next is composed. If multiple calls are needed,
-// the `?` operator may be convenient for chaining the accumulator value
-// along, but beware comparable invariants that need to be upheld before those
-// early returns. This is a `&mut self` method, so iteration needs to be
-// resumable after hitting an error here.
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// // the checked sum of all of the elements of the array
-// var sum = FromVec(a).try_fold(0i8, |acc, &x| acc.checked_add(x));
-//
-// assert.Equal(t, sum, ops.Some(6));
-//
-//
-// Short-circuiting:
-//
-//
-// var a = [10, 20, 30, 100, 40, 50];
-// var it = FromVec(a);
-//
-// // This sum overflows when adding the 100 element
-// var sum = it.try_fold(0i8, |acc, &x| acc.checked_add(x));
-// assert.Equal(t, sum, ops.None[int]());
-//
-// // Because it short-circuited, the remaining elements are still
-// // available through the next.
-// assert.Equal(t, it.len(), 2);
-// assert.Equal(t, it.Next(), ops.Some(40));
-//
-//
-// While you cannot `break` from a closure, the [`ControlFlow`] type allows
-// a similar idea:
-//
-//
-// use std::ops::ControlFlow;
-//
-// var triangular = (1..30).try_fold(0_i8, |prev, x| {
-//     if var Some(next) = prev.checked_add(x) {
-//         ControlFlow::Continue(next)
-//     } else {
-//         ControlFlow::Break(prev)
-//     }
-// });
-// assert.Equal(t, triangular, ControlFlow::Break(120));
-//
-// var triangular = (1..30).try_fold(0_u64, |prev, x| {
-//     if var Some(next) = prev.checked_add(x) {
-//         ControlFlow::Continue(next)
-//     } else {
-//         ControlFlow::Break(prev)
-//     }
-// });
-// assert.Equal(t, triangular, ControlFlow::Continue(435));
-//
-// #[inline]
-// #[stable(feature = "iterator_try_fold", since = "1.27.0")]
-// fn try_fold<B, F, R>(&mut self, init: B, mut f: F)  R
-// where
-// Self: Sized,
-// F: FnMut(B, Self::T)  R,
-// R: Try<Output = B>,
-// {
-// var accum = init;
-// while var Some(x) = self.Next() {
-// accum = f(accum, x)?;
-// }
-// try { accum }
-// }
-//
-// An next method that applies a fallible function to each item in the
-// next, stopping at the first error and returning that error.
-//
-// This can also be thought of as the fallible form of [`ForEach()`]
-// or as the stateless version of [`try_fold()`].
-//
-// [`ForEach()`]: baseIterator::ForEach
-// [`try_fold()`]: baseIterator::try_fold
-//
-// # Examples
-//
-//
-// use std::fs::rename;
-// use std::io::{stdout, Write};
-// use std::path::Path;
-//
-// var data = ["no_tea.txt", "stale_bread.json", "torrential_rain.png"];
-//
-// var res = datFromVec(a).try_ForEach(|x| writeln!(stdout(), "{}", x));
-// assert!(res.is_ok());
-//
-// var it = datFromVec(a).Cloned();
-// var res = it.try_ForEach(|x| rename(x, Path::new(x).with_extension("old")));
-// assert!(res.is_err());
-// // It short-circuited, so the remaining items are still in the next:
-// assert.Equal(t, it.Next(), ops.Some("stale_bread.json"));
-//
-//
-// The [`ControlFlow`] type can be used with this method for the situations
-// in which you'd use `break` and `continue` in a normal loop:
-//
-//
-// use std::ops::ControlFlow;
-//
-// var r = (2..100).try_ForEach(|x| {
-//     if 323 % x == 0 {
-//         return ControlFlow::Break(x)
-//     }
-//
-//     ControlFlow::Continue(())
-// });
-// assert.Equal(t, r, ControlFlow::Break(17));
-//
-// #[inline]
-// #[stable(feature = "iterator_try_fold", since = "1.27.0")]
-// fn try_ForEach<F, R>(&mut self, f: F)  R
-// where
-// Self: Sized,
-// F: FnMut(Self::T)  R,
-// R: Try<Output = ()>,
-// {
-// #[inline]
-// fn call<T, R>(mut f: impl FnMut(T)  R)  impl FnMut((), T)  R {
-// move |(), x| f(x)
-// }
-//
-// self.try_fold((), call(f))
-// }
-//
-
-// Fold folds every element into an accumulator by applying an operation,
-// returning the final result.
-//
-// `fold()` takes two arguments: an initial value, and a closure with two
-// arguments: an 'accumulator', and an element. The closure returns the value that
-// the accumulator should have for the next iteration.
-//
-// The initial value is the value the accumulator will have on the first
-// call.
-//
-// After applying this closure to every element of the next, `fold()`
-// returns the accumulator.
-//
-// This operation is sometimes called 'reduce' or 'inject'.
-//
-// Folding is useful whenever you have a collection of something, and want
-// to produce a single value from it.
-//
-// Note: `fold()`, and similar methods that traverse the entire next,
-// might not terminate for infinite iterators, even on interfaces for which a
-// result is determinable in finite time.
-//
-// Note: [`reduce()`] can be used to use the first element as the initial
-// value, if the accumulator type and item type is the same.
-//
-// Note: `fold()` combines elements in a *left-associative* fashion. For associative
-// operators like `+`, the order the elements are combined in is not important, but for non-associative
-// operators like `-` the order will affect the final result.
-// For a *right-associative* version of `fold()`, see [`DoubleEndedIterator::rfold()`].
-//
-// # Note to Implementors
-//
-// Several of the other (forward) methods have default implementations in
-// terms of this one, so try to implement this explicitly if it can
-// do something better than the default `for` loop implementation.
-//
-// In particular, try to have this call `fold()` on the internal parts
-// from which this next is composed.
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// // the sum of all of the elements of the array
-// var sum = FromVec(a).Fold((0, |acc, x| acc + x);
-//
-// assert.Equal(t, sum, 6);
-//
-//
-// Let's walk through each step of the iteration here:
-//
-// | element | acc | x | result |
-// |---------|-----|---|--------|
-// |         | 0   |   |        |
-// | 1       | 0   | 1 | 1      |
-// | 2       | 1   | 2 | 3      |
-// | 3       | 3   | 3 | 6      |
-//
-// And so, our final result, `6`.
-//
-// This example demonstrates the left-associative nature of `fold()`:
-// it builds a string, starting with an initial value
-// and continuing with each element from the front until the back:
-//
-//
-// var numbers = [1, 2, 3, 4, 5];
-//
-// var zero = "0".to_string();
-//
-// var result = numbers.iter().Fold((zero, |acc, &x| {
-//     format!("({} + {})", acc, x)
-// });
-//
-// assert.Equal(t, result, "(((((0 + 1) + 2) + 3) + 4) + 5)");
-//
-// It's common for people who haven't used iterators a lot to
-// use a `for` loop with a list of things to build up a result. Those
-// can be turned into `fold()`s:
-//
-// [`for`]: ../../book/ch03-05-control-flow.html#looping-through-a-collection-with-for
-//
-//
-// var numbers = [1, 2, 3, 4, 5];
-//
-// var result = 0;
-//
-// // for loop:
-// for i in &numbers {
-//     result = result + i;
-// }
-//
-// // fold:
-// var result2 = numbers.iter().Fold((0, |acc, &x| acc + x);
-//
-// // they're the same
-// assert.Equal(t, result, result2);
-//
-func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
-	var accum = init
-	if x := iter.Next(); x.IsSome() {
-		accum = f(accum, x.Some())
-	}
-	return accum
-}
-
-//
-// Reduces the elements to a single one, by repeatedly applying a reducing
-// operation.
-//
-// If the next is empty, returns [`ops.None[T]()`]; otherwise, returns the
-// result of the reduction.
-//
-// The reducing function is a closure with two arguments: an 'accumulator', and an element.
-// For iterators with at least one element, this is the same as [`fold()`]
-// with the first element of the next as the initial accumulator value, folding
-// every subsequent element into it.
-//
-// [`fold()`]: baseIterator::fold
-//
-// # Example
-//
-// Find the maximum value:
-//
-//
-// fn find_max<I>(iter: I)  Option<I::T>
-//     where I: baseIterator,
-//           I::T: Ord,
-// {
-//     iter.reduce(|accum, item| {
-//         if accum >= item { accum } else { item }
-//     })
-// }
-// var a = [10, 20, 5, -23, 0];
-// var b: [u32; 0] = [];
-//
-// assert.Equal(t, find_max(FromVec(a)), ops.Some(20));
-// assert.Equal(t, find_max(b.iter()), ops.None[int]());
-//
-// #[inline]
-// #[stable(feature = "iterator_fold_self", since = "1.51.0")]
-// fn reduce<F>(mut self, f: F)  Option[T]
-// where
-// Self: Sized,
-// F: FnMut(Self::T, Self::T)  Self::T,
-// {
-// var first = self.Next()?;
-// Some(self.Fold((first, f))
-// }
-//
-// Tests if every element of the next matches a predicate.
-//
-// `all()` takes a closure that returns `true` or `false`. It applies
-// this closure to each element of the next, and if they all return
-// `true`, then so does `all()`. If comparable of them return `false`, it
-// returns `false`.
-//
-// `all()` is short-circuiting; in other words, it will stop processing
-// as soon as it finds a `false`, given that no matter what else happens,
-// the result will also be `false`.
-//
-// An empty next returns `true`.
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// assert!(FromVec(a).all(|&x| x > 0));
-//
-// assert!(!FromVec(a).all(|&x| x > 2));
-//
-//
-// Stopping at the first `false`:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// var iter = FromVec(a);
-//
-// assert!(!iter.all(|&x| x != 2));
-//
-// // we can still use `iter`, as there are more elements.
-// assert.Equal(t, iter.Next(), ops.Some(3));
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn all<F>(&mut self, f: F)  bool
-// where
-// Self: Sized,
-// F: FnMut(Self::T)  bool,
-// {
-// #[inline]
-// fn check<T>(mut f: impl FnMut(T)  bool)  impl FnMut((), T)  ControlFlow<()> {
-// move |(), x| {
-// if f(x) { ControlFlow::CONTINUE } else { ControlFlow::BREAK }
-// }
-// }
-// self.try_fold((), check(f)) == ControlFlow::CONTINUE
-// }
-//
-// Tests if comparable element of the next matches a predicate.
-//
-// `comparable()` takes a closure that returns `true` or `false`. It applies
-// this closure to each element of the next, and if comparable of them return
-// `true`, then so does `comparable()`. If they all return `false`, it
-// returns `false`.
-//
-// `comparable()` is short-circuiting; in other words, it will stop processing
-// as soon as it finds a `true`, given that no matter what else happens,
-// the result will also be `true`.
-//
-// An empty next returns `false`.
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// assert!(FromVec(a).comparable(|&x| x > 0));
-//
-// assert!(!FromVec(a).comparable(|&x| x > 5));
-//
-//
-// Stopping at the first `true`:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// var iter = FromVec(a);
-//
-// assert!(iter.comparable(|&x| x != 2));
-//
-// // we can still use `iter`, as there are more elements.
-// assert.Equal(t, iter.Next(), ops.Some(2));
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn comparable<F>(&mut self, f: F)  bool
-// where
-// Self: Sized,
-// F: FnMut(Self::T)  bool,
-// {
-// #[inline]
-// fn check<T>(mut f: impl FnMut(T)  bool)  impl FnMut((), T)  ControlFlow<()> {
-// move |(), x| {
-// if f(x) { ControlFlow::BREAK } else { ControlFlow::CONTINUE }
-// }
-// }
-//
-// self.try_fold((), check(f)) == ControlFlow::BREAK
-// }
-//
-// Searches for an element of a next that satisfies a predicate.
-//
-// `find()` takes a closure that returns `true` or `false`. It applies
-// this closure to each element of the next, and if comparable of them return
-// `true`, then `find()` returns [`ops.Some(element)`]. If they all return
-// `false`, it returns [`ops.None[T]()`].
-//
-// `find()` is short-circuiting; in other words, it will stop processing
-// as soon as the closure returns `true`.
-//
-// Because `find()` takes a reference, and mcomparable iterators iterate over
-// references, this leads to a possibly confusing situation where the
-// argument is a double reference. You can see this effect in the
-// examples below, with `&&x`.
-//
-// [`ops.Some(element)`]: Some
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// assert.Equal(t, FromVec(a).find(|&&x| x == 2), ops.Some(2));
-//
-// assert.Equal(t, FromVec(a).find(|&&x| x == 5), ops.None[int]());
-//
-//
-// Stopping at the first `true`:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// var iter = FromVec(a);
-//
-// assert.Equal(t, iter.find(|&&x| x == 2), ops.Some(2));
-//
-// // we can still use `iter`, as there are more elements.
-// assert.Equal(t, iter.Next(), ops.Some(3));
-//
-//
-// Note that `iter.find(f)` is equivalent to `iter.Filter(f).Next()`.
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn find<P>(&mut self, predicate: P)  Option[T]
-// where
-// Self: Sized,
-// P: FnMut(&Self::T)  bool,
-// {
-// #[inline]
-// fn check<T>(mut predicate: impl FnMut(&T)  bool)  impl FnMut((), T)  ControlFlow<T> {
-// move |(), x| {
-// if predicate(&x) { ControlFlow::Break(x) } else { ControlFlow::CONTINUE }
-// }
-// }
-//
-// self.try_fold((), check(predicate)).break_value()
-// }
 //
 // Applies function to the elements of next and returns
 // the first non-none result.
@@ -1471,7 +1179,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // }
 // }
 //
-// self.try_fold((), check(f)).break_value()
+// self.TryFold((), check(f)).break_value()
 // }
 //
 // Applies function to the elements of next and returns
@@ -1488,11 +1196,11 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 //     T(s.parse::<i32>()?  == search)
 // };
 //
-// var result = FromVec(a).try_find(|&&s| is_my_num(s, 2));
+// var result = FromVec(a).try_Find(|&&s| is_my_num(s, 2));
 // assert.Equal(t, result, T(Some("2")));
 //
-// var result = FromVec(a).try_find(|&&s| is_my_num(s, 5));
-// assert!(result.is_err());
+// var result = FromVec(a).try_Find(|&&s| is_my_num(s, 5));
+// assert.True(t, result.is_err());
 //
 // #[inline]
 // #[unstable(feature = "try_find", reason = "new API", issue = "63178")]
@@ -1519,7 +1227,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // }
 // }
 //
-// self.try_fold((), check(f)).break_value().transpose()
+// self.TryFold((), check(f)).break_value().transpose()
 // }
 //
 // Searches for an element in a next, returning its index.
@@ -1591,7 +1299,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // }
 // }
 //
-// self.try_fold(0, check(predicate)).break_value()
+// self.TryFold(0, check(predicate)).break_value()
 // }
 //
 // Searches for an element in a next from the right, returning its
@@ -1651,7 +1359,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // }
 //
 // var n = self.len();
-// self.try_rfold(n, check(predicate)).break_value()
+// self.try_rFold(n, check(predicate)).break_value()
 // }
 //
 // Returns the maximum element of a next.
@@ -1660,12 +1368,12 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // returned. If the next is empty, [`ops.None[T]()`] is returned.
 //
 // Note that [`f32`]/[`f64`] doesn't implement [`Ord`] due to NaN being
-// incomparable. You can work around this by using [`baseIterator::reduce`]:
+// inany. You can work around this by using [`baseIterator::reduce`]:
 //
 // assert.Equal(t,
 //     vec![2.4, f32::NAN, 1.3]
 //         .into_iter()
-//         .reduce(f32::max)
+//         .Reduce(f32::max)
 //         .unwrap(),
 //     2.4
 // );
@@ -1698,12 +1406,12 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // If the next is empty, [`ops.None[T]()`] is returned.
 //
 // Note that [`f32`]/[`f64`] doesn't implement [`Ord`] due to NaN being
-// incomparable. You can work around this by using [`baseIterator::reduce`]:
+// inany. You can work around this by using [`baseIterator::reduce`]:
 //
 // assert.Equal(t,
 //     vec![2.4, f32::NAN, 1.3]
 //         .into_iter()
-//         .reduce(f32::min)
+//         .Reduce(f32::min)
 //         .unwrap(),
 //     1.3
 // );
@@ -1787,7 +1495,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // move |x, y| cmp::max_by(x, y, &mut compare)
 // }
 //
-// self.reduce(fold(compare))
+// self.Reduce(Fold(compare))
 // }
 //
 // Returns the element that gives the minimum value from the
@@ -1847,7 +1555,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // move |x, y| cmp::min_by(x, y, &mut compare)
 // }
 //
-// self.reduce(fold(compare))
+// self.Reduce(Fold(compare))
 // }
 //
 // Reverses a next's direction.
@@ -2266,7 +1974,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // var xs = [1, 2, 3, 4];
 // var ys = [1, 4, 9, 16];
 //
-// assert!(xs.iter().eq_by(&ys, |&x, &y| x * x == y));
+// assert.True(t, xs.iter().eq_by(&ys, |&x, &y| x * x == y));
 //
 // #[unstable(feature = "iter_order_by", issue = "64295")]
 // fn eq_by<I, F>(mut self, other: I, mut eq: F)  bool
@@ -2403,19 +2111,19 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // next yields exactly zero or one element, `true` is returned.
 //
 // Note that if `Self::T` is only `PartialOrd`, but not `Ord`, the above definition
-// implies that this function returns `false` if comparable two consecutive items are not
-// comparable.
+// implies that this function returns `false` if any two consecutive items are not
+// any.
 //
 // # Examples
 //
 //
 // #![feature(is_sorted)]
 //
-// assert!([1, 2, 2, 9].iter().is_sorted());
-// assert!(![1, 3, 2, 4].iter().is_sorted());
-// assert!([0].iter().is_sorted());
-// assert!(std::iter::empty::<i32>().is_sorted());
-// assert!(![0.0, 1.0, f32::NAN].iter().is_sorted());
+// assert.True(t, [1, 2, 2, 9].iter().is_sorted());
+// assert.True(t, ![1, 3, 2, 4].iter().is_sorted());
+// assert.True(t, [0].iter().is_sorted());
+// assert.True(t, std::iter::empty::<i32>().is_sorted());
+// assert.True(t, ![0.0, 1.0, f32::NAN].iter().is_sorted());
 //
 // #[inline]
 // #[unstable(feature = "is_sorted", reason = "new API", issue = "53485")]
@@ -2438,11 +2146,11 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 //
 // #![feature(is_sorted)]
 //
-// assert!([1, 2, 2, 9].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
-// assert!(![1, 3, 2, 4].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
-// assert!([0].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
-// assert!(std::iter::empty::<i32>().is_sorted_by(|a, b| a.partial_cmp(b)));
-// assert!(![0.0, 1.0, f32::NAN].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, [1, 2, 2, 9].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, ![1, 3, 2, 4].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, [0].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, std::iter::empty::<i32>().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, ![0.0, 1.0, f32::NAN].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
 //
 //
 // [`is_sorted`]: baseIterator::is_sorted
@@ -2471,7 +2179,7 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 // None => return true,
 // }
 //
-// self.all(check(&mut last, compare))
+// self.All(check(&mut last, compare))
 // }
 //
 // Checks if the elements of this next are sorted using the given key extraction
@@ -2488,8 +2196,8 @@ func (iter *baseIterator[T]) Fold(init any, f func(any, T) any) any {
 //
 // #![feature(is_sorted)]
 //
-// assert!(["c", "bb", "aaa"].iter().is_sorted_by_key(|s| s.len()));
-// assert!(![-2i32, -1, 0, 3].iter().is_sorted_by_key(|n| n.abs()));
+// assert.True(t, ["c", "bb", "aaa"].iter().is_sorted_by_key(|s| s.len()));
+// assert.True(t, ![-2i32, -1, 0, 3].iter().is_sorted_by_key(|n| n.abs()));
 //
 // #[inline]
 // #[unstable(feature = "is_sorted", reason = "new API", issue = "53485")]

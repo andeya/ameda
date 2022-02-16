@@ -1,8 +1,8 @@
 package iter
 
-type StepBy[T comparable] struct {
+type StepBy[T any] struct {
 }
 
-func newStepBy[T comparable](iter *baseIterator[T], step int) *StepBy[T] {
+func newStepBy[T any](iter *baseIterator[T], step int) *StepBy[T] {
 	return &StepBy[T]{}
 }
