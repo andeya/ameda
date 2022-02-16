@@ -89,7 +89,7 @@ func (iter *baseIterator[T]) ForEach(f func(T)) {
 			return nil
 		}
 	}
-	iter.Fold(nil, call(f))
+	_ = iter.Fold(nil, call(f))
 }
 
 func (iter *baseIterator[T]) Filter(f func(T) bool) *Filter[T] {
@@ -161,5 +161,19 @@ func (iter *baseIterator[T]) Collect() []T {
 }
 
 func (iter *baseIterator[T]) Partition(f func(T) bool) ([]T, []T) {
-	return nil, nil
+	var extend = func(f func(T) bool, left, right *[]T) func(any, T) any {
+		return func(_ any, x T) any {
+			if f(x) {
+				*left = append(*left, x)
+			} else {
+				*right = append(*right, x)
+			}
+			return nil
+		}
+	}
+	minSize, _ := iter.SizeHint()
+	left := make([]T, 0, minSize/2)
+	right := make([]T, 0, minSize/2)
+	_ = iter.Fold(nil, extend(f, &left, &right))
+	return left, right
 }
