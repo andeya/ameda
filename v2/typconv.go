@@ -14,9 +14,12 @@ func UnsafeBytesToString(b []byte) string {
 // NOTE:
 //  panic if modify the member value of the []byte.
 func UnsafeStringToBytes(s string) []byte {
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	bh := reflect.SliceHeader{Data: sh.Data, Len: sh.Len, Cap: sh.Len}
-	return *(*[]byte)(unsafe.Pointer(&bh))
+	return *(*[]byte)(unsafe.Pointer(
+		&struct {
+			string
+			Cap int
+		}{s, len(s)},
+	))
 }
 
 // IndirectValue gets the indirect value.

@@ -5,11 +5,9 @@ import (
 	"math"
 	"reflect"
 	"strconv"
-)
 
-type Digit interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~float32 | ~float64
-}
+	"github.com/henrylee2cn/ameda/v2/digit"
+)
 
 // Zero return zero value.
 func Zero[T any]() T {
@@ -70,7 +68,7 @@ func ToStrings[T any, D ~string](a []T) []D {
 // characters are permitted per the Go integer literal syntax.
 // If base is below 0, is 1, or is above 62, an error is returned.
 //
-func StringToDigit[T ~string, D Digit](v T, base int, bitSize int) (D, error) {
+func StringToDigit[T ~string, D digit.Digit](v T, base int, bitSize int) (D, error) {
 	var d *D
 	var x interface{} = d
 	switch x.(type) {
@@ -116,7 +114,7 @@ func StringToDigit[T ~string, D Digit](v T, base int, bitSize int) (D, error) {
 	return 0, nil
 }
 
-func StringsToDigits[T ~string, D Digit](a []T, base int, bitSize int) (b []D, err error) {
+func StringsToDigits[T ~string, D digit.Digit](a []T, base int, bitSize int) (b []D, err error) {
 	b = make([]D, len(a))
 	for i, t := range a {
 		b[i], err = StringToDigit[T, D](t, base, bitSize)
@@ -128,13 +126,13 @@ func StringsToDigits[T ~string, D Digit](a []T, base int, bitSize int) (b []D, e
 }
 
 // ToBool converts D to bool.
-func ToBool[T ~string | Digit](v T) bool {
+func ToBool[T ~string | digit.Digit](v T) bool {
 	zero := new(T)
 	return v != *zero
 }
 
 // ToBools converts []D to []bool.
-func ToBools[T ~string | Digit](a []T) []bool {
+func ToBools[T ~string | digit.Digit](a []T) []bool {
 	b := make([]bool, len(a))
 	for i, t := range a {
 		b[i] = ToBool(t)
@@ -143,14 +141,14 @@ func ToBools[T ~string | Digit](a []T) []bool {
 }
 
 // BoolToDigit converts bool to digit.
-func BoolToDigit[T ~bool, D Digit](v T) D {
+func BoolToDigit[T ~bool, D digit.Digit](v T) D {
 	if v == true {
 		return D(1)
 	}
 	return D(0)
 }
 
-func BoolsToDigits[T ~bool, D Digit](a []T) (b []D) {
+func BoolsToDigits[T ~bool, D digit.Digit](a []T) (b []D) {
 	b = make([]D, len(a))
 	for i, t := range a {
 		b[i] = BoolToDigit[T, D](t)
@@ -158,7 +156,7 @@ func BoolsToDigits[T ~bool, D Digit](a []T) (b []D) {
 	return b
 }
 
-func DigitToDigit[T Digit, D Digit](v T) (D, error) {
+func DigitToDigit[T digit.Digit, D digit.Digit](v T) (D, error) {
 	var d *D
 	var x interface{} = d
 	switch x.(type) {
@@ -241,7 +239,7 @@ func DigitToDigit[T Digit, D Digit](v T) (D, error) {
 }
 
 // DigitsToDigits creates a copy of the digit slice.
-func DigitsToDigits[T Digit, D Digit](a []T) (b []D, err error) {
+func DigitsToDigits[T digit.Digit, D digit.Digit](a []T) (b []D, err error) {
 	b = make([]D, len(a))
 	for i, t := range a {
 		b[i], err = DigitToDigit[T, D](t)
@@ -253,12 +251,12 @@ func DigitsToDigits[T Digit, D Digit](a []T) (b []D, err error) {
 }
 
 // DigitToFloat64 converts digit to float64.
-func DigitToFloat64[T Digit](v T) float64 {
+func DigitToFloat64[T digit.Digit](v T) float64 {
 	return float64(v)
 }
 
 // digitToFloat32 converts digit to float32.
-func digitToFloat32[T Digit](v T) (float32, error) {
+func digitToFloat32[T digit.Digit](v T) (float32, error) {
 	f := float64(v)
 	if f > math.MaxFloat32 || f < -math.MaxFloat32 {
 		return 0, errOverflowValue
@@ -267,7 +265,7 @@ func digitToFloat32[T Digit](v T) (float32, error) {
 }
 
 // digitToInt converts digit to int.
-func digitToInt[T Digit](v T) (int, error) {
+func digitToInt[T digit.Digit](v T) (int, error) {
 	f := float64(v)
 	if f > math.MaxInt || f < math.MinInt {
 		return 0, errOverflowValue
@@ -276,7 +274,7 @@ func digitToInt[T Digit](v T) (int, error) {
 }
 
 // digitToInt8 converts digit to int8.
-func digitToInt8[T Digit](v T) (int8, error) {
+func digitToInt8[T digit.Digit](v T) (int8, error) {
 	if v > 0 {
 		if v > math.MaxInt8 {
 			return 0, errOverflowValue
@@ -290,7 +288,7 @@ func digitToInt8[T Digit](v T) (int8, error) {
 }
 
 // digitToInt16 converts digit to int16.
-func digitToInt16[T Digit](v T) (int16, error) {
+func digitToInt16[T digit.Digit](v T) (int16, error) {
 	f := float64(v)
 	if f > math.MaxInt16 || f < math.MinInt16 {
 		return 0, errOverflowValue
@@ -299,7 +297,7 @@ func digitToInt16[T Digit](v T) (int16, error) {
 }
 
 // digitToInt32 converts digit to int32.
-func digitToInt32[T Digit](v T) (int32, error) {
+func digitToInt32[T digit.Digit](v T) (int32, error) {
 	f := float64(v)
 	if f > math.MaxInt32 || f < math.MinInt32 {
 		return 0, errOverflowValue
@@ -308,7 +306,7 @@ func digitToInt32[T Digit](v T) (int32, error) {
 }
 
 // digitToInt64 converts digit to int64.
-func digitToInt64[T Digit](v T) (int64, error) {
+func digitToInt64[T digit.Digit](v T) (int64, error) {
 	f := float64(v)
 	if f > math.MaxInt64 || f < math.MinInt64 {
 		return 0, errOverflowValue
@@ -317,7 +315,7 @@ func digitToInt64[T Digit](v T) (int64, error) {
 }
 
 // digitToUint converts digit to uint.
-func digitToUint[T Digit](v T) (uint, error) {
+func digitToUint[T digit.Digit](v T) (uint, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
@@ -328,7 +326,7 @@ func digitToUint[T Digit](v T) (uint, error) {
 }
 
 // digitToUint8 converts digit to uint8.
-func digitToUint8[T Digit](v T) (uint8, error) {
+func digitToUint8[T digit.Digit](v T) (uint8, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
@@ -339,7 +337,7 @@ func digitToUint8[T Digit](v T) (uint8, error) {
 }
 
 // digitToUint16 converts digit to uint16.
-func digitToUint16[T Digit](v T) (uint16, error) {
+func digitToUint16[T digit.Digit](v T) (uint16, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
@@ -350,7 +348,7 @@ func digitToUint16[T Digit](v T) (uint16, error) {
 }
 
 // digitToUint32 converts digit to uint32.
-func digitToUint32[T Digit](v T) (uint32, error) {
+func digitToUint32[T digit.Digit](v T) (uint32, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}
@@ -361,7 +359,7 @@ func digitToUint32[T Digit](v T) (uint32, error) {
 }
 
 // digitToUint64 converts digit to uint64.
-func digitToUint64[T Digit](v T) (uint64, error) {
+func digitToUint64[T digit.Digit](v T) (uint64, error) {
 	if v < 0 {
 		return 0, errNegativeValue
 	}

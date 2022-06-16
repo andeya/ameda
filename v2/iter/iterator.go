@@ -2,6 +2,7 @@ package iter
 
 import (
 	"github.com/henrylee2cn/ameda/v2/ops"
+	"github.com/henrylee2cn/ameda/v2/ord"
 	"github.com/henrylee2cn/ameda/v2/result"
 )
 
@@ -852,7 +853,7 @@ type (
 		// And so, our final result, `6`.
 		//
 		Fold(init any, f func(any, T) any) any
-		// Reduces reduces the elements to a single one, by repeatedly applying a reducing
+		// Reduce reduces reduces the elements to a single one, by repeatedly applying a reducing
 		// operation.
 		//
 		// If the next is empty, returns [`ops.None[T]()`]; otherwise, returns the
@@ -1000,6 +1001,92 @@ type (
 		//
 		// Note that `iter.Find(f)` is equivalent to `iter.Filter(f).Next()`.
 		Find(predicate func(T) bool) ops.Option[T]
+		// FindMap applies function to the elements of next and returns
+		// the first non-none result.
+		//
+		// `iter.FindMap(f)` is equivalent to `iter.FilterMap(f).Next()`.
+		//
+		// # Examples
+		//
+		//
+		// var a = []string{"lol", "NaN", "2", "5"};
+		//
+		// var first_number = FromVec(a).FindMap(func(s T) ops.Option[any]{ return ops.Wrap[any](strconv.Atoi(s))});
+		//
+		// assert.Equal(t, first_number, ops.Some(2));
+		//
+		FindMap(f func(T) ops.Option[any]) ops.Option[any]
+		// TryFind applies function to the elements of next and returns
+		// the first true result or the first error.
+		//
+		// # Examples
+		//
+		//
+		// var a = []string{"1", "2", "lol", "NaN", "5"};
+		//
+		// var is_my_num = func(s string, search int) Result[bool] {
+		//     return Map(Wrap(strconv.Atoi(s)), func(x int) bool { return x == search })
+		// }
+		//
+		// var result = FromVec(a).TryFind(func(s string)bool{return is_my_num(s, 2)});
+		// assert.Equal(t, result, T(Some("2")));
+		//
+		// var result = FromVec(a).TryFind(func(s string)bool{return is_my_num(s, 5)});
+		// assert.True(t, result.IsErr());
+		//
+		TryFind(predicate func(T) result.Result[bool]) result.Result[ops.Option[T]]
+		// Position searches for an element in a next, returning its index.
+		//
+		// `Position()` takes a closure that returns `true` or `false`. It applies
+		// this closure to each element of the next, and if one of them
+		// returns `true`, then `Position()` returns [`ops.Some(index)`]. If all of
+		// them return `false`, it returns [`ops.None[T]()`].
+		//
+		// `Position()` is short-circuiting; in other words, it will stop
+		// processing as soon as it finds a `true`.
+		//
+		// # Overflow Behavior
+		//
+		// The method does no guarding against overflows, so if there are more
+		// than [`math.MaxInt`] non-matching elements, it either produces the wrong
+		// result or panics. If debug assertions are enabled, a panic is
+		// guaranteed.
+		//
+		// # Panics
+		//
+		// This function might panic if the next has more than `math.MaxInt`
+		// non-matching elements.
+		//
+		// [`ops.Some(index)`]: Some
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// assert.Equal(t, FromVec(a).Position(func(x int)bool{return x==2}), ops.Some(1));
+		//
+		// assert.Equal(t, FromVec(a).Position(func(x int)bool{return x==5}), ops.None[int]());
+		//
+		//
+		// Stopping at the first `true`:
+		//
+		//
+		// var a = []int{1, 2, 3, 4};
+		//
+		// var iter = FromVec(a);
+		//
+		// assert.Equal(t, iter.Position(func(x int)bool{return x >= 2}), ops.Some(1));
+		//
+		// // we can still use `iter`, as there are more elements.
+		// assert.Equal(t, iter.Next(), ops.Some(3));
+		//
+		// // The returned index depends on next state
+		// assert.Equal(t, iter.Position(func(x int)bool{return x == 4}), ops.Some(0));
+		//
+		Position(predicate func(T) bool) ops.Option[int]
 	}
 	Next[T any] interface {
 		// Next advances the next and returns the next value.
@@ -1031,6 +1118,10 @@ type (
 		// assert.Equal(t, ops.None[int](), iter.Next());
 		//
 		Next() ops.Option[T]
+	}
+	ExactSizeNext[T any] interface {
+		Next[T]
+		Len() int
 	}
 	SizeHint interface {
 		// SizeHint returns the bounds on the remaining length of the next.
@@ -1146,357 +1237,119 @@ type (
 	FusedIterator[T any] interface {
 	}
 	DoubleEndedIterator[T any] interface {
+		Iterator[T]
+	}
+	ExactSizeIterator[T any] interface {
+		Iterator[T]
+		Len() int
+	}
+	ReversibleIterator[T any] interface {
+		ExactSizeIterator[T]
+		DoubleEndedIterator[T]
+		// RPosition searches for an element in a next from the right, returning its
+		// index.
+		//
+		// `RPosition()` takes a closure that returns `true` or `false`. It applies
+		// this closure to each element of the next, starting from the end,
+		// and if one of them returns `true`, then `RPosition()` returns
+		// [`ops.Some(index)`]. If all of them return `false`, it returns [`ops.None[T]()`].
+		//
+		// `RPosition()` is short-circuiting; in other words, it will stop
+		// processing as soon as it finds a `true`.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// assert.Equal(t, FromVec(a).RPosition(func(x int)bool{return x == 3}), ops.Some(2));
+		//
+		// assert.Equal(t, FromVec(a).RPosition(func(x int)bool{return x==5}), ops.None[int]());
+		//
+		//
+		// Stopping at the first `true`:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		//
+		// var iter = FromVec(a);
+		//
+		// assert.Equal(t, iter.RPosition(func(x int)bool{return x==2}), ops.Some(1));
+		//
+		// // we can still use `iter`, as there are more elements.
+		// assert.Equal(t, iter.Next(), ops.Some(1));
+		//
+		RPosition(predicate func(T) bool) ops.Option[int]
+	}
+	OrderedIterator[T ord.Ord] interface {
+		Iterator[T]
+		// Max returns the maximum element of a next.
+		//
+		// If several elements are equally maximum, the last element is
+		// returned. If the next is empty, [`ops.None[T]()`] is returned.
+		//
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		// var b []int;
+		//
+		// assert.Equal(t, FromVec(a).Max(), ops.Some(3));
+		// assert.Equal(t, FromVec(b).Max(), ops.None[int]());
+		//
+		Max() ops.Option[T]
+		// Min returns the minimum element of a next.
+		//
+		// If several elements are equally minimum, the first element is returned.
+		// If the next is empty, [`ops.None[T]()`] is returned.
+		//
+		// # Examples
+		//
+		// Basic usage:
+		//
+		//
+		// var a = []int{1, 2, 3};
+		// var b []int;
+		//
+		// assert.Equal(t, FromVec(a).Min(), ops.Some(1));
+		// assert.Equal(t, FromVec(b).Min(), ops.None[int]());
+		//
+		Min() ops.Option[T]
+		// MaxByKey returns the element that gives the maximum value from the
+		// specified function.
+		//
+		// If several elements are equally maximum, the last element is
+		// returned. If the next is empty, [`ops.None[T]()`] is returned.
+		//
+		// # Examples
+		//
+		//
+		// var a = []int{-3, 0, 1, 5, -10};
+		// assert.Equal(t, *FromVec(a).MaxByKey(func(x T) float64{return digit.Abs(x)}).unwrap(), -10);
+		//
+		MaxByKey(cmp func(x T) float64) ops.Option[T]
+		// MaxBy returns the element that gives the maximum value with respect to the
+		// specified comparison function.
+		//
+		// If several elements are equally maximum, the last element is
+		// returned. If the next is empty, [`ops.None[T]()`] is returned.
+		//
+		// # Examples
+		//
+		//
+		// var a = [-3_i32, 0, 1, 5, -10];
+		// assert.Equal(t, *FromVec(a).MaxBy(func(x, y T) ord.Ordering{ return ord.Compare(x,y)}).Unwrap(), 5);
+		//
+		MaxBy(cmp func(a, b T) ord.Ordering) ops.Option[T]
+		MinBy(cmp func(a, b T) ord.Ordering) ops.Option[T]
 	}
 )
 
-//
-// Applies function to the elements of next and returns
-// the first non-none result.
-//
-// `iter.find_map(f)` is equivalent to `iter.FilterMap(f).Next()`.
-//
-// # Examples
-//
-//
-// var a = ["lol", "NaN", "2", "5"];
-//
-// var first_number = FromVec(a).find_map(|s| s.parse().ok());
-//
-// assert.Equal(t, first_number, ops.Some(2));
-//
-// #[inline]
-// #[stable(feature = "iterator_find_map", since = "1.30.0")]
-// fn find_map<B, F>(&mut self, f: F)  Option<B>
-// where
-// Self: Sized,
-// F: FnMut(Self::T)  Option<B>,
-// {
-// #[inline]
-// fn check<T, B>(mut f: impl FnMut(T)  Option<B>)  impl FnMut((), T)  ControlFlow<B> {
-// move |(), x| match f(x) {
-// Some(x) = > ControlFlow::Break(x),
-// None = > ControlFlow::CONTINUE,
-// }
-// }
-//
-// self.TryFold((), check(f)).break_value()
-// }
-//
-// Applies function to the elements of next and returns
-// the first true result or the first error.
-//
-// # Examples
-//
-//
-// #![feature(try_find)]
-//
-// var a = ["1", "2", "lol", "NaN", "5"];
-//
-// var is_my_num = |s: &str, search: i32|  Result<bool, std::num::ParseIntError> {
-//     T(s.parse::<i32>()?  == search)
-// };
-//
-// var result = FromVec(a).try_Find(|&&s| is_my_num(s, 2));
-// assert.Equal(t, result, T(Some("2")));
-//
-// var result = FromVec(a).try_Find(|&&s| is_my_num(s, 5));
-// assert.True(t, result.is_err());
-//
-// #[inline]
-// #[unstable(feature = "try_find", reason = "new API", issue = "63178")]
-// fn try_find<F, R, E>(&mut self, f: F)  Result<Option[T], E>
-// where
-// Self: Sized,
-// F: FnMut(&Self::T)  R,
-// R: Try<Output = bool>,
-// / FIXME: This bound is rather strange, but means minimal breakage on nightly.
-// / See #85115 for the issue tracking a holistic solution for this and try_map.
-// R: Try<Residual = Result<crate::convert::Infallible, E>>,
-// {
-// #[inline]
-// fn check<F, T, R, E>(mut f: F)  impl FnMut((), T)  ControlFlow<Result<T, E>>
-// where
-// F: FnMut(&T)  R,
-// R: Try<Output = bool>,
-// R: Try<Residual = Result<crate::convert::Infallible, E>>,
-// {
-// move |(), x| match f(&x).branch() {
-// ControlFlow::Continue(false) = > ControlFlow::CONTINUE,
-// ControlFlow::Continue(true) = > ControlFlow::Break(T(x)),
-// ControlFlow::Break(Err(x)) = > ControlFlow::Break(Err(x)),
-// }
-// }
-//
-// self.TryFold((), check(f)).break_value().transpose()
-// }
-//
-// Searches for an element in a next, returning its index.
-//
-// `position()` takes a closure that returns `true` or `false`. It applies
-// this closure to each element of the next, and if one of them
-// returns `true`, then `position()` returns [`ops.Some(index)`]. If all of
-// them return `false`, it returns [`ops.None[T]()`].
-//
-// `position()` is short-circuiting; in other words, it will stop
-// processing as soon as it finds a `true`.
-//
-// # Overflow Behavior
-//
-// The method does no guarding against overflows, so if there are more
-// than [`math.MaxInt`] non-matching elements, it either produces the wrong
-// result or panics. If debug assertions are enabled, a panic is
-// guaranteed.
-//
-// # Panics
-//
-// This function might panic if the next has more than `math.MaxInt`
-// non-matching elements.
-//
-// [`ops.Some(index)`]: Some
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// assert.Equal(t, FromVec(a).position(|&x| x == 2), ops.Some(1));
-//
-// assert.Equal(t, FromVec(a).position(|&x| x == 5), ops.None[int]());
-//
-//
-// Stopping at the first `true`:
-//
-//
-// var a = [1, 2, 3, 4];
-//
-// var iter = FromVec(a);
-//
-// assert.Equal(t, iter.position(|&x| x >= 2), ops.Some(1));
-//
-// // we can still use `iter`, as there are more elements.
-// assert.Equal(t, iter.Next(), ops.Some(3));
-//
-// // The returned index depends on next state
-// assert.Equal(t, iter.position(|&x| x == 4), ops.Some(0));
-//
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn position<P>(&mut self, predicate: P)  Option<usize>
-// where
-// Self: Sized,
-// P: FnMut(Self::T)  bool,
-// {
-// #[inline]
-// fn check<T>(
-// mut predicate: impl FnMut(T)  bool,
-// )  impl FnMut(usize, T)  ControlFlow<usize, usize> {
-// #[rustc_inherit_overflow_checks]
-// move |i, x| {
-// if predicate(x) { ControlFlow::Break(i) } else { ControlFlow::Continue(i + 1) }
-// }
-// }
-//
-// self.TryFold(0, check(predicate)).break_value()
-// }
-//
-// Searches for an element in a next from the right, returning its
-// index.
-//
-// `rposition()` takes a closure that returns `true` or `false`. It applies
-// this closure to each element of the next, starting from the end,
-// and if one of them returns `true`, then `rposition()` returns
-// [`ops.Some(index)`]. If all of them return `false`, it returns [`ops.None[T]()`].
-//
-// `rposition()` is short-circuiting; in other words, it will stop
-// processing as soon as it finds a `true`.
-//
-// [`ops.Some(index)`]: Some
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// assert.Equal(t, FromVec(a).rposition(|&x| x == 3), ops.Some(2));
-//
-// assert.Equal(t, FromVec(a).rposition(|&x| x == 5), ops.None[int]());
-//
-//
-// Stopping at the first `true`:
-//
-//
-// var a = []int{1, 2, 3};
-//
-// var iter = FromVec(a);
-//
-// assert.Equal(t, iter.rposition(|&x| x == 2), ops.Some(1));
-//
-// // we can still use `iter`, as there are more elements.
-// assert.Equal(t, iter.Next(), ops.Some(1));
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn rposition<P>(&mut self, predicate: P)  Option<usize>
-// where
-// P: FnMut(Self::T)  bool,
-// Self: Sized + ExactSizeIterator + DoubleEndedIterator,
-// {
-// / No need for an overflow check here, because `ExactSizeIterator`
-// / implies that the number of elements fits into a `usize`.
-// #[inline]
-// fn check<T>(
-// mut predicate: impl FnMut(T)  bool,
-// )  impl FnMut(usize, T)  ControlFlow<usize, usize> {
-// move |i, x| {
-// var i = i - 1;
-// if predicate(x) { ControlFlow::Break(i) } else { ControlFlow::Continue(i) }
-// }
-// }
-//
-// var n = self.len();
-// self.try_rFold(n, check(predicate)).break_value()
-// }
-//
-// Returns the maximum element of a next.
-//
-// If several elements are equally maximum, the last element is
-// returned. If the next is empty, [`ops.None[T]()`] is returned.
-//
-// Note that [`f32`]/[`f64`] doesn't implement [`Ord`] due to NaN being
-// inany. You can work around this by using [`baseIterator::reduce`]:
-//
-// assert.Equal(t,
-//     vec![2.4, f32::NAN, 1.3]
-//         .into_iter()
-//         .Reduce(f32::max)
-//         .unwrap(),
-//     2.4
-// );
-//
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-// var b: Vec<u32> = Vec::new();
-//
-// assert.Equal(t, FromVec(a).max(), ops.Some(3));
-// assert.Equal(t, b.iter().max(), ops.None[int]());
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn max(self)  Option[T]
-// where
-// Self: Sized,
-// Self::T: Ord,
-// {
-// self.max_by(Ord::cmp)
-// }
-//
-// Returns the minimum element of a next.
-//
-// If several elements are equally minimum, the first element is returned.
-// If the next is empty, [`ops.None[T]()`] is returned.
-//
-// Note that [`f32`]/[`f64`] doesn't implement [`Ord`] due to NaN being
-// inany. You can work around this by using [`baseIterator::reduce`]:
-//
-// assert.Equal(t,
-//     vec![2.4, f32::NAN, 1.3]
-//         .into_iter()
-//         .Reduce(f32::min)
-//         .unwrap(),
-//     1.3
-// );
-//
-//
-// # Examples
-//
-// Basic usage:
-//
-//
-// var a = []int{1, 2, 3};
-// var b: Vec<u32> = Vec::new();
-//
-// assert.Equal(t, FromVec(a).min(), ops.Some(1));
-// assert.Equal(t, b.iter().min(), ops.None[int]());
-//
-// #[inline]
-// #[stable(feature = "rust1", since = "1.0.0")]
-// fn min(self)  Option[T]
-// where
-// Self: Sized,
-// Self::T: Ord,
-// {
-// self.min_by(Ord::cmp)
-// }
-//
-// Returns the element that gives the maximum value from the
-// specified function.
-//
-// If several elements are equally maximum, the last element is
-// returned. If the next is empty, [`ops.None[T]()`] is returned.
-//
-// # Examples
-//
-//
-// var a = [-3_i32, 0, 1, 5, -10];
-// assert.Equal(t, *FromVec(a).max_by_key(|x| x.abs()).unwrap(), -10);
-//
-// #[inline]
-// #[stable(feature = "iter_cmp_by_key", since = "1.6.0")]
-// fn max_by_key<B: Ord, F>(self, f: F)  Option[T]
-// where
-// Self: Sized,
-// F: FnMut(&Self::T)  B,
-// {
-// #[inline]
-// fn key<T, B>(mut f: impl FnMut(&T)  B)  impl FnMut(T)  (B, T) {
-// move |x| (f(&x), x)
-// }
-//
-// #[inline]
-// fn compare<T, B: Ord>((x_p, _): &(B, T), (y_p, _): &(B, T))  Ordering {
-// x_p.cmp(y_p)
-// }
-//
-// var (_, x) = self.Map(key(f)).max_by(compare)?;
-// Some(x)
-// }
-//
-// Returns the element that gives the maximum value with respect to the
-// specified comparison function.
-//
-// If several elements are equally maximum, the last element is
-// returned. If the next is empty, [`ops.None[T]()`] is returned.
-//
-// # Examples
-//
-//
-// var a = [-3_i32, 0, 1, 5, -10];
-// assert.Equal(t, *FromVec(a).max_by(|x, y| x.cmp(y)).unwrap(), 5);
-//
-// #[inline]
-// #[stable(feature = "iter_max_by", since = "1.15.0")]
-// fn max_by<F>(self, compare: F)  Option[T]
-// where
-// Self: Sized,
-// F: FnMut(&Self::T, &Self::T)  Ordering,
-// {
-// #[inline]
-// fn fold<T>(mut compare: impl FnMut(&T, &T)  Ordering)  impl FnMut(T, T)  T {
-// move |x, y| cmp::max_by(x, y, &mut compare)
-// }
-//
-// self.Reduce(Fold(compare))
-// }
 //
 // Returns the element that gives the minimum value from the
 // specified function.
@@ -1508,11 +1361,11 @@ type (
 //
 //
 // var a = [-3_i32, 0, 1, 5, -10];
-// assert.Equal(t, *FromVec(a).min_by_key(|x| x.abs()).unwrap(), 0);
+// assert.Equal(t, *FromVec(a).MinBy_key(|x| x.abs()).unwrap(), 0);
 //
 // #[inline]
 // #[stable(feature = "iter_cmp_by_key", since = "1.6.0")]
-// fn min_by_key<B: Ord, F>(self, f: F)  Option[T]
+// fn MinBy_key<B: Ord, F>(self, f: F)  Option[T]
 // where
 // Self: Sized,
 // F: FnMut(&Self::T)  B,
@@ -1527,7 +1380,7 @@ type (
 // x_p.cmp(y_p)
 // }
 //
-// var (_, x) = self.Map(key(f)).min_by(compare)?;
+// var (_, x) = self.Map(key(f)).MinBy(compare)?;
 // Some(x)
 // }
 //
@@ -1541,18 +1394,18 @@ type (
 //
 //
 // var a = [-3_i32, 0, 1, 5, -10];
-// assert.Equal(t, *FromVec(a).min_by(|x, y| x.cmp(y)).unwrap(), -10);
+// assert.Equal(t, *FromVec(a).MinBy(|x, y| x.cmp(y)).unwrap(), -10);
 //
 // #[inline]
-// #[stable(feature = "iter_min_by", since = "1.15.0")]
-// fn min_by<F>(self, compare: F)  Option[T]
+// #[stable(feature = "iter_MinBy", since = "1.15.0")]
+// fn MinBy<F>(self, compare: F)  Option[T]
 // where
 // Self: Sized,
 // F: FnMut(&Self::T, &Self::T)  Ordering,
 // {
 // #[inline]
 // fn fold<T>(mut compare: impl FnMut(&T, &T)  Ordering)  impl FnMut(T, T)  T {
-// move |x, y| cmp::min_by(x, y, &mut compare)
+// move |x, y| cmp::MinBy(x, y, &mut compare)
 // }
 //
 // self.Reduce(Fold(compare))
@@ -1869,7 +1722,7 @@ type (
 // assert.Equal(t, [1.].iter().partial_cmp([1., 2.].iter()), ops.Some(Ordering::Less));
 // assert.Equal(t, [1., 2.].iter().partial_cmp([1.].iter()), ops.Some(Ordering::Greater));
 //
-// assert.Equal(t, [f64::NAN].iter().partial_cmp([1.].iter()), ops.None[int]());
+// assert.Equal(t, [float64::NAN].iter().partial_cmp([1.].iter()), ops.None[int]());
 //
 // #[stable(feature = "iter_order", since = "1.5.0")]
 // fn partial_cmp<I>(self, other: I)  Option<Ordering>
@@ -2123,7 +1976,7 @@ type (
 // assert.True(t, ![1, 3, 2, 4].iter().is_sorted());
 // assert.True(t, [0].iter().is_sorted());
 // assert.True(t, std::iter::empty::<i32>().is_sorted());
-// assert.True(t, ![0.0, 1.0, f32::NAN].iter().is_sorted());
+// assert.True(t, ![0.0, 1.0, float32::NAN].iter().is_sorted());
 //
 // #[inline]
 // #[unstable(feature = "is_sorted", reason = "new API", issue = "53485")]
@@ -2150,7 +2003,7 @@ type (
 // assert.True(t, ![1, 3, 2, 4].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
 // assert.True(t, [0].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
 // assert.True(t, std::iter::empty::<i32>().is_sorted_by(|a, b| a.partial_cmp(b)));
-// assert.True(t, ![0.0, 1.0, f32::NAN].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
+// assert.True(t, ![0.0, 1.0, float32::NAN].iter().is_sorted_by(|a, b| a.partial_cmp(b)));
 //
 //
 // [`is_sorted`]: baseIterator::is_sorted

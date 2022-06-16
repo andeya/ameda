@@ -187,18 +187,7 @@ func (iter *baseIterator[T]) IsPartitioned(predicate func(T) bool) bool {
 }
 
 func (iter *baseIterator[T]) TryFold(init any, f func(any, T) result.Result[any]) result.Result[any] {
-	var accum = result.Ok(init)
-	for {
-		x := iter.Next()
-		if x.IsNone() {
-			break
-		}
-		accum = f(accum, x.Some())
-		if accum.IsErr() {
-			return accum
-		}
-	}
-	return accum
+	return TryFold[T, any](iter, init, f)
 }
 
 func (iter *baseIterator[T]) TryForEach(f func(T) error) error {
@@ -273,4 +262,61 @@ func (iter *baseIterator[T]) Find(predicate func(T) bool) ops.Option[T] {
 		return ops.Some[T](r.ErrVal().(T))
 	}
 	return ops.None[T]()
+}
+
+func (iter *baseIterator[T]) FindMap(f func(T) ops.Option[any]) ops.Option[any] {
+	var check = func(f func(T) ops.Option[any]) func(any, T) result.Result[any] {
+		return func(_ any, x T) result.Result[any] {
+			r := f(x)
+			if r.IsSome() {
+				return result.Err[any](x)
+			} else {
+				return result.Ok[any](nil)
+			}
+		}
+	}
+	r := iter.TryFold(nil, check(f))
+	if r.IsErr() {
+		return ops.Some(r.ErrVal())
+	}
+	return ops.None[any]()
+}
+
+func (iter *baseIterator[T]) TryFind(predicate func(T) result.Result[bool]) result.Result[ops.Option[T]] {
+	var check = func(f func(T) result.Result[bool]) func(any, T) result.Result[any] {
+		return func(_ any, x T) result.Result[any] {
+			r := f(x)
+			if r.IsOk() {
+				if r.Ok() {
+					return result.Err[any](result.Ok[ops.Option[T]](ops.Some(x)))
+				} else {
+					return result.Ok[any](nil)
+				}
+			} else {
+				return result.Err[any](result.Err[ops.Option[T]](r.Err()))
+			}
+		}
+	}
+	r := iter.TryFold(nil, check(predicate))
+	if r.IsErr() {
+		return r.ErrVal().(result.Result[ops.Option[T]])
+	}
+	return result.Ok[ops.Option[T]](ops.None[T]())
+}
+
+func (iter *baseIterator[T]) Position(predicate func(T) bool) ops.Option[int] {
+	var check = func(f func(T) bool) func(int, T) result.Result[int] {
+		return func(i int, x T) result.Result[int] {
+			if f(x) {
+				return result.Err[int](i)
+			} else {
+				return result.Ok[int](i + 1)
+			}
+		}
+	}
+	r := TryFold[T, int](iter, 0, check(predicate))
+	if r.IsErr() {
+		return ops.Some[int](r.ErrVal().(int))
+	}
+	return ops.None[int]()
 }

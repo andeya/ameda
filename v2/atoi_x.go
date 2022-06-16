@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"math"
+
+	"github.com/henrylee2cn/ameda/v2/digit"
 )
 
 // ParseUintByDict convert numStr into corresponding uint64 according to dict.
-func ParseUintByDict[D Digit](dict []byte, numStr string) (D, error) {
+func ParseUintByDict[D digit.Digit](dict []byte, numStr string) (D, error) {
 	if len(dict) == 0 {
 		return 0, errors.New("dict is empty")
 	}
