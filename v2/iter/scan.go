@@ -1,6 +1,6 @@
 package iter
 
-import "github.com/henrylee2cn/ameda/v2/ops"
+import "github.com/andeya/ameda/v2/ops"
 
 type Scan[T any] struct {
 	iter         Iterator[T]

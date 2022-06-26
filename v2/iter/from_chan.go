@@ -3,7 +3,7 @@ package iter
 import (
 	"math"
 
-	"github.com/henrylee2cn/ameda/v2/ops"
+	"github.com/andeya/ameda/v2/ops"
 )
 
 type chanNext[T any] struct {

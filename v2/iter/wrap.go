@@ -1,7 +1,7 @@
 package iter
 
 import (
-	"github.com/henrylee2cn/ameda/v2/result"
+	"github.com/andeya/ameda/v2/result"
 )
 
 func ToMap[T any, B any](iter Iterator[T], f func(T) B) *Map[B] {

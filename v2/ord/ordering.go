@@ -1,6 +1,6 @@
 package ord
 
-import "github.com/henrylee2cn/ameda/v2/digit"
+import "github.com/andeya/ameda/v2/digit"
 
 type Ord[T any] interface {
 	digit.Digit | ~string | uintptr

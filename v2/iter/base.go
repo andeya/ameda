@@ -1,8 +1,8 @@
 package iter
 
 import (
-	"github.com/henrylee2cn/ameda/v2/ops"
-	"github.com/henrylee2cn/ameda/v2/result"
+	"github.com/andeya/ameda/v2/ops"
+	"github.com/andeya/ameda/v2/result"
 )
 
 var _ Iterator[struct{}] = new(baseIterator[struct{}])

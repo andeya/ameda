@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	time2 "github.com/henrylee2cn/ameda/v2/internal/time"
+	time2 "github.com/andeya/ameda/v2/internal/time"
 )
 
 func TestCheckGoVersion(t *testing.T) {

@@ -1,4 +1,4 @@
-module github.com/henrylee2cn/ameda/v2
+module github.com/andeya/ameda/v2
 
 go 1.18
 
