@@ -8,7 +8,8 @@ import (
 
 // ParseUint is like ParseInt but for unsigned numbers.
 // NOTE:
-//  Compatible with standard package strconv.
+//
+//	Compatible with standard package strconv.
 func ParseUint(s string, base int, bitSize int) (uint64, error) {
 	// Ignore letter case
 	if base <= 36 {
@@ -47,6 +48,8 @@ func ParseUint(s string, base int, bitSize int) (uint64, error) {
 			d = c - 'a' + 10
 		case 'A' <= c && c <= 'Z':
 			d = c - 'A' + 10 + 26
+		case c == '_':
+			continue
 		default:
 			return 0, syntaxError(fnParseUint, s)
 		}
@@ -94,7 +97,8 @@ func ParseUint(s string, base int, bitSize int) (uint64, error) {
 // returned value is the maximum magnitude integer of the
 // appropriate bitSize and sign.
 // NOTE:
-//  Compatible with standard package strconv.
+//
+//	Compatible with standard package strconv.
 func ParseInt(s string, base int, bitSize int) (i int64, err error) {
 	// Ignore letter case
 	if base <= 36 {
@@ -162,17 +166,15 @@ func underscoreOK(s string) bool {
 	}
 
 	// Optional base prefix.
-	hex := false
 	if len(s) >= 2 && s[0] == '0' && (lower(s[1]) == 'b' || lower(s[1]) == 'o' || lower(s[1]) == 'x') {
 		i = 2
 		saw = '0' // base prefix counts as a digit for "underscore as digit separator"
-		hex = lower(s[1]) == 'x'
 	}
 
 	// Number proper.
 	for ; i < len(s); i++ {
 		// Digits are always okay.
-		if '0' <= s[i] && s[i] <= '9' || hex && 'a' <= lower(s[i]) && lower(s[i]) <= 'f' {
+		if '0' <= s[i] && s[i] <= '9' || 'a' <= lower(s[i]) && lower(s[i]) <= 'z' {
 			saw = '0'
 			continue
 		}
@@ -184,14 +186,10 @@ func underscoreOK(s string) bool {
 			saw = '_'
 			continue
 		}
-		// Underscore must also be followed by digit.
-		if saw == '_' {
-			return false
-		}
 		// Saw non-digit, non-underscore.
-		saw = '!'
+		return false
 	}
-	return saw != '_'
+	return true
 }
 
 // Atoi is equivalent to ParseInt(s, 10, 0), converted to type int.

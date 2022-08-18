@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type parseUint64Test struct {
@@ -656,4 +658,10 @@ func benchmarkAtoi(b *testing.B, neg int) {
 			}
 		})
 	}
+}
+
+func TestAtoi62(t *testing.T) {
+	i, err := ParseUint("aZl8N0y58M7", 62, 64)
+	assert.NoError(t, err)
+	assert.Equal(t, uint64(9223372036854775807), i)
 }
