@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/andeya/ameda/v2/digit"
+	"github.com/andeya/gust/digit"
 )
 
 // Zero return zero value.

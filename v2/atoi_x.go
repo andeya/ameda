@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/andeya/ameda/v2/digit"
+	"github.com/andeya/gust/digit"
 )
 
 // ParseUintByDict convert numStr into corresponding uint64 according to dict.
