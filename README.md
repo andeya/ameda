@@ -4,4 +4,4 @@ Powerful toolbox for golang data types.
 
 Yeah!
 
-**ameda/v2 supports generics!**
+**It is recommended to use [gust](https://github.com/andeya/gust) instead!**
