@@ -50,8 +50,10 @@ func newT(iPtr unsafe.Pointer) Value {
 
 // RuntimeTypeIDOf returns the underlying type ID in current runtime from interface object.
 // NOTE:
-//  *A and A returns the different runtime type ID;
-//  It is 10 times performance of t.String().
+//
+//	*A and A returns the different runtime type ID;
+//	It is 10 times performance of t.String().
+//
 //go:nocheckptr
 func RuntimeTypeIDOf(i interface{}) uintptr {
 	checkValueUsable()
@@ -62,8 +64,10 @@ func RuntimeTypeIDOf(i interface{}) uintptr {
 
 // RuntimeTypeID returns the underlying type ID in current runtime from reflect.Type.
 // NOTE:
-//  *A and A returns the different runtime type ID;
-//  It is 10 times performance of t.String().
+//
+//	*A and A returns the different runtime type ID;
+//	It is 10 times performance of t.String().
+//
 //go:nocheckptr
 func RuntimeTypeID(t reflect.Type) uintptr {
 	checkValueUsable()
@@ -73,8 +77,10 @@ func RuntimeTypeID(t reflect.Type) uintptr {
 
 // RuntimeTypeID gets the underlying type ID in current runtime.
 // NOTE:
-//  *A and A gets the different runtime type ID;
-//  It is 10 times performance of reflect.TypeOf(i).String().
+//
+//	*A and A gets the different runtime type ID;
+//	It is 10 times performance of reflect.TypeOf(i).String().
+//
 //go:nocheckptr
 func (v Value) RuntimeTypeID() uintptr {
 	return v.typPtr
@@ -95,6 +101,7 @@ func (v Value) CanAddr() bool {
 
 // Elem returns the Value that the interface i contains
 // or that the pointer i points to.
+//
 //go:nocheckptr
 func (v Value) Elem() Value {
 	k := v.Kind()
@@ -118,6 +125,7 @@ func (v Value) Elem() Value {
 
 // UnderlyingElem returns the underlying Value that the interface i contains
 // or that the pointer i points to.
+//
 //go:nocheckptr
 func (v Value) UnderlyingElem() Value {
 	for kind := v.Kind(); kind == reflect.Ptr || kind == reflect.Interface; kind = v.Kind() {
@@ -128,7 +136,9 @@ func (v Value) UnderlyingElem() Value {
 
 // Pointer gets the pointer of i.
 // NOTE:
-//  *T and T, gets diffrent pointer
+//
+//	*T and T, gets diffrent pointer
+//
 //go:nocheckptr
 func (v Value) Pointer() uintptr {
 	switch v.Kind() {
@@ -142,6 +152,7 @@ func (v Value) Pointer() uintptr {
 }
 
 // IsNil reports whether its argument i is nil.
+//
 //go:nocheckptr
 func (v Value) IsNil() bool {
 	return unsafe.Pointer(v.Pointer()) == nil
@@ -155,6 +166,7 @@ func (v Value) IsNil() bool {
 // of the outermost function.
 //
 // NOTE: Its kind must be a reflect.Func, otherwise it returns nil
+//
 //go:nocheckptr
 func (v Value) FuncForPC() *runtime.Func {
 	return runtime.FuncForPC(*(*uintptr)(v.ptr))
@@ -194,28 +206,16 @@ var errValueUsable error
 
 func init() {
 	if errValueUsable == nil {
-		_, errValueUsable = checkGoVersion(runtime.Version())
+		errValueUsable = checkGoVersion(runtime.Version())
 	}
 }
 
-func checkGoVersion(goVer string) (string, error) {
-	var rs []rune
-	for _, r := range strings.TrimPrefix(goVer, "go") {
-		if r >= '0' && r <= '9' || r == '.' {
-			rs = append(rs, r)
-		} else {
-			break
-		}
+func checkGoVersion(goVer string) error {
+	const s = "go1."
+	if strings.HasPrefix(goVer, s) || strings.Contains(goVer, " "+s) {
+		return nil
 	}
-	goVersion := strings.TrimRight(string(rs), ".")
-	a, err := StringsToInts(strings.Split(goVersion, "."))
-	if err != nil {
-		return goVersion, err
-	}
-	if a[0] != 1 || a[1] < 9 {
-		return goVersion, fmt.Errorf("required 1.9≤go<2.0, but current version is go" + goVersion)
-	}
-	return goVersion, nil
+	return fmt.Errorf("ameda Value: required go<2.0, but current version is '%s'", goVer)
 }
 
 func checkValueUsable() {
