@@ -8,7 +8,8 @@ import (
 
 // ParseUint is like ParseInt but for unsigned numbers.
 // NOTE:
-//  Compatible with standard package strconv.
+//
+//	Compatible with standard package strconv.
 func ParseUint(s string, base int, bitSize int) (uint64, error) {
 	// Ignore letter case
 	if base <= 36 {
@@ -96,7 +97,8 @@ func ParseUint(s string, base int, bitSize int) (uint64, error) {
 // returned value is the maximum magnitude integer of the
 // appropriate bitSize and sign.
 // NOTE:
-//  Compatible with standard package strconv.
+//
+//	Compatible with standard package strconv.
 func ParseInt(s string, base int, bitSize int) (i int64, err error) {
 	// Ignore letter case
 	if base <= 36 {

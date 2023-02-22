@@ -35,7 +35,8 @@ func Int16sToStrings(i []int16) []string {
 
 // Int16sToBools converts int16 slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func Int16sToBools(i []int16) []bool {
 	r := make([]bool, len(i))
 	for k, v := range i {
@@ -169,13 +170,18 @@ func Int16sToUint64s(i []int16) ([]uint64, error) {
 
 // Int16sCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Int16sCopyWithin(i []int16, target, start int, end ...int) {
 	target = fixIndex(len(i), target, true)
 	if target == len(i) {
@@ -189,7 +195,8 @@ func Int16sCopyWithin(i []int16, target, start int, end ...int) {
 
 // Int16sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func Int16sEvery(i []int16, fn func(i []int16, k int, v int16) bool) bool {
 	for k, v := range i {
 		if !fn(i, k, v) {
@@ -201,13 +208,18 @@ func Int16sEvery(i []int16, fn func(i []int16, k int, v int16) bool) bool {
 
 // Int16sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Int16sFill(i []int16, value int16, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(i), start, end...)
 	if !ok {
@@ -231,7 +243,8 @@ func Int16sFilter(i []int16, fn func(i []int16, k int, v int16) bool) []int16 {
 
 // Int16sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func Int16sFind(i []int16, fn func(i []int16, k int, v int16) bool) (k int, v int16) {
 	for k, v := range i {
 		if fn(i, k, v) {
@@ -243,14 +256,16 @@ func Int16sFind(i []int16, fn func(i []int16, k int, v int16) bool) (k int, v in
 
 // Int16sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int16sIncludes(i []int16, valueToFind int16, fromIndex ...int) bool {
 	return Int16sIndexOf(i, valueToFind, fromIndex...) > -1
 }
 
 // Int16sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int16sIndexOf(i []int16, searchElement int16, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k, v := range i[idx:] {
@@ -263,7 +278,8 @@ func Int16sIndexOf(i []int16, searchElement int16, fromIndex ...int) int {
 
 // Int16sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int16sLastIndexOf(i []int16, searchElement int16, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k := len(i) - 1; k >= idx; k-- {
@@ -321,12 +337,15 @@ L:
 // Int16sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Int16sReduce(i []int16,
 	fn func(i []int16, k int, v, accumulator int16) int16, initialValue ...int16,
 ) int16 {
@@ -349,12 +368,15 @@ func Int16sReduce(i []int16,
 // Int16sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Int16sReduceRight(i []int16,
 	fn func(i []int16, k int, v, accumulator int16) int16, initialValue ...int16,
 ) int16 {
@@ -411,7 +433,8 @@ func Int16sSlice(i []int16, begin int, end ...int) []int16 {
 
 // Int16sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func Int16sSome(i []int16, fn func(i []int16, k int, v int16) bool) bool {
 	for k, v := range i {
 		if fn(i, k, v) {

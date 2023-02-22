@@ -35,7 +35,8 @@ func Int8sToStrings(i []int8) []string {
 
 // Int8sToBools converts int8 slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func Int8sToBools(i []int8) []bool {
 	r := make([]bool, len(i))
 	for k, v := range i {
@@ -170,13 +171,18 @@ func Int8sToUint64s(i []int8) ([]uint64, error) {
 
 // Int8sCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Int8sCopyWithin(i []int8, target, start int, end ...int) {
 	target = fixIndex(len(i), target, true)
 	if target == len(i) {
@@ -190,7 +196,8 @@ func Int8sCopyWithin(i []int8, target, start int, end ...int) {
 
 // Int8sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func Int8sEvery(i []int8, fn func(i []int8, k int, v int8) bool) bool {
 	for k, v := range i {
 		if !fn(i, k, v) {
@@ -202,13 +209,18 @@ func Int8sEvery(i []int8, fn func(i []int8, k int, v int8) bool) bool {
 
 // Int8sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Int8sFill(i []int8, value int8, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(i), start, end...)
 	if !ok {
@@ -232,7 +244,8 @@ func Int8sFilter(i []int8, fn func(i []int8, k int, v int8) bool) []int8 {
 
 // Int8sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func Int8sFind(i []int8, fn func(i []int8, k int, v int8) bool) (k int, v int8) {
 	for k, v := range i {
 		if fn(i, k, v) {
@@ -244,14 +257,16 @@ func Int8sFind(i []int8, fn func(i []int8, k int, v int8) bool) (k int, v int8) 
 
 // Int8sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int8sIncludes(i []int8, valueToFind int8, fromIndex ...int) bool {
 	return Int8sIndexOf(i, valueToFind, fromIndex...) > -1
 }
 
 // Int8sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int8sIndexOf(i []int8, searchElement int8, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k, v := range i[idx:] {
@@ -264,7 +279,8 @@ func Int8sIndexOf(i []int8, searchElement int8, fromIndex ...int) int {
 
 // Int8sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Int8sLastIndexOf(i []int8, searchElement int8, fromIndex ...int) int {
 	idx := getFromIndex(len(i), fromIndex...)
 	for k := len(i) - 1; k >= idx; k-- {
@@ -322,12 +338,15 @@ L:
 // Int8sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Int8sReduce(i []int8,
 	fn func(i []int8, k int, v, accumulator int8) int8, initialValue ...int8,
 ) int8 {
@@ -350,12 +369,15 @@ func Int8sReduce(i []int8,
 // Int8sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Int8sReduceRight(i []int8,
 	fn func(i []int8, k int, v, accumulator int8) int8, initialValue ...int8,
 ) int8 {
@@ -412,7 +434,8 @@ func Int8sSlice(i []int8, begin int, end ...int) []int8 {
 
 // Int8sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func Int8sSome(i []int8, fn func(i []int8, k int, v int8) bool) bool {
 	for k, v := range i {
 		if fn(i, k, v) {

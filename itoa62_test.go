@@ -7,7 +7,7 @@ package ameda_test
 import (
 	"testing"
 
-	. "github.com/henrylee2cn/ameda"
+	. "github.com/andeya/ameda"
 )
 
 type itob64Test struct {

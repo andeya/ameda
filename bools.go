@@ -134,13 +134,18 @@ func BoolsToUint64s(b []bool) []uint64 {
 
 // BoolsCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func BoolsCopyWithin(b []bool, target, start int, end ...int) {
 	target = fixIndex(len(b), target, true)
 	if target == len(b) {
@@ -154,7 +159,8 @@ func BoolsCopyWithin(b []bool, target, start int, end ...int) {
 
 // BoolsEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func BoolsEvery(b []bool, fn func(b []bool, k int, v bool) bool) bool {
 	for k, v := range b {
 		if !fn(b, k, v) {
@@ -166,13 +172,18 @@ func BoolsEvery(b []bool, fn func(b []bool, k int, v bool) bool) bool {
 
 // BoolsFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func BoolsFill(b []bool, value bool, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(b), start, end...)
 	if !ok {
@@ -196,7 +207,8 @@ func BoolsFilter(b []bool, fn func(b []bool, k int, v bool) bool) []bool {
 
 // BoolsFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func BoolsFind(b []bool, fn func(b []bool, k int, v bool) bool) (k int, v bool) {
 	for k, v := range b {
 		if fn(b, k, v) {
@@ -208,14 +220,16 @@ func BoolsFind(b []bool, fn func(b []bool, k int, v bool) bool) (k int, v bool) 
 
 // BoolsIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func BoolsIncludes(b []bool, valueToFind bool, fromIndex ...int) bool {
 	return BoolsIndexOf(b, valueToFind, fromIndex...) > -1
 }
 
 // BoolsIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func BoolsIndexOf(b []bool, searchElement bool, fromIndex ...int) int {
 	idx := getFromIndex(len(b), fromIndex...)
 	for k, v := range b[idx:] {
@@ -228,7 +242,8 @@ func BoolsIndexOf(b []bool, searchElement bool, fromIndex ...int) int {
 
 // BoolsLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func BoolsLastIndexOf(b []bool, searchElement bool, fromIndex ...int) int {
 	idx := getFromIndex(len(b), fromIndex...)
 	for k := len(b) - 1; k >= idx; k-- {
@@ -286,12 +301,15 @@ L:
 // BoolsReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func BoolsReduce(
 	b []bool,
 	fn func(b []bool, k int, v, accumulator bool) bool, initialValue ...bool,
@@ -315,12 +333,15 @@ func BoolsReduce(
 // BoolsReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func BoolsReduceRight(
 	b []bool,
 	fn func(b []bool, k int, v, accumulator bool) bool, initialValue ...bool,
@@ -378,7 +399,8 @@ func BoolsSlice(b []bool, begin int, end ...int) []bool {
 
 // BoolsSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func BoolsSome(b []bool, fn func(b []bool, k int, v bool) bool) bool {
 	for k, v := range b {
 		if fn(b, k, v) {

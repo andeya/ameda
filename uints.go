@@ -35,7 +35,8 @@ func UintsToStrings(u []uint) []string {
 
 // UintsToBools converts uint slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func UintsToBools(u []uint) []bool {
 	r := make([]bool, len(u))
 	for k, v := range u {
@@ -177,13 +178,18 @@ func UintsToUint64s(u []uint) []uint64 {
 
 // UintsCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func UintsCopyWithin(u []uint, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
@@ -197,7 +203,8 @@ func UintsCopyWithin(u []uint, target, start int, end ...int) {
 
 // UintsEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func UintsEvery(u []uint, fn func(u []uint, k int, v uint) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
@@ -209,13 +216,18 @@ func UintsEvery(u []uint, fn func(u []uint, k int, v uint) bool) bool {
 
 // UintsFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func UintsFill(u []uint, value uint, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
@@ -239,7 +251,8 @@ func UintsFilter(u []uint, fn func(u []uint, k int, v uint) bool) []uint {
 
 // UintsFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func UintsFind(u []uint, fn func(u []uint, k int, v uint) bool) (k int, v uint) {
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -251,14 +264,16 @@ func UintsFind(u []uint, fn func(u []uint, k int, v uint) bool) (k int, v uint) 
 
 // UintsIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func UintsIncludes(u []uint, valueToFind uint, fromIndex ...int) bool {
 	return UintsIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
 // UintsIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func UintsIndexOf(u []uint, searchElement uint, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
@@ -271,7 +286,8 @@ func UintsIndexOf(u []uint, searchElement uint, fromIndex ...int) int {
 
 // UintsLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func UintsLastIndexOf(u []uint, searchElement uint, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
@@ -329,12 +345,15 @@ L:
 // UintsReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func UintsReduce(u []uint,
 	fn func(u []uint, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
@@ -357,12 +376,15 @@ func UintsReduce(u []uint,
 // UintsReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func UintsReduceRight(u []uint,
 	fn func(u []uint, k int, v, accumulator uint) uint, initialValue ...uint,
 ) uint {
@@ -419,7 +441,8 @@ func UintsSlice(u []uint, begin int, end ...int) []uint {
 
 // UintsSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func UintsSome(u []uint, fn func(u []uint, k int, v uint) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {

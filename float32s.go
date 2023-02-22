@@ -35,7 +35,8 @@ func Float32sToStrings(f []float32) []string {
 
 // Float32sToBools converts float32 slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func Float32sToBools(f []float32) []bool {
 	r := make([]bool, len(f))
 	for k, v := range f {
@@ -185,13 +186,18 @@ func Float32sToUint64s(f []float32) ([]uint64, error) {
 
 // Float32sCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Float32sCopyWithin(f []float32, target, start int, end ...int) {
 	target = fixIndex(len(f), target, true)
 	if target == len(f) {
@@ -205,7 +211,8 @@ func Float32sCopyWithin(f []float32, target, start int, end ...int) {
 
 // Float32sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func Float32sEvery(f []float32, fn func(f []float32, k int, v float32) bool) bool {
 	for k, v := range f {
 		if !fn(f, k, v) {
@@ -217,13 +224,18 @@ func Float32sEvery(f []float32, fn func(f []float32, k int, v float32) bool) boo
 
 // Float32sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Float32sFill(f []float32, value float32, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(f), start, end...)
 	if !ok {
@@ -247,7 +259,8 @@ func Float32sFilter(f []float32, fn func(f []float32, k int, v float32) bool) []
 
 // Float32sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func Float32sFind(f []float32, fn func(f []float32, k int, v float32) bool) (k int, v float32) {
 	for k, v := range f {
 		if fn(f, k, v) {
@@ -259,14 +272,16 @@ func Float32sFind(f []float32, fn func(f []float32, k int, v float32) bool) (k i
 
 // Float32sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Float32sIncludes(f []float32, valueToFind float32, fromIndex ...int) bool {
 	return Float32sIndexOf(f, valueToFind, fromIndex...) > -1
 }
 
 // Float32sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Float32sIndexOf(f []float32, searchElement float32, fromIndex ...int) int {
 	idx := getFromIndex(len(f), fromIndex...)
 	for k, v := range f[idx:] {
@@ -279,7 +294,8 @@ func Float32sIndexOf(f []float32, searchElement float32, fromIndex ...int) int {
 
 // Float32sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Float32sLastIndexOf(f []float32, searchElement float32, fromIndex ...int) int {
 	idx := getFromIndex(len(f), fromIndex...)
 	for k := len(f) - 1; k >= idx; k-- {
@@ -337,12 +353,15 @@ L:
 // Float32sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Float32sReduce(
 	f []float32,
 	fn func(f []float32, k int, v, accumulator float32) float32, initialValue ...float32,
@@ -366,12 +385,15 @@ func Float32sReduce(
 // Float32sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Float32sReduceRight(
 	f []float32,
 	fn func(f []float32, k int, v, accumulator float32) float32, initialValue ...float32,
@@ -429,7 +451,8 @@ func Float32sSlice(f []float32, begin int, end ...int) []float32 {
 
 // Float32sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func Float32sSome(f []float32, fn func(f []float32, k int, v float32) bool) bool {
 	for k, v := range f {
 		if fn(f, k, v) {

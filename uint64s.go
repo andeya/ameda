@@ -35,7 +35,8 @@ func Uint64sToStrings(u []uint64) []string {
 
 // Uint64sToBools converts uint64 slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func Uint64sToBools(u []uint64) []bool {
 	r := make([]bool, len(u))
 	for k, v := range u {
@@ -177,13 +178,18 @@ func Uint64sToUint32s(u []uint64) ([]uint32, error) {
 
 // Uint64sCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Uint64sCopyWithin(u []uint64, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
@@ -197,7 +203,8 @@ func Uint64sCopyWithin(u []uint64, target, start int, end ...int) {
 
 // Uint64sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func Uint64sEvery(u []uint64, fn func(u []uint64, k int, v uint64) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
@@ -209,13 +216,18 @@ func Uint64sEvery(u []uint64, fn func(u []uint64, k int, v uint64) bool) bool {
 
 // Uint64sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Uint64sFill(u []uint64, value uint64, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
@@ -239,7 +251,8 @@ func Uint64sFilter(u []uint64, fn func(u []uint64, k int, v uint64) bool) []uint
 
 // Uint64sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func Uint64sFind(u []uint64, fn func(u []uint64, k int, v uint64) bool) (k int, v uint64) {
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -251,14 +264,16 @@ func Uint64sFind(u []uint64, fn func(u []uint64, k int, v uint64) bool) (k int, 
 
 // Uint64sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint64sIncludes(u []uint64, valueToFind uint64, fromIndex ...int) bool {
 	return Uint64sIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
 // Uint64sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint64sIndexOf(u []uint64, searchElement uint64, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
@@ -271,7 +286,8 @@ func Uint64sIndexOf(u []uint64, searchElement uint64, fromIndex ...int) int {
 
 // Uint64sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint64sLastIndexOf(u []uint64, searchElement uint64, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
@@ -329,12 +345,15 @@ L:
 // Uint64sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Uint64sReduce(
 	u []uint64,
 	fn func(u []uint64, k int, v, accumulator uint64) uint64, initialValue ...uint64,
@@ -358,12 +377,15 @@ func Uint64sReduce(
 // Uint64sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Uint64sReduceRight(
 	u []uint64,
 	fn func(u []uint64, k int, v, accumulator uint64) uint64, initialValue ...uint64,
@@ -421,7 +443,8 @@ func Uint64sSlice(u []uint64, begin int, end ...int) []uint64 {
 
 // Uint64sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func Uint64sSome(u []uint64, fn func(u []uint64, k int, v uint64) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {

@@ -23,7 +23,8 @@ func InterfaceToStringPtr(i interface{}) *string {
 
 // InterfaceToBool converts interface to bool.
 // NOTE:
-//  0 is false, other numbers are true
+//
+//	0 is false, other numbers are true
 func InterfaceToBool(i interface{}, emptyAsFalse ...bool) (bool, error) {
 	switch v := i.(type) {
 	case bool:
@@ -83,7 +84,8 @@ func InterfaceToBool(i interface{}, emptyAsFalse ...bool) (bool, error) {
 
 // InterfaceToBoolPtr converts interface to *bool.
 // NOTE:
-//  0 is false, other numbers are true
+//
+//	0 is false, other numbers are true
 func InterfaceToBoolPtr(i interface{}, emptyAsFalse ...bool) (*bool, error) {
 	r, err := InterfaceToBool(i, emptyAsFalse...)
 	return &r, err

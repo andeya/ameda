@@ -35,7 +35,8 @@ func Uint32sToStrings(u []uint32) []string {
 
 // Uint32sToBools converts uint32 slice to bool slice.
 // NOTE:
-//  0 is false, everything else is true
+//
+//	0 is false, everything else is true
 func Uint32sToBools(u []uint32) []bool {
 	r := make([]bool, len(u))
 	for k, v := range u {
@@ -165,13 +166,18 @@ func Uint32sToUint64s(u []uint32) []uint64 {
 
 // Uint32sCopyWithin copies part of an slice to another location in the current slice.
 // @target
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Uint32sCopyWithin(u []uint32, target, start int, end ...int) {
 	target = fixIndex(len(u), target, true)
 	if target == len(u) {
@@ -185,7 +191,8 @@ func Uint32sCopyWithin(u []uint32, target, start int, end ...int) {
 
 // Uint32sEvery tests whether all elements in the slice pass the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice will return true for any condition!
+//
+//	Calling this method on an empty slice will return true for any condition!
 func Uint32sEvery(u []uint32, fn func(u []uint32, k int, v uint32) bool) bool {
 	for k, v := range u {
 		if !fn(u, k, v) {
@@ -197,13 +204,18 @@ func Uint32sEvery(u []uint32, fn func(u []uint32, k int, v uint32) bool) bool {
 
 // Uint32sFill changes all elements in the current slice to a value, from a start index to an end index.
 // @value
-//  Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
+//	Zero-based index at which to copy the sequence to. If negative, target will be counted from the end.
+//
 // @start
-//  Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
+//	Zero-based index at which to start copying elements from. If negative, start will be counted from the end.
+//
 // @end
-//  Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
-//  If negative, end will be counted from the end.
-//  If end is omitted, CopyWithin will copy until the last index (default to len(s)).
+//
+//	Zero-based index at which to end copying elements from. CopyWithin copies up to but not including end.
+//	If negative, end will be counted from the end.
+//	If end is omitted, CopyWithin will copy until the last index (default to len(s)).
 func Uint32sFill(u []uint32, value uint32, start int, end ...int) {
 	fixedStart, fixedEnd, ok := fixRange(len(u), start, end...)
 	if !ok {
@@ -227,7 +239,8 @@ func Uint32sFilter(u []uint32, fn func(u []uint32, k int, v uint32) bool) []uint
 
 // Uint32sFind returns the key-value of the first element in the provided slice that satisfies the provided testing function.
 // NOTE:
-//  If not found, k = -1
+//
+//	If not found, k = -1
 func Uint32sFind(u []uint32, fn func(u []uint32, k int, v uint32) bool) (k int, v uint32) {
 	for k, v := range u {
 		if fn(u, k, v) {
@@ -239,14 +252,16 @@ func Uint32sFind(u []uint32, fn func(u []uint32, k int, v uint32) bool) (k int, 
 
 // Uint32sIncludes determines whether an slice includes a certain value among its entries.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint32sIncludes(u []uint32, valueToFind uint32, fromIndex ...int) bool {
 	return Uint32sIndexOf(u, valueToFind, fromIndex...) > -1
 }
 
 // Uint32sIndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint32sIndexOf(u []uint32, searchElement uint32, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k, v := range u[idx:] {
@@ -259,7 +274,8 @@ func Uint32sIndexOf(u []uint32, searchElement uint32, fromIndex ...int) int {
 
 // Uint32sLastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
 // @fromIndex
-//  The index to start the search at. Defaults to 0.
+//
+//	The index to start the search at. Defaults to 0.
 func Uint32sLastIndexOf(u []uint32, searchElement uint32, fromIndex ...int) int {
 	idx := getFromIndex(len(u), fromIndex...)
 	for k := len(u) - 1; k >= idx; k-- {
@@ -317,12 +333,15 @@ L:
 // Uint32sReduce executes a reducer function (that you provide) on each element of the slice,
 // resulting in a single output value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Uint32sReduce(
 	u []uint32,
 	fn func(u []uint32, k int, v, accumulator uint32) uint32, initialValue ...uint32,
@@ -346,12 +365,15 @@ func Uint32sReduce(
 // Uint32sReduceRight applies a function against an accumulator and each value of the slice (from right-to-left)
 // to reduce it to a single value.
 // @accumulator
-//  The accumulator accumulates callback's return values.
-//  It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
-//  if it was supplied (see below).
+//
+//	The accumulator accumulates callback's return values.
+//	It is the accumulated value previously returned in the last invocation of the callback—or initialValue,
+//	if it was supplied (see below).
+//
 // @initialValue
-//  A value to use as the first argument to the first call of the callback.
-//  If no initialValue is supplied, the first element in the slice will be used and skipped.
+//
+//	A value to use as the first argument to the first call of the callback.
+//	If no initialValue is supplied, the first element in the slice will be used and skipped.
 func Uint32sReduceRight(
 	u []uint32,
 	fn func(u []uint32, k int, v, accumulator uint32) uint32, initialValue ...uint32,
@@ -409,7 +431,8 @@ func Uint32sSlice(u []uint32, begin int, end ...int) []uint32 {
 
 // Uint32sSome tests whether at least one element in the slice passes the test implemented by the provided function.
 // NOTE:
-//  Calling this method on an empty slice returns false for any condition!
+//
+//	Calling this method on an empty slice returns false for any condition!
 func Uint32sSome(u []uint32, fn func(u []uint32, k int, v uint32) bool) bool {
 	for k, v := range u {
 		if fn(u, k, v) {

@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"testing"
 
-	. "github.com/henrylee2cn/ameda"
+	. "github.com/andeya/ameda"
 	"github.com/stretchr/testify/assert"
 )
 

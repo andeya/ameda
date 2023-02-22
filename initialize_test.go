@@ -45,8 +45,7 @@ func TestInitSampleValue(t *testing.T) {
 		P3
 		Pm map[string]P
 	}
-	v := InitSampleValue(reflect.TypeOf(map[string]P{}), 5).Interface().
-	(map[string]P)
+	v := InitSampleValue(reflect.TypeOf(map[string]P{}), 5).Interface().(map[string]P)
 	b, err := json.MarshalIndent(v, "", "  ")
 	assert.NoError(t, err)
 	t.Logf("%s", b)

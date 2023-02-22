@@ -12,7 +12,8 @@ func UnsafeBytesToString(b []byte) string {
 
 // UnsafeStringToBytes convert string type to []byte type.
 // NOTE:
-//  panic if modify the member value of the []byte.
+//
+//	panic if modify the member value of the []byte.
 func UnsafeStringToBytes(s string) []byte {
 	return *(*[]byte)(unsafe.Pointer(
 		&struct {
