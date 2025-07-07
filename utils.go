@@ -73,6 +73,9 @@ func fixIndex(length int, idx int, canLen bool) int {
 // isZero reports whether v is the zero value for its type.
 // It panics if the argument is invalid.
 func isZero(v reflect.Value) bool {
+	if !v.IsValid() {
+		return true
+	}
 	switch v.Kind() {
 	case reflect.Bool:
 		return !v.Bool()
